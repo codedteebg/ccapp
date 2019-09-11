@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_summary"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.babbangona.barcodescannerproject.SummaryActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select corresponding button"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/summaryLabel"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/scanbutton"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="By Crop"
+        android:layout_below="@id/summaryLabel"
+        android:onClick="openCropSummary"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/fillbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="By Date"
+        android:onClick="openDateSummary"
+        android:layout_below="@id/scanbutton"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/moldbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="By Mold Count"
+        android:onClick="openMoldSummary"
+        android:layout_below="@id/fillbutton"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/percentcleanbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="By Percent Clean"
+        android:onClick="openPercentCleanSummary"
+        android:layout_below="@id/moldbutton"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/percentmoisturebutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="By Percent Moisture"
+        android:onClick="openPercentMoistureSummary"
+        android:layout_below="@id/percentcleanbutton"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/recordbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Sumamry"
+        android:onClick="openTotalSummary"
+        android:layout_below="@id/percentmoisturebutton"/>
+
+</RelativeLayout>

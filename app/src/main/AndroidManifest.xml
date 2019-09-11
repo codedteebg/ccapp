@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.babbangona.barcodescannerproject">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".DefaultActivity"
+            android:label="@string/default_scan"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.MainActivity" />
+        </activity>
+        <activity
+            android:name=".FillActivity"
+            android:label="@string/fill_details"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SecondScanActivity"
+            android:label="@string/scan_details"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ThirdScanActivity"
+            android:label="@string/confirm_scan"
+            android:parentActivityName=".SecondScanActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.SecondScanActivity" />
+        </activity>
+        <activity
+            android:name=".ShowInventory"
+            android:label="@string/show_inventory"
+            android:parentActivityName=".ShowDateSummary">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.ShowDateSummary" />
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SummaryActivity"
+            android:label="@string/summary_page"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SelectDateSummary"
+            android:label="@string/select_date_summ"
+            android:parentActivityName=".SummaryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.SummaryActivity" />
+        </activity>
+        <activity
+            android:name=".SelectCropSummary"
+            android:label="@string/select_crop_summ"
+            android:parentActivityName=".SummaryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.SummaryActivity" />
+        </activity>
+        <activity
+            android:name=".ShowCropSummary"
+            android:label="@string/show_crop_summ"
+            android:parentActivityName=".SelectCropSummary">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.SelectCropSummary" />
+        </activity>
+        <activity
+            android:name=".ShowDateSummary"
+            android:label="@string/show_date_summ"
+            android:parentActivityName=".SelectDateSummary">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.SelectDateSummary" />
+        </activity>
+        <activity
+            android:name=".ShowTotalSummary"
+            android:label="@string/total_summ"
+            android:parentActivityName=".SummaryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.SummaryActivity" />
+        </activity>
+        <activity
+            android:name=".SecondFillActivity"
+            android:label="@string/confirm_fill"
+            android:parentActivityName=".FillActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.FillActivity" />
+        </activity>
+        <activity
+            android:name=".EditRecordActivity"
+            android:label="@string/edit_records"
+            android:parentActivityName=".ShowInventory">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.babbangona.barcodescannerproject.ShowInventory" />
+        </activity>
+        <activity android:name=".SelectMoldSummary" />
+        <activity android:name=".ShowMoldSummary" />
+
+        <service
+            android:name=".BackgroundSync"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <activity android:name=".SelectPercentCleanSummary" />
+        <activity android:name=".SelectPercentMoistureSummary" />
+        <activity android:name=".ShowPercentCleanSummary" />
+        <activity android:name=".ShowPercentMoistureSummary"></activity>
+    </application>
+
+</manifest>

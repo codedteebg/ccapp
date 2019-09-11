@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">BG Collection Centre App</string>
+    <string name="main_screen">Main Page</string>
+    <string name="default_scan">Scan</string>
+    <string name="scan_details">Scan Details</string>
+    <string name="confirm_scan">Confirm Scan</string>
+    <string name="fill_details">Fill HSF Details</string>
+    <string name="confirm_fill">Confirm HSF Details</string>
+    <string name="summary_page">Summary</string>
+    <string name="select_crop_summ">Select Crop</string>
+    <string name="show_crop_summ">Crop Summary</string>
+    <string name="select_date_summ">Select Date</string>
+    <string name="show_date_summ">Date Summary</string>
+    <string name="show_inventory">Inventory for Selected Date</string>
+    <string name="seedtype_prompt">Select Seed Type</string>
+    <string name="edit_records">Edit Selected Record</string>
+    <string name="total_summ">Total Summary</string>
+
+    <string-array name="seedtype_array">
+        <item>Select One</item>
+        <item>SM-15-C</item>
+        <item>SM-15-F</item>
+        <item>SM-15-B</item>
+        <item>PVA8-C</item>
+        <item>PVA8-F</item>
+        <item>PVA8-B</item>
+        <item>Rice-C</item>
+        <item>Rice-F</item>
+        <item>Rice-B</item>
+    </string-array>
+</resources>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.babbangona.barcodescannerproject.SecondFillActivity">
+
+    <RelativeLayout
+        android:id="@+id/activity_second_fill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:text="HSF ID:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:id="@+id/confirmFillHsfIdTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="text"
+            android:text="HS"
+            android:ems="10"
+            android:id="@+id/confirmFillHsfIdText"
+            android:layout_below="@+id/confirmFillHsfIdTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Field ID:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/confirmFillHsfIdText"
+            android:layout_marginTop="14dp"
+            android:id="@+id/confirmFillFieldIDTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="text"
+            android:ems="10"
+            android:text="R17-IK"
+            android:id="@+id/confirmFillFieldIDText"
+            android:layout_below="@+id/confirmFillFieldIDTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Bags Marketed:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/confirmFillFieldIDText"
+            android:layout_marginTop="14dp"
+            android:id="@+id/confirmFillBagsMarketedTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/confirmFillBagsMarketedText"
+            android:layout_below="@+id/confirmFillBagsMarketedTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Select Seed Type:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/confirmFillBagsMarketedText"
+            android:layout_marginTop="14dp"
+            android:id="@+id/confirmFillSeedTypeTitle" />
+
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/confirmFillSeedTypeTitle"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/confirmFillSeedType"
+            android:spinnerMode="dropdown"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Date of Processing:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/confirmFillSeedType"
+            android:layout_marginTop="14dp"
+            android:id="@+id/confirmFillDateTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/confirmFillDateText"
+            android:layout_below="@id/confirmFillDateTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Mold Count:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/confirmFillDateText"
+            android:layout_marginTop="14dp"
+            android:id="@+id/editMold_CountTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editMold_Count"
+            android:layout_below="@id/editMold_CountTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Percent Clean:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/editMold_Count"
+            android:layout_marginTop="14dp"
+            android:id="@+id/editPercentCleanTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editPercentClean"
+            android:layout_below="@id/editPercentCleanTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Percent Moisture:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/editPercentClean"
+            android:layout_marginTop="14dp"
+            android:id="@+id/editPercentMoistureTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editPercentMoisture"
+            android:layout_below="@id/editPercentMoistureTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="KG Marketed:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/editPercentMoisture"
+            android:layout_marginTop="14dp"
+            android:id="@+id/editKgMarketedTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editKgMarketed"
+            android:layout_below="@id/editKgMarketedTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <Button
+            android:text="Save"
+            android:textAllCaps="false"
+            android:layout_width="250sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editKgMarketed"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:onClick="saveFillResults"
+            android:id="@+id/saveFillResultssaveFillResult" />
+
+
+
+    </RelativeLayout>
+</ScrollView>

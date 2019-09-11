@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.babbangona.barcodescannerproject.FillActivity">
+
+    <RelativeLayout
+        android:id="@+id/activity_fll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:text="HSF ID:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:id="@+id/fillHsfIdTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="text"
+            android:textAllCaps="true"
+            android:text="HS"
+            android:ems="10"
+            android:id="@+id/fillHsfIdText"
+            android:layout_below="@+id/fillHsfIdTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Field ID:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/fillHsfIdText"
+            android:layout_marginTop="14dp"
+            android:id="@+id/fillFieldIDTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="text"
+            android:text="R18-IK"
+            android:textAllCaps="true"
+            android:ems="10"
+            android:id="@+id/fillFieldIDText"
+            android:layout_below="@+id/fillFieldIDTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Bags Marketed:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/fillFieldIDText"
+            android:layout_marginTop="14dp"
+            android:id="@+id/fillBagsMarketedTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/fillBagsMarketedText"
+            android:layout_below="@+id/fillBagsMarketedTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Select Seed Type:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/fillBagsMarketedText"
+            android:layout_marginTop="14dp"
+            android:id="@+id/fillSeedTypeTitle" />
+
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/fillSeedTypeTitle"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/fillSeedType"
+            android:spinnerMode="dropdown"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Date of Processing:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/fillSeedType"
+            android:layout_marginTop="14dp"
+            android:id="@+id/fillDateTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/fillDateText"
+            android:layout_below="@+id/fillDateTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Mold Count:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/fillDateText"
+            android:layout_marginTop="14dp"
+            android:id="@+id/editMold_CountTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editMold_Count"
+            android:layout_below="@id/editMold_CountTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Percent Clean:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/editMold_Count"
+            android:layout_marginTop="14dp"
+            android:id="@+id/editPercentCleanTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editPercentClean"
+            android:layout_below="@id/editPercentCleanTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="Percent Moisture:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/editPercentClean"
+            android:layout_marginTop="14dp"
+            android:id="@+id/editPercentMoistureTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editPercentMoisture"
+            android:layout_below="@id/editPercentMoistureTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <TextView
+            android:text="KG Marketed:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/editPercentMoisture"
+            android:layout_marginTop="14dp"
+            android:id="@+id/editKgMarketedTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editKgMarketed"
+            android:layout_below="@id/editKgMarketedTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/edittextstyle"/>
+
+        <Button
+            android:text="Next Page"
+            android:textAllCaps="false"
+            android:layout_width="250sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editKgMarketed"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:id="@+id/nextConfirmFill" />
+
+    </RelativeLayout>
+
+</ScrollView>
