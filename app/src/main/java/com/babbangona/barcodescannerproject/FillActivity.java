@@ -1,25 +1,24 @@
 package com.babbangona.barcodescannerproject;
 
 import android.app.DatePickerDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -27,8 +26,9 @@ import java.util.Locale;
 public class FillActivity extends AppCompatActivity implements View.OnClickListener{
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    private EditText dateText, fillHsfID, fillFieldID, fillBags, mold_count, percentClean, percentMoisture, kg_marketed;
-    private Spinner fillSeed;
+    private TextInputEditText fillHsfID, fillFieldID, fillBags, dateText, mold_count, percentClean, percentMoisture, kg_marketed;
+    //private Spinner fillSeed;
+    private AutoCompleteTextView fillSeed;
     private String getFilledHSFID, getFilledFieldID, getFillBags, getFilledSeed, getFilledDate, getMoldCount, getPercentClean, getPercentMoisture, getKgMarketed;
 
     @Override
@@ -36,23 +36,28 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill);
 
-        fillSeed = (Spinner) findViewById(R.id.fillSeedType);
+        fillSeed = findViewById(R.id.spinnerTest);
+        //fillSeed = (Spinner) findViewById(R.id.fillSeedType);
         List<String> list = Master.getSeedType();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        fillSeed.setAdapter(dataAdapter);
+        //ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, list);
+
+        //fillSeed.setAdapter(dataAdapter);
+        fillSeed.setAdapter(adapter);
 
 
-        dateText = (EditText) findViewById(R.id.fillDateText);
-        fillHsfID = (EditText) findViewById(R.id.fillHsfIdText);
-        fillFieldID = (EditText) findViewById(R.id.fillFieldIDText);
-        fillBags = (EditText) findViewById(R.id.fillBagsMarketedText);
+        dateText =  findViewById(R.id.fillDateText);
+        fillHsfID =  findViewById(R.id.fillHsfIdText);
+        fillFieldID = findViewById(R.id.fillFieldIDText);
+        fillBags = findViewById(R.id.fillBagsMarketedText);
 
         // New columns
-        mold_count = findViewById(R.id.editMold_Count);
-        percentClean = findViewById(R.id.editPercentClean);
-        percentMoisture = findViewById(R.id.editPercentMoisture);
-        kg_marketed = findViewById(R.id.editKgMarketed);
+        mold_count = findViewById(R.id.moldCountText);
+        percentClean = findViewById(R.id.percentCleanText);
+        percentMoisture = findViewById(R.id.percentMoistureText);
+        kg_marketed = findViewById(R.id.kgMarketedText);
 
         /*
         BroadcastReceiver fill_receiver = new BroadcastReceiver() {
@@ -77,7 +82,8 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
                 getFilledHSFID = fillHsfID.getText().toString();
                 getFilledFieldID = fillFieldID.getText().toString();
                 getFillBags = fillBags.getText().toString();
-                getFilledSeed = fillSeed.getSelectedItem().toString();
+                //getFilledSeed = fillSeed.getSelectedItem().toString();
+                getFilledSeed = fillSeed.getText().toString();
                 getFilledDate = dateText.getText().toString();
                 int fieldIdLenght = fillFieldID.getText().length();
 
@@ -130,7 +136,7 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void findViewsById(){
-        dateText = (EditText) findViewById(R.id.fillDateText);
+        dateText = findViewById(R.id.fillDateText);
         dateText.setInputType(InputType.TYPE_NULL);
         dateText.requestFocus();
     }

@@ -15,6 +15,17 @@
     <string name="seedtype_prompt">Select Seed Type</string>
     <string name="edit_records">Edit Selected Record</string>
     <string name="total_summ">Total Summary</string>
+    <string name="hsfid">HSF ID</string>
+    <string name="fieldID">Field ID</string>
+    <string name="bagsMarketed">Bags Marketed</string>
+    <string name="seedtype">Seed Type</string>
+    <string name="dateProcessed">Date Processed</string>
+    <string name="moldCount">Mold Count</string>
+    <string name="percentClean">Percent Clean</string>
+    <string name="percentMoist">Percent Moisture</string>
+    <string name="kgMarketed">KG Marketed</string>
+    <string name="buttonNext">Next Page</string>
+    <string name="buttonSave">Save</string>
 
     <string-array name="seedtype_array">
         <item>Select One</item>

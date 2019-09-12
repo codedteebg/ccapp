@@ -1,14 +1,12 @@
 package com.babbangona.barcodescannerproject;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class ShowTotalSummary extends AppCompatActivity {
     myDbAdapter helper;

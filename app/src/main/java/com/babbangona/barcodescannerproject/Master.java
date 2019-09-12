@@ -36,7 +36,6 @@ public class Master {
     }
     public static List getSeedType(){
         List<String> list = new ArrayList<String>();
-        list.add("Select One:");
         list.add("30Y87-Grain");
         list.add("DK234-Grain");
         list.add("DK777-Grain");

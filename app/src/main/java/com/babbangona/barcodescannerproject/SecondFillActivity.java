@@ -4,18 +4,20 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -23,8 +25,8 @@ import java.util.Locale;
 public class SecondFillActivity extends AppCompatActivity implements View.OnClickListener{
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    EditText dateText, confirmFillHSFId, confirmFillFieldID, confirmFillBags, mold_count, percentClean, percentMoisture, kg_marketed;
-    Spinner confirmFillSeed;
+    TextInputEditText dateText, confirmFillHSFId, confirmFillFieldID, confirmFillBags, mold_count, percentClean, percentMoisture, kg_marketed;
+    AutoCompleteTextView confirmFillSeed;
     myDbAdapter helper;
     String confirmFillHsfString, confirmFillFieldIDString, confirmFIllBagsMarketedString,confirmFillSeedString, confirmFillDateString, loginName,
     confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed;
@@ -52,14 +54,14 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         confirmFillFieldID = findViewById(R.id.confirmFillFieldIDText);
         confirmFillBags = findViewById(R.id.confirmFillBagsMarketedText);
 
-        confirmFillSeed = findViewById(R.id.confirmFillSeedType);
+        confirmFillSeed = findViewById(R.id.confirmSpinnerText);
 
 
         // New columns
-        mold_count = findViewById(R.id.editMold_Count);
-        percentClean = findViewById(R.id.editPercentClean);
-        percentMoisture = findViewById(R.id.editPercentMoisture);
-        kg_marketed = findViewById(R.id.editKgMarketed);
+        mold_count = findViewById(R.id.confirmMoldCountText);
+        percentClean = findViewById(R.id.confirmPercentCleanText);
+        percentMoisture = findViewById(R.id.confirmPercentMoistureText);
+        kg_marketed = findViewById(R.id.kgMarketedText);
 
         List<String> list  = Master.getSeedType();
 
@@ -80,7 +82,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         String v1 = confirmFillHSFId.getText().toString();
         String v2 = confirmFillFieldID.getText().toString();
         String v3 = confirmFillBags.getText().toString();
-        String v4 = confirmFillSeed.getSelectedItem().toString();
+        String v4 = confirmFillSeed.getText().toString();
         String v5 = dateText.getText().toString();
 
         // New columns
