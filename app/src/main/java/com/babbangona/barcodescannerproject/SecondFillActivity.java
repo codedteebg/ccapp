@@ -15,6 +15,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.inventoryT;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -28,14 +31,17 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
     TextInputEditText dateText, confirmFillHSFId, confirmFillFieldID, confirmFillBags, mold_count, percentClean, percentMoisture, kg_marketed;
     AutoCompleteTextView confirmFillSeed;
     myDbAdapter helper;
+    private AppDatabase mDb;
     String confirmFillHsfString, confirmFillFieldIDString, confirmFIllBagsMarketedString,confirmFillSeedString, confirmFillDateString, loginName,
     confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed;
+    long iid;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second_fill);
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        mDb = AppDatabase.getInstance(getApplicationContext());
 
         Intent openConfirmFillPage = getIntent();
         confirmFillHsfString = openConfirmFillPage.getStringExtra("Confirm_Fill_HSF_ID");
@@ -132,9 +138,37 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
                             && confirmFillSeedString.equalsIgnoreCase(v4) && confirmFillDateString.equalsIgnoreCase(v5)
                             && confirmMoldCount.equalsIgnoreCase(mold) && confirmPercentClean.equalsIgnoreCase(clean) && confirmPercentMoisture.equalsIgnoreCase(moisture) && confirmKgMarketed.equalsIgnoreCase(kgMarketed)
                             ) {
-                        long id = helper.insertData(v1, v2, fillBags, v4, v5, loginName, mold, clean, moisture, kgMarketed);
+                        final inventoryT inventoryT = new inventoryT(v1, "Tobiiiiiiiiiiiii", v2, fillBags, Integer.parseInt(kgMarketed), v4, v5, Integer.parseInt(mold),
+                                Integer.parseInt(clean), Integer.parseInt(moisture));
 
-                        if (id < 0) {
+                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                iid = mDb.inventoryTDao().insertTxn(inventoryT);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (iid < 0) {
+                                            Message.message(getApplicationContext(), "Insertion Unsuccessful");
+                                        } else {
+                                            Message.message(getApplicationContext(), "Inventory Successfully Saved");
+                                            Intent openMainActivity = new Intent(SecondFillActivity.this, MainActivity.class);
+                                            startActivity(openMainActivity);
+
+                                            Intent finishSecondScanActivity = new Intent("finishFirstFill");
+                                            sendBroadcast(finishSecondScanActivity);
+
+                                            finish();
+
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+                        //long id = helper.insertData(v1, v2, fillBags, v4, v5, loginName, mold, clean, moisture, kgMarketed);
+
+                        /*if (id < 0) {
                             Message.message(getApplicationContext(), "Insertion Unsuccessful");
                         } else {
                             Message.message(getApplicationContext(), "Inventory Successfully Saved");
@@ -146,7 +180,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
 
                             finish();
 
-                        }
+                        }*/
                     } else {
                         Message.message(getApplicationContext(), "Data entered doesn't correspond. Please go back to previous screen and re-enter data.");
                     }

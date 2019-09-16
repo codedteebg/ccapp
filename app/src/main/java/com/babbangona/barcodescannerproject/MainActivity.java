@@ -8,6 +8,9 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Environment;
+
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -20,8 +23,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -30,6 +38,7 @@ import jxl.WorkbookSettings;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import com.babbangona.barcodescannerproject.model.inventoryT;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -40,12 +49,14 @@ public class MainActivity extends AppCompatActivity {
     private JobInfo jobInfo;
     ComponentName componentName;
     private static final int JOB_ID =101;
+    AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mDb = AppDatabase.getInstance(getApplicationContext());
         // Sync triggered whenever you visit the home page
         SyncData.SyncInventory syncTest = new SyncData.SyncInventory(getApplicationContext()){
             @Override
@@ -212,6 +223,79 @@ public class MainActivity extends AppCompatActivity {
 
         syncTest.execute();
 
+    }
+
+    //Used in an onClick method here. Just add to your onCreate, etc....
+    public void csvImport(View view){
+        final ArrayList<inventoryT> invs = readCSVFromAssets(); //gets List of objects from readCSV method
+
+        /*
+         * I am using Executors here. Your AsyncTask will also work.
+        Will attach the Executors class also in case you need them.
+         */
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                long[] id = mDb.inventoryTDao().insertPreTxn(invs); //DAO call to insert objects
+                //returns a long[] to ensure that it actually inserts.
+                if (id.length > 0){
+                    //because Toasts can't run on Background.
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Message class handles toasts for me.
+                            Message.message(getApplicationContext(), "Data Preloaded");
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message.message(getApplicationContext(), "Error insertin data");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    //CSV read into List of model class
+    private ArrayList<inventoryT> readCSVFromAssets(){
+        ArrayList<inventoryT> inventoryTS = new ArrayList<>(); //List to hold model class objects
+        String[] content = null; //placeholder String array
+        try{
+            //opens CSV fle in asset folder
+            InputStream inputStream = getAssets().open("inventoryT.csv");
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            String line = "";
+            //read from CSV file by line and read into object. Also adds into the list.
+            while ((line = br.readLine()) != null){
+                content = line.split(",");
+                //To escape out the header row
+                if (content[0].equals("HSFID")){
+
+                }else{
+                 //maps CSV row to model class and adds to list
+                final inventoryT inv = new inventoryT(
+                     content[0],
+                     content[1],
+                     content[2],
+                     Integer.parseInt(content[3]),
+                     Integer.parseInt(content[4]),
+                     content[5],
+                     content[6],
+                     Integer.parseInt(content[7]),
+                     Integer.parseInt(content[8]),
+                     Integer.parseInt(content[9]));
+                inventoryTS.add(inv);
+                }
+            }
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return inventoryTS; //return List
     }
 
     @Override

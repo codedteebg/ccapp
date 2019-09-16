@@ -105,7 +105,7 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
                         Message.message(getApplicationContext(), "One or more required fields are empty");
 
                     } else {
-                        if (fieldIdLenght < 18 || fieldIdLenght >18) {
+                        if (fieldIdLenght != 18) {
                             Message.message(getApplicationContext(), "Wrong Field ID. Please ensure Field ID is entered correctly");
                         }else {
                             Intent openConfirmFillPage = new Intent(FillActivity.this, SecondFillActivity.class);

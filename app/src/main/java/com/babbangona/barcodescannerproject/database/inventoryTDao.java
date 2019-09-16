@@ -7,13 +7,18 @@ import androidx.room.Update;
 
 import com.babbangona.barcodescannerproject.model.inventoryT;
 
+import java.util.ArrayList;
+
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface inventoryTDao {
 
     @Insert (onConflict = REPLACE)
-    void insertTxn(inventoryT inventoryT);
+    long insertTxn(inventoryT inventoryT);
+
+    @Insert (onConflict = REPLACE)
+    long[] insertPreTxn(ArrayList<inventoryT> inventoryTS);
 
     @Update
     void updateTxn (inventoryT inventoryT);

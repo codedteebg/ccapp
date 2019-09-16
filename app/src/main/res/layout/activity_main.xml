@@ -51,7 +51,13 @@
         android:onClick="syncInventory"
         android:layout_below="@id/exportbutton" />
 
-
+    <Button
+        android:id="@+id/csvbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CSV Import"
+        android:onClick="csvImport"
+        android:layout_below="@id/syncbutton" />
 
 
 </RelativeLayout>

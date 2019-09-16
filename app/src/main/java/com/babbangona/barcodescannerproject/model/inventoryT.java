@@ -25,7 +25,7 @@ public class inventoryT {
 
     @ColumnInfo (name = "KGMarketed")
     @NonNull
-    private float KGMarketed;
+    private int KGMarketed;
 
     @ColumnInfo (name = "SeedType")
     @NonNull
@@ -99,11 +99,11 @@ public class inventoryT {
         BagsMarketed = bagsMarketed;
     }
 
-    public float getKGMarketed() {
+    public int getKGMarketed() {
         return KGMarketed;
     }
 
-    public void setKGMarketed(float KGMarketed) {
+    public void setKGMarketed(int KGMarketed) {
         this.KGMarketed = KGMarketed;
     }
 
@@ -148,6 +148,5 @@ public class inventoryT {
     public void setPercentMoisture(float percentMoisture) {
         PercentMoisture = percentMoisture / 100;
     }
-
 
 }

@@ -41,7 +41,6 @@ public class SyncData {
 
     static String URL = "http://apps.babbangona.com/collection_center/";
     @SuppressLint("StaticFieldLeak")
-
     public static class SyncInventory extends AsyncTask<Void,Void,String> {
 
         Context context;
