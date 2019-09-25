@@ -37,7 +37,7 @@
         android:layout_below="@id/scanbutton"
         android:layout_marginBottom="8dp"/>
 
-    <Button
+    <!--<Button
         android:id="@+id/moldbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
         android:text="By Percent Moisture"
         android:onClick="openPercentMoistureSummary"
         android:layout_below="@id/percentcleanbutton"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"/>-->
 
     <Button
         android:id="@+id/recordbutton"
@@ -70,6 +70,6 @@
         android:layout_height="wrap_content"
         android:text="Total Sumamry"
         android:onClick="openTotalSummary"
-        android:layout_below="@id/percentmoisturebutton"/>
+        android:layout_below="@id/fillbutton"/>
 
 </RelativeLayout>

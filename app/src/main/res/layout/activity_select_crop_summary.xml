@@ -23,24 +23,31 @@
         android:textColor="@color/colorPrimaryDark"
         android:id="@+id/selectCropLabel" />
 
-    <Spinner
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:id="@+id/selectSeedTypeLabel"
+        android:hint="@string/seedtype"
         android:layout_below="@id/selectCropLabel"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:id="@+id/selectSeedType"
-        android:spinnerMode="dropdown"
-        android:background="@drawable/edittextstyle"/>
+        style="@style/ExposedDropdownMenu">
+
+        <AutoCompleteTextView
+            android:id="@+id/selectSeedType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"/>
+
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:text="Show Summary for Selected Crop"
+        android:text="@string/showCropSummary"
         android:textAllCaps="false"
         android:layout_width="250sp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/selectSeedType"
+        android:layout_below="@+id/selectSeedTypeLabel"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:id="@+id/nextCropSummary" />

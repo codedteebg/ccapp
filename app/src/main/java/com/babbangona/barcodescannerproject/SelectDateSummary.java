@@ -9,12 +9,14 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class SelectDateSummary extends AppCompatActivity implements View.OnClickListener {
-    private EditText dateText;
+    private TextInputEditText dateText;
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
 
@@ -29,7 +31,7 @@ public class SelectDateSummary extends AppCompatActivity implements View.OnClick
     }
 
     public void showDateSummary (View view){
-        EditText summaryDate = (EditText) findViewById(R.id.summaryDateText);
+        TextInputEditText summaryDate =  findViewById(R.id.selectDate);
 
         String summDate = summaryDate.getText().toString();
 
@@ -46,7 +48,7 @@ public class SelectDateSummary extends AppCompatActivity implements View.OnClick
     }
 
     private void findViewsById(){
-        dateText = (EditText) findViewById(R.id.summaryDateText);
+        dateText =  findViewById(R.id.selectDate);
         dateText.setInputType(InputType.TYPE_NULL);
         dateText.requestFocus();
     }

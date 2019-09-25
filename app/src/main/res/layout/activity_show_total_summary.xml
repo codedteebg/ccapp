@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_show_total_summary"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,53 +18,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="25dp"
         android:textColor="@color/colorPrimaryDark"
         android:id="@+id/totalSummaryLabel" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/totalBags"
-        android:paddingLeft="5dp"
-        android:background="@drawable/grayededittext"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalBagsLabel"
+        android:hint="@string/totalBagsMarketed"
         android:layout_below="@id/totalSummaryLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp" />
+        style="@style/AppTextField"
+        app:boxBackgroundColor="#DCDCDC"
+        android:editable = "false">
 
-    <TextView
-        android:text="Total Transactions Till Date:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:id="@+id/totalTransLabel"
-        android:layout_below="@id/totalBags"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:id="@+id/totalBags"
+            android:maxLines="1"/>
 
-    <EditText
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/totalTrans"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/grayededittext"
-        android:layout_below="@+id/totalTransLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="Total Bags Till Date:"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/totalBagsCropLabel"
-        android:layout_above="@+id/totalBags" />
+        android:id="@+id/totalTransLabel"
+        android:hint="@string/totalTrans"
+        android:layout_below="@id/totalBagsLabel"
+        style="@style/AppTextField"
+        app:boxBackgroundColor="#DCDCDC"
+        android:editable = "false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:id="@+id/totalTrans"
+            android:maxLines="1"/>
+
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </RelativeLayout>

@@ -3,262 +3,188 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.babbangona.barcodescannerproject.SecondScanActivity">
 
     <RelativeLayout
-        android:id="@+id/activity_second_scan"
+        android:id="@+id/activity_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
-    <TextView
-        android:text="HSF ID:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:id="@+id/hsfidTitle" />
+        android:padding="24dp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/hsfidText"
-        android:layout_below="@+id/hsfidTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/grayededittext"/>
-
-    <TextView
-        android:text="Field ID:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/hsfidText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/fieldIDTitle" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/fieldIDText"
-        android:layout_below="@+id/fieldIDTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/grayededittext"/>
-
-    <TextView
-        android:text="Bags Marketed:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/fieldIDText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/bagsMarketedTitle" />
-
-    <TextView
-        android:text=" (leave if the same):"
-        android:textStyle="bold|italic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/bagsMarketedTitle"
-        android:layout_below="@id/fieldIDText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/bagsHint" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/bagsMarketedText"
-        android:layout_below="@+id/bagsMarketedTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
-
-    <TextView
-        android:text="Select Seed Type:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/bagsMarketedText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/seedTypeTitle" />
-
-    <TextView
-        android:text=" (leave if the same):"
-        android:textStyle="bold|italic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/seedTypeTitle"
-        android:layout_below="@id/bagsMarketedText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/seedTypeHint" />
-
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/seedTypeTitle"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:id="@+id/seedType"
-        android:spinnerMode="dropdown"
-        android:background="@drawable/edittextstyle"/>
-
-    <TextView
-        android:text="Date of Processing:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/seedType"
-        android:layout_marginTop="14dp"
-        android:id="@+id/dateTitle" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/dateText"
-        android:layout_below="@+id/dateTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
-
-        <TextView
-            android:text="Mold Count:"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/dateText"
-            android:layout_marginTop="14dp"
-            android:id="@+id/editMold_CountTitle" />
-
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/editMold_Count"
-            android:layout_below="@id/editMold_CountTitle"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:background="@drawable/edittextstyle"/>
-
-        <TextView
-            android:text="Percent Clean:"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
+            android:id="@+id/scanHSF"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/editMold_Count"
-            android:layout_marginTop="14dp"
-            android:id="@+id/editPercentCleanTitle" />
+            android:hint="@string/hsfid"
+            style="@style/AppTextField"
+            app:boxBackgroundColor="#DCDCDC"
+            android:editable = "false"
+            >
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:id="@+id/hsfidText"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/editPercentClean"
-            android:layout_below="@id/editPercentCleanTitle"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:background="@drawable/edittextstyle"/>
-
-        <TextView
-            android:text="Percent Moisture:"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/editPercentClean"
-            android:layout_marginTop="14dp"
-            android:id="@+id/editPercentMoistureTitle" />
+            android:id="@+id/scanFieldID"
+            android:hint="@string/fieldID"
+            android:layout_below="@id/scanHSF"
+            style="@style/AppTextField"
+            app:boxBackgroundColor="#DCDCDC"
+            android:editable = "false"
+            >
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:id="@+id/fieldIDText"
+                android:maxLines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/editPercentMoisture"
-            android:layout_below="@id/editPercentMoistureTitle"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:background="@drawable/edittextstyle"/>
-
-        <TextView
-            android:text="KG Marketed:"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/editPercentMoisture"
-            android:layout_marginTop="14dp"
-            android:id="@+id/editKgMarketedTitle" />
+            android:id="@+id/scanBagsMarketed"
+            android:hint="@string/bagsMarketed"
+            android:layout_below="@id/scanFieldID"
+            style="@style/AppTextField">
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:id="@+id/bagsMarketedText"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/editKgMarketed"
-            android:layout_below="@id/editKgMarketedTitle"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:background="@drawable/edittextstyle"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/scanKgMarketed"
+            android:hint="@string/kgMarketed"
+            android:layout_below="@id/scanBagsMarketed"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/editKgMarketed"
+                android:maxLines="1"/>
 
 
-    <Button
-        android:text="Next Page"
-        android:textAllCaps="false"
-        android:layout_width="250sp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editKgMarketed"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:id="@+id/nextConfirmScan" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanSeedType"
+            android:hint="@string/seedtype"
+            android:layout_below="@id/scanKgMarketed"
+            style="@style/ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/seedType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanDate"
+            android:hint="@string/dateProcessed"
+            android:layout_below="@id/scanSeedType"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:id="@+id/dateText"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanMoldCount"
+            android:hint="@string/moldCount"
+            android:layout_below="@id/scanDate"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:id="@+id/editMold_Count"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanPercentClean"
+            android:hint="@string/percentClean"
+            android:layout_below="@id/scanMoldCount"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/editPercentClean"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanPercentMoisture"
+            android:hint="@string/percentMoist"
+            android:layout_below="@id/scanPercentClean"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/editPercentMoisture"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:text="@string/buttonNext"
+            android:textAllCaps="false"
+            android:layout_width="250sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/scanPercentMoisture"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/nextConfirmScan" />
 
     </RelativeLayout>
 

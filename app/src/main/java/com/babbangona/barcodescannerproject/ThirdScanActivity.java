@@ -10,30 +10,36 @@ import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-
+import com.google.android.material.textfield.TextInputEditText;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.model.inventoryT;
+
 
 
 public class ThirdScanActivity extends AppCompatActivity implements View.OnClickListener {
-    private EditText dateText, mold_count, percentClean, percentMoisture, kg_marketed;
+    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed;
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    myDbAdapter helper;
+    private AppDatabase mDb;
     String confirmHsfString, confirmFieldIDString, confirmBagsMarketedString,confirmSeed, confirmDate, loginName,
             confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed;
+    long iid;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Spinner confirmSeedSpinner;
+    public void onCreate(Bundle savedInstanceState) {
+        TextInputEditText  confirmHSFID, confirmFieldID, confirmBagsMarketed;
+        AutoCompleteTextView confirmSeedSpinner;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third_scan);
+        mDb = AppDatabase.getInstance(getApplicationContext());
 
         Intent openConfirmScanPage = getIntent();
         confirmHsfString = openConfirmScanPage.getStringExtra("Confirm_HSF_ID");
@@ -49,16 +55,16 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         confirmKgMarketed = openConfirmScanPage.getStringExtra("kg_marketed");
         // Stop New Columns
 
-        EditText confirmHSFID = (EditText) findViewById(R.id.confirmHsfidText);
+        confirmHSFID =  findViewById(R.id.confirmHsfidText);
         confirmHSFID.setText(confirmHsfString);
 
-        EditText confirmFieldID = (EditText) findViewById(R.id.confirmFieldIDText);
+        confirmFieldID = findViewById(R.id.confirmFieldIDText);
         confirmFieldID.setText(confirmFieldIDString);
 
-        EditText confirmBagsMarketed = (EditText) findViewById(R.id.confirmBagsMarketedText);
+        confirmBagsMarketed = findViewById(R.id.confirmBagsMarketedText);
         confirmBagsMarketed.setText(confirmBagsMarketedString);
 
-        confirmSeedSpinner = (Spinner) findViewById(R.id.confirmSeedType);
+        confirmSeedSpinner = findViewById(R.id.confirmSeedTypeText);
 
         // New columns
         mold_count = findViewById(R.id.editMold_Count);
@@ -67,8 +73,8 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         kg_marketed = findViewById(R.id.editKgMarketed);
 
         List<String> list = Master.getSeedType();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         confirmSeedSpinner.setAdapter(dataAdapter);
 
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
@@ -76,34 +82,34 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         findViewsById();
         setDateTimeField();
 
-        helper = new myDbAdapter(this);
+        //helper = new myDbAdapter(this);
 
     }
 
     public void saveScanResults (View view) {
-        EditText saveScanHSF, saveScanField, saveScanBags, saveScanDate;
-        Spinner saveScanSeed;
+        TextInputEditText saveScanHSF, saveScanField, saveScanBags, saveScanDate;
+        AutoCompleteTextView saveScanSeed;
         int bags = 0;
 
 
-        saveScanHSF = (EditText) findViewById(R.id.confirmHsfidText);
-        saveScanField = (EditText) findViewById(R.id.confirmFieldIDText);
-        saveScanBags = (EditText) findViewById(R.id.confirmBagsMarketedText);
-        saveScanDate = (EditText) findViewById(R.id.confirmDateText);
-        saveScanSeed = (Spinner) findViewById(R.id.confirmSeedType);
+        saveScanHSF =  findViewById(R.id.confirmHsfidText);
+        saveScanField =  findViewById(R.id.confirmFieldIDText);
+        saveScanBags =  findViewById(R.id.confirmBagsMarketedText);
+        saveScanDate =  findViewById(R.id.confirmDateText);
+        saveScanSeed =  findViewById(R.id.confirmSeedTypeText);
 
         // New columns
-        mold_count = findViewById(R.id.editMold_Count);
-        percentClean = findViewById(R.id.editPercentClean);
-        percentMoisture = findViewById(R.id.editPercentMoisture);
-        kg_marketed = findViewById(R.id.editKgMarketed);
+        mold_count = findViewById(R.id.confirmScanMoldCountText);
+        percentClean = findViewById(R.id.confirmScanCleanText);
+        percentMoisture = findViewById(R.id.confirmScanMoistureText);
+        kg_marketed = findViewById(R.id.confirmScanKgMarketed);
         // End New Columns
 
         String v1 = saveScanHSF.getText().toString();
         String v2 = saveScanField.getText().toString();
         String v3 = saveScanBags.getText().toString();
         String v5 = saveScanDate.getText().toString();
-        String v4 = saveScanSeed.getSelectedItem().toString();
+        String v4 = saveScanSeed.getText().toString();
 
         String mold = mold_count.getText().toString();
         String clean = percentClean.getText().toString();
@@ -139,6 +145,35 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
                         && confirmSeed.equalsIgnoreCase(v4) && confirmDate.equalsIgnoreCase(v5)
                         && confirmMoldCount.equalsIgnoreCase(mold) && confirmPercentClean.equalsIgnoreCase(clean) && confirmPercentMoisture.equalsIgnoreCase(moisture) && confirmKgMarketed.equalsIgnoreCase(kgMarketed)
                         ) {
+                    final inventoryT inv = new inventoryT(v1, "Tobiiiiiiiiiiiii", v2, bags, Integer.parseInt(kgMarketed), v4, v5, Integer.parseInt(mold),
+                            Integer.parseInt(clean), Integer.parseInt(moisture));
+
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            iid = mDb.inventoryTDao().insertTxn(inv);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (iid < 0) {
+                                        Message.message(getApplicationContext(), "Insertion Unsuccessful");
+                                    } else {
+                                        Message.message(getApplicationContext(), "Inventory Successfully Saved");
+                                        Intent openMainActivity = new Intent(ThirdScanActivity.this, MainActivity.class);
+                                        startActivity(openMainActivity);
+
+                                        Intent finishSecondScanActivity = new Intent("finishFirstFill");
+                                        sendBroadcast(finishSecondScanActivity);
+
+                                        finish();
+
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                /*
                     long id = helper.insertData(v1, v2, bags, v4, v5, loginName, mold, clean, moisture, kgMarketed);
                     if (id < 0) {
                         Message.message(getApplicationContext(), "Insertion Unsuccessful");
@@ -154,7 +189,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
 
 
 
-                    }
+                    }*/
                 } else {
                     //Message.message(getApplicationContext(), confirmDate);
                     Message.message(getApplicationContext(), "Data entered doesn't correspond. Please go back to previous screen and re-enter data.");
@@ -166,7 +201,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void findViewsById(){
-        dateText = (EditText) findViewById(R.id.confirmDateText);
+        dateText = findViewById(R.id.confirmDateText);
         dateText.setInputType(InputType.TYPE_NULL);
         dateText.requestFocus();
     }

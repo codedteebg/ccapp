@@ -9,6 +9,8 @@ import android.text.InputType;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class ShowCropSummary extends AppCompatActivity {
     myDbAdapter helper;
     String totalCropBags, totalCropTrans;
@@ -19,15 +21,15 @@ public class ShowCropSummary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_crop_summary);
 
-        EditText showBagsCrop, showTransCrop;
-        showBagsCrop = (EditText) findViewById(R.id.totalBagsCrop);
-        showTransCrop = (EditText) findViewById(R.id.totalTransCrop);
+        TextInputEditText showBagsCrop, showTransCrop;
+        showBagsCrop =  findViewById(R.id.totalBagsCrop);
+        showTransCrop =  findViewById(R.id.totalTransCrop);
 
 
         Intent openShowCropSummary = getIntent();
         String selectedSeedSummary = openShowCropSummary.getStringExtra("Crop_To_Summarise");
 
-        TextView cropTitleLabel = (TextView) findViewById(R.id.cropTitleLabel);
+        TextView cropTitleLabel =  findViewById(R.id.cropTitleLabel);
 
         String cropTitleLabelValue = "Summary for "+selectedSeedSummary;
 

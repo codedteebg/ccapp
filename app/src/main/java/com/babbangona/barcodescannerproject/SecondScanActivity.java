@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnFocusChangeListener;
@@ -22,6 +23,8 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import android.widget.ArrayAdapter;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 import java.text.SimpleDateFormat;
@@ -37,7 +40,9 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
     private SimpleDateFormat dateFormatter;
     static private boolean isFirstTimeGetFocused = true;
     String GetHsfidText, GetFieldidText, GetBagsMarketedText, GetDateText, GetSeedText, getMoldCount, getPercentClean, getPercentMoisture, getKgMarketed;
-    private EditText dateText, mold_count, percentClean, percentMoisture, kg_marketed;
+    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed, hsfidText, fieldIDText, bagsMarketedText;
+    private AutoCompleteTextView seedSpinner;
+    private Button nextConfirmScan;
 
 
     @Override
@@ -45,7 +50,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second_scan);
 
-        final Spinner seedSpinner;
+        //final Spinner seedSpinner;
         Button nextConfirmScan;
 
         Intent intent = getIntent();
@@ -54,13 +59,13 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         String bags_string = intent.getStringExtra("BAGS_MKTD");
         String seed_string = intent.getStringExtra("SEED_TYPE");
 
-        final EditText hsfidText = (EditText) findViewById(R.id.hsfidText);
+        hsfidText =  findViewById(R.id.hsfidText);
         hsfidText.setText(hsf_string);
 
-        final EditText fieldIDText = (EditText) findViewById(R.id.fieldIDText);
+        fieldIDText =  findViewById(R.id.fieldIDText);
         fieldIDText.setText(field_string);
 
-        final EditText bagsMarketedText = (EditText) findViewById(R.id.bagsMarketedText);
+        bagsMarketedText = findViewById(R.id.bagsMarketedText);
         bagsMarketedText.setText(bags_string);
         bagsMarketedText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
@@ -80,17 +85,18 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         kg_marketed = findViewById(R.id.editKgMarketed);
         // End New Columns
 
-        seedSpinner = (Spinner) findViewById(R.id.seedType);
+        seedSpinner = findViewById(R.id.seedType);
         List<String> list = Master.getSeedType();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,list);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         seedSpinner.setAdapter(dataAdapter);
 
-        seedSpinner.setSelection(getIndex(seedSpinner, seed_string));
+        //seedSpinner.setSelection(getIndex(seedSpinner, seed_string));
+        seedSpinner.setText(seed_string);
         disableInput(hsfidText);
         disableInput(fieldIDText);
 
-        dateText = (EditText) findViewById(R.id.dateText);
+        dateText = findViewById(R.id.dateText);
 
         BroadcastReceiver broadcast_receiver = new BroadcastReceiver() {
 
@@ -106,7 +112,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         registerReceiver(broadcast_receiver, new IntentFilter("finishSecondScan"));
 
 
-        nextConfirmScan = (Button) findViewById(R.id.nextConfirmScan);
+        nextConfirmScan = findViewById(R.id.nextConfirmScan);
 
         nextConfirmScan.setOnClickListener(new OnClickListener() {
             @Override
@@ -115,7 +121,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
                 GetFieldidText = fieldIDText.getText().toString();
                 GetBagsMarketedText = bagsMarketedText.getText().toString();
                 GetDateText = dateText.getText().toString();
-                GetSeedText = seedSpinner.getSelectedItem().toString();
+                GetSeedText = seedSpinner.getText().toString();
 
                 // New Columns
                 getMoldCount = mold_count.getText().toString();
@@ -181,7 +187,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
     }
 
     private void findViewsById(){
-        dateText = (EditText) findViewById(R.id.dateText);
+        dateText = findViewById(R.id.dateText);
         dateText.setInputType(InputType.TYPE_NULL);
         dateText.requestFocus();
     }

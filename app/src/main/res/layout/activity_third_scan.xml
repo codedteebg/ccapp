@@ -1,246 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ThirdScanActivity">
+    tools:context="com.babbangona.barcodescannerproject.ThirdScanActivity">
 
-<RelativeLayout
-    android:id="@+id/activity_second_scan"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
-
-    <TextView
-        android:text="HSF ID:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:id="@+id/confirmHsfidTitle" />
-
-    <EditText
+    <RelativeLayout
+        android:id="@+id/activity_confirm_scan"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/confirmHsfidText"
-        android:layout_below="@+id/confirmHsfidTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/grayededittext"/>
-
-    <TextView
-        android:text="Field ID:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/confirmHsfidText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/confirmFieldIDTitle" />
+        android:padding="24dp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/confirmFieldIDText"
-        android:layout_below="@+id/confirmFieldIDTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/grayededittext"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:id="@+id/confirmScanHSF"
+            android:layout_height="wrap_content"
+            android:hint="@string/hsfid"
+            style="@style/AppTextField"
+            app:boxBackgroundColor="#DCDCDC"
+            android:editable = "false"
+            >
 
-    <TextView
-        android:text="Bags Marketed:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/confirmFieldIDText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/confirmBagsMarketedTitle" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:id="@+id/confirmHsfidText"
+                android:maxLines="1" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/confirmBagsMarketedText"
-        android:layout_below="@+id/confirmBagsMarketedTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:text="Select Seed Type:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/confirmBagsMarketedText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/confirmSeedTypeTitle" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanFieldID"
+            android:hint="@string/fieldID"
+            android:layout_below="@id/confirmScanHSF"
+            app:boxBackgroundColor="#DCDCDC"
+            android:editable = "false"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:id="@+id/confirmFieldIDText"
+                android:maxLines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanBagsMarketed"
+            android:hint="@string/bagsMarketed"
+            android:layout_below="@id/confirmScanFieldID"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:id="@+id/confirmBagsMarketedText"
+                android:maxLines="1"/>
 
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/confirmSeedTypeTitle"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:id="@+id/confirmSeedType"
-        android:spinnerMode="dropdown"
-        android:background="@drawable/edittextstyle"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:text="Date of Processing:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/confirmSeedType"
-        android:layout_marginTop="14dp"
-        android:id="@+id/confirmDateTitle" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanKgMarketed"
+            android:hint="@string/kgMarketed"
+            android:layout_below="@id/confirmScanBagsMarketed"
+            style="@style/AppTextField">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/confirmDateText"
-        android:layout_below="@id/confirmDateTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/scanKgMarketedText"
+                android:maxLines="1"/>
 
-    <TextView
-        android:text="Mold Count:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/confirmDateText"
-        android:layout_marginTop="14dp"
-        android:id="@+id/editMold_CountTitle" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/editMold_Count"
-        android:layout_below="@id/editMold_CountTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:text="Percent Clean:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/editMold_Count"
-        android:layout_marginTop="14dp"
-        android:id="@+id/editPercentCleanTitle" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanSeed"
+            android:hint="@string/seedtype"
+            android:layout_below="@id/confirmScanKgMarketed"
+            style="@style/ExposedDropdownMenu">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/editPercentClean"
-        android:layout_below="@id/editPercentCleanTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
+            <AutoCompleteTextView
+                android:id="@+id/confirmSeedTypeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"/>
 
-    <TextView
-        android:text="Percent Moisture:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/editPercentClean"
-        android:layout_marginTop="14dp"
-        android:id="@+id/editPercentMoistureTitle" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/editPercentMoisture"
-        android:layout_below="@id/editPercentMoistureTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:text="KG Marketed:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/editPercentMoisture"
-        android:layout_marginTop="14dp"
-        android:id="@+id/editKgMarketedTitle" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanDate"
+            android:hint="@string/dateProcessed"
+            android:layout_below="@id/confirmScanSeed"
+            style="@style/AppTextField">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/editKgMarketed"
-        android:layout_below="@id/editKgMarketedTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:id="@+id/confirmDateText"
+                android:maxLines="1"/>
 
-    <Button
-        android:text="Save"
-        android:textAllCaps="false"
-        android:layout_width="250sp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editKgMarketed"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:onClick="saveScanResults"
-        android:id="@+id/saveScanResult" />
 
-</RelativeLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanMoldCount"
+            android:hint="@string/moldCount"
+            android:layout_below="@id/confirmScanDate"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:id="@+id/confirmScanMoldCountText"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanPercentClean"
+            android:hint="@string/percentClean"
+            android:layout_below="@id/confirmScanMoldCount"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/confirmScanCleanText"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanPercentMoisture"
+            android:hint="@string/percentMoist"
+            android:layout_below="@id/confirmScanPercentClean"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/confirmScanMoistureText"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:text="@string/buttonSave"
+            android:textAllCaps="false"
+            android:layout_width="250sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/confirmScanPercentMoisture"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/saveScanResults"
+            android:onClick="saveScanResults"/>
+
+    </RelativeLayout>
+
 </ScrollView>

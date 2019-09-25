@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,15 +32,13 @@ public class ShowDateSummary extends AppCompatActivity {
         Intent openDateSummary = getIntent();
         dateForSummary = openDateSummary.getStringExtra("Date_For_Summary");
 
-        EditText showBagsDate, showTransDate;
-        TextView dateTitleLabel, totalBagsDateLabel, totalTransDateLabel;
+        TextInputEditText showBagsDate, showTransDate;
+        TextView dateTitleLabel;
         String dateTitleLabelValue, totalBagsDateLabelValue, totalTransDateLabelValue;
 
-        showBagsDate = (EditText) findViewById(R.id.totalBagsDate);
-        showTransDate = (EditText) findViewById(R.id.totalTransDate);
-        dateTitleLabel = (TextView) findViewById(R.id.dateTitleLabel);
-        totalBagsDateLabel = (TextView) findViewById(R.id.totalBagsDateLabel);
-        totalTransDateLabel = (TextView) findViewById(R.id.totalTransDateLabel);
+        showBagsDate = findViewById(R.id.totalBagsDate);
+        showTransDate =  findViewById(R.id.totalTransDate);
+        dateTitleLabel =  findViewById(R.id.dateTitleLabel);
 
         disableInput(showBagsDate);
         disableInput(showTransDate);
@@ -58,8 +58,8 @@ public class ShowDateSummary extends AppCompatActivity {
         totalTransDateLabelValue = "Total Transactions Processed on " + dateForSummary;
 
         dateTitleLabel.setText(dateTitleLabelValue);
-        totalBagsDateLabel.setText(totalBagsDateLabelValue);
-        totalTransDateLabel.setText(totalTransDateLabelValue);
+/*        totalBagsDateLabel.setText(totalBagsDateLabelValue);
+        totalTransDateLabel.setText(totalTransDateLabelValue);*/
 
         helper = new myDbAdapter(this);
         SQLiteDatabase database = new myDbAdapter.myDbHelper(this).getReadableDatabase();

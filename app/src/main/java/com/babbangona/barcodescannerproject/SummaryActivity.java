@@ -23,7 +23,7 @@ public class SummaryActivity extends AppCompatActivity {
         Intent j = new Intent(this, SelectDateSummary.class);
         startActivity(j);
     }
-
+/*
     public void openMoldSummary(View view){
         Intent j = new Intent(this, SelectMoldSummary.class);
         startActivity(j);
@@ -37,7 +37,7 @@ public class SummaryActivity extends AppCompatActivity {
     public void openPercentMoistureSummary(View view){
         Intent j = new Intent(this, SelectPercentMoistureSummary.class);
         startActivity(j);
-    }
+    }*/
 
     public void openTotalSummary(View view){
         Intent k = new Intent(this, ShowTotalSummary.class);
