@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="20dp"
         android:textColor="@color/colorPrimaryDark"
         android:id="@+id/dateTitleLabel" />
 
@@ -46,7 +46,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/totalTransCropLabel"
+        android:id="@+id/totalTransDateLabel"
         android:hint="@string/totalBagsMarketed"
         android:layout_below="@id/totalBagsDateLabel"
         style="@style/AppTextField"
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:id="@+id/totalTransCrop"
+            android:id="@+id/totalTransDate"
             android:maxLines="1"/>
 
 
@@ -68,9 +68,8 @@
         android:textAllCaps="false"
         android:layout_width="250sp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/viewLabel"
+        android:layout_below="@id/totalTransDateLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="1dp"
         android:onClick="showDateSummary"
         android:id="@+id/viewEditRecords" />
 
