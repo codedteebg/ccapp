@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -18,20 +19,20 @@ public class SelectCropSummary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_crop_summary);
 
-        final Spinner cropSpinner;
+        final AutoCompleteTextView cropSpinner;
 
         cropSpinner = findViewById(R.id.selectSeedType);
         List<String> list = Master.getSeedType();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-       cropSpinner.setAdapter(dataAdapter);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,list);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cropSpinner.setAdapter(dataAdapter);
 
-        Button nextCropSummary = (Button) findViewById(R.id.nextCropSummary);
+        Button nextCropSummary = findViewById(R.id.nextCropSummary);
 
         nextCropSummary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                String GetSelectedSeed = cropSpinner.getSelectedItem().toString();
+                String GetSelectedSeed = cropSpinner.getText().toString();
 
                 if (GetSelectedSeed.equals("Select One:")){
                     Toast.makeText(SelectCropSummary.this, "Please select a Seed Type",

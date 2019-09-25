@@ -23,18 +23,25 @@
         android:textColor="@color/colorPrimaryDark"
         android:id="@+id/cropTitleLabel" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/totalBagsCrop"
-        android:paddingLeft="5dp"
-        android:background="@drawable/grayededittext"
-        android:layout_below="@+id/cropTitleLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp" />
+        android:layout_height="wrap_content"
+        android:id="@+id/totalBagsCropLabel"
+        android:hint="@string/kgMarketed"
+        android:layout_below="@id/cropTitleLabel"
+        style="@style/AppTextField">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:id="@+id/totalBagsCrop"
+            android:maxLines="1"/>
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <TextView
         android:text="Total Transactions Till Date:"
@@ -42,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:id="@+id/totalTransCropLabel"
-        android:layout_below="@+id/totalBagsCrop"
+        android:layout_below="@+id/totalBagsCropLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -59,12 +66,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:text="Total Bags Till Date:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/totalBagsCropLabel"
-        android:layout_above="@+id/totalBagsCrop" />
+
 
 
 </RelativeLayout>

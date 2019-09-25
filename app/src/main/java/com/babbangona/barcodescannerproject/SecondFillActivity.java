@@ -12,9 +12,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
 import com.babbangona.barcodescannerproject.model.inventoryT;
@@ -166,21 +163,6 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
 
                             }
                         });
-                        //long id = helper.insertData(v1, v2, fillBags, v4, v5, loginName, mold, clean, moisture, kgMarketed);
-
-                        /*if (id < 0) {
-                            Message.message(getApplicationContext(), "Insertion Unsuccessful");
-                        } else {
-                            Message.message(getApplicationContext(), "Inventory Successfully Saved");
-                            Intent openMainActivity = new Intent(SecondFillActivity.this, MainActivity.class);
-                            startActivity(openMainActivity);
-
-                            Intent finishSecondScanActivity = new Intent("finishFirstFill");
-                            sendBroadcast(finishSecondScanActivity);
-
-                            finish();
-
-                        }*/
                     } else {
                         Message.message(getApplicationContext(), "Data entered doesn't correspond. Please go back to previous screen and re-enter data.");
                     }

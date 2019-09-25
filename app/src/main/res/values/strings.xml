@@ -26,6 +26,7 @@
     <string name="kgMarketed">KG Marketed</string>
     <string name="buttonNext">Next Page</string>
     <string name="buttonSave">Save</string>
+    <string name="showCropSummary">Show Summary for Selected Crop</string>
 
     <string-array name="seedtype_array">
         <item>Select One</item>
