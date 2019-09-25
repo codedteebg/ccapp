@@ -10,40 +10,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.babbangona.barcodescannerproject.SelectDateSummary">
 
-
-    <TextView
-        android:text="Select Date to filter by:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:id="@+id/selectDateLabel" />
-
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/summaryDateText"
-        android:layout_below="@id/selectDateLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edittextstyle"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/selectDateLabel"
+        android:hint="@string/selectDateSummary"
+        style="@style/AppTextField">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:id="@+id/selectDate"
+            android:maxLines="1"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:text="Show Summary for Selected Date"
+        android:text="@string/showDateSummary"
         android:textAllCaps="false"
-        android:layout_width="250sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/summaryDateText"
+        android:layout_below="@+id/selectDateLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
         android:onClick="showDateSummary"
         android:id="@+id/nextDateSummary" />
 
