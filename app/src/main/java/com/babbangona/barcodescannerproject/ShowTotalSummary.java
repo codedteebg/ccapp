@@ -8,6 +8,8 @@ import android.text.InputType;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class ShowTotalSummary extends AppCompatActivity {
     myDbAdapter helper;
     String totalBags, totalTrans;
@@ -19,9 +21,9 @@ public class ShowTotalSummary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_total_summary);
 
-        EditText showBags, showTrans;
-        showBags = (EditText) findViewById(R.id.totalBags);
-        showTrans = (EditText) findViewById(R.id.totalTrans);
+        TextInputEditText showBags, showTrans;
+        showBags = findViewById(R.id.totalBags);
+        showTrans = findViewById(R.id.totalTrans);
 
 
 

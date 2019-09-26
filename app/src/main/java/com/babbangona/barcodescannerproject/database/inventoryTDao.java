@@ -3,6 +3,7 @@ package com.babbangona.barcodescannerproject.database;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.Query;
 import androidx.room.Update;
 
 import com.babbangona.barcodescannerproject.model.inventoryT;
@@ -25,5 +26,8 @@ public interface inventoryTDao {
 
     @Delete
     void deleteTxn (inventoryT inventoryT);
+
+    @Query("SELECT * FROM inventoryT WHERE SyncFlag <> :syncflag")
+    inventoryT[] selectUnsynced(int syncflag);
 
 }

@@ -47,6 +47,10 @@ public class inventoryT {
     @NonNull
     private float PercentMoisture;
 
+    @ColumnInfo (name = "SyncFlag")
+    @NonNull
+    private int SyncFlag;
+
 
 
     public inventoryT (@NonNull String HSFID, String Unique_Field_ID, String FieldID, int BagsMarketed, int KGMarketed,
@@ -62,6 +66,7 @@ public class inventoryT {
         this.MoldCount = MoldCount;
         this.PercentClean = (float)PercentClean/100;
         this.PercentMoisture = (float)PercentMoisture/100;
+        this.SyncFlag = 0;
     }
 
     @NonNull
@@ -149,4 +154,11 @@ public class inventoryT {
         PercentMoisture = percentMoisture / 100;
     }
 
+    public int getSyncFlag() {
+        return SyncFlag;
+    }
+
+    public void  setSyncFlag(int SyncFlag){
+        this.SyncFlag = SyncFlag;
+    }
 }
