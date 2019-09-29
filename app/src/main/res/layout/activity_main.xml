@@ -43,21 +43,37 @@
         android:onClick="exportInventory"
         android:layout_below="@id/recordbutton" />
 
-    <Button
+    <!--<Button
         android:id="@+id/syncbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sync Inventory"
         android:onClick="syncInventory"
-        android:layout_below="@id/exportbutton" />
+        android:layout_below="@id/exportbutton" />-->
 
-    <Button
+    <!--<Button
         android:id="@+id/csvbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CSV Import"
         android:onClick="csvImport"
-        android:layout_below="@id/syncbutton" />
+        android:layout_below="@id/syncbutton" />-->
+
+    <Button
+        android:id="@+id/testButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:onClick="testCheck"
+        android:layout_below="@id/exportbutton" />
+
+    <Button
+        android:id="@+id/changeWarehouse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Warehouse"
+        android:onClick="addWarehouse"
+        android:layout_below="@id/testButton" />
 
 
 </RelativeLayout>

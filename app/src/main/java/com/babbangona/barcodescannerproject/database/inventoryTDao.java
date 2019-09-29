@@ -27,7 +27,8 @@ public interface inventoryTDao {
     @Delete
     void deleteTxn (inventoryT inventoryT);
 
-    @Query("SELECT * FROM inventoryT WHERE SyncFlag <> :syncflag")
-    inventoryT[] selectUnsynced(int syncflag);
+    @Query("SELECT * FROM inventoryT")
+    inventoryT[] selectUnsynced();
+
 
 }

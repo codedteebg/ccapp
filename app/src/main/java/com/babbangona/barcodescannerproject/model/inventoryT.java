@@ -41,15 +41,11 @@ public class inventoryT {
 
     @ColumnInfo (name = "PercentClean")
     @NonNull
-    private float PercentClean;
+    private int PercentClean;
 
     @ColumnInfo (name = "PercentMoisture")
     @NonNull
-    private float PercentMoisture;
-
-    @ColumnInfo (name = "SyncFlag")
-    @NonNull
-    private int SyncFlag;
+    private int PercentMoisture;
 
 
 
@@ -64,9 +60,10 @@ public class inventoryT {
         this.SeedType = SeedType;
         this.DateProcessed = DateProcessed;
         this.MoldCount = MoldCount;
-        this.PercentClean = (float)PercentClean/100;
-        this.PercentMoisture = (float)PercentMoisture/100;
-        this.SyncFlag = 0;
+        /*this.PercentClean = (float)PercentClean/100;
+        this.PercentMoisture = (float)PercentMoisture/100;*/
+        this.PercentClean = PercentClean;
+        this.PercentMoisture = PercentMoisture;
     }
 
     @NonNull
@@ -138,27 +135,20 @@ public class inventoryT {
         MoldCount = moldCount;
     }
 
-    public float getPercentClean() {
+    public int getPercentClean() {
         return (int)(PercentClean * 100);
     }
 
-    public void setPercentClean(float percentClean) {
+    public void setPercentClean(int percentClean) {
         PercentClean = percentClean / 100;
     }
 
-    public float getPercentMoisture() {
+    public int getPercentMoisture() {
         return (int)(PercentMoisture * 100);
     }
 
-    public void setPercentMoisture(float percentMoisture) {
+    public void setPercentMoisture(int percentMoisture) {
         PercentMoisture = percentMoisture / 100;
     }
 
-    public int getSyncFlag() {
-        return SyncFlag;
-    }
-
-    public void  setSyncFlag(int SyncFlag){
-        this.SyncFlag = SyncFlag;
-    }
 }

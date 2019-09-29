@@ -4,6 +4,7 @@ import java.util.TimerTask;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,69 +20,57 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 public class DefaultActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
     String fieldID, bags, seedDistributed, hsfID;
+    SharedPreferences myPref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default);
         //setTitle("Scan");
+        myPref = getSharedPreferences("User_prefs", 0);
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 5);
         }
+
+        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
+        setContentView(mScannerView);
+        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+        mScannerView.startCamera();
     }
 
-    public void QrScanner(View view){
+  /*  public void QrScanner(View view){
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);
         mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
         mScannerView.startCamera();         // Start camera
-    }
+    }*/
 
 
     @Override
-    public void handleResult(Result rawResult) {
+    public void handleResult(final Result rawResult) {
 
         final String format = rawResult.getBarcodeFormat().toString();
+        final String Result;
 
         if(format.equals("QR_CODE")) {
 
             String lastChars = rawResult.getText().substring(rawResult.getText().length() - 5);
 
             if (lastChars.equalsIgnoreCase("FREE*")) {
+                if(rawResult.getText().length() > 23){
+                     Result = rawResult.getText().substring(0, rawResult.getText().length() - 23);
+                }
+                else Result = rawResult.getText();
 
 
                 // Do something with the result here
-                String checkFieldLoc = "var1";
-                String checkBagsStartLoc = "var2s", checkBagsEndLoc = "var2e";
-                String checkSeedStartLoc = "var3s", checkSeedEndLoc = "var3e";
-                String checkHsfIDStartLoc = "var4s", checkHsfIDEndLoc = "var4e";
-                final int fieldNum, BagsStartNum, BagsEndNum, SeedStartNum, SeedEndNum, HsfIDStartNum, HsfIDEndNum;
-                Log.e("handler", rawResult.getText()); // Prints scan results
-                Log.e("handler", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode)
-                fieldNum = rawResult.getText().indexOf(checkFieldLoc);
-                fieldID = rawResult.getText().substring(10, fieldNum);
-                BagsStartNum = rawResult.getText().indexOf(checkBagsStartLoc) + 5;
-                BagsEndNum = rawResult.getText().indexOf(checkBagsEndLoc);
-                bags = rawResult.getText().substring(BagsStartNum, BagsEndNum);
-                SeedStartNum = rawResult.getText().indexOf(checkSeedStartLoc) + 5;
-                SeedEndNum = rawResult.getText().indexOf(checkSeedEndLoc);
-
-                seedDistributed = rawResult.getText().substring(SeedStartNum, SeedEndNum);
-                // Map here
-                Master map = new Master();
-                seedDistributed = map.getSeedType(seedDistributed);
-                // Map ends
-
-                HsfIDStartNum = rawResult.getText().indexOf(checkHsfIDStartLoc) + 5;
-                HsfIDEndNum = rawResult.getText().indexOf(checkHsfIDEndLoc);
-                hsfID = rawResult.getText().substring(HsfIDStartNum, HsfIDEndNum);
-
 
                 // show the scanner result into dialog box.
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Scan Result");
-                builder.setMessage("FieldID = " + fieldID + "\n BagsMarketed = " + bags + "\n SeedDistributed = " + seedDistributed);
+                //builder.setMessage("FieldID = " + fieldID + "\n BagsMarketed = " + bags + "\n SeedDistributed = " + seedDistributed);
+                builder.setMessage(Result);
                 builder.setCancelable(true);
                 final AlertDialog alert1 = builder.create();
                 alert1.show();
@@ -94,13 +83,31 @@ public class DefaultActivity extends AppCompatActivity implements ZXingScannerVi
                         t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
                         mScannerView.stopCamera();
 
-                        Intent intent = new Intent(DefaultActivity.this, SecondScanActivity.class);
-                        intent.putExtra("HSF_ID", hsfID);
-                        intent.putExtra("FIELD_ID", fieldID);
-                        intent.putExtra("BAGS_MKTD", bags);
-                        intent.putExtra("SEED_TYPE", seedDistributed);
-                        startActivity(intent);
-                        finish();
+                        if(myPref.contains("Activity")){
+                            String activityIntent = myPref.getString("Activity", "");
+                            if(activityIntent.equalsIgnoreCase("SecondActivity.java")){
+                                Intent intent = new Intent(DefaultActivity.this, SecondScanActivity.class);
+                                intent.putExtra("SCAN_RESULT",Result);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else if(activityIntent.equalsIgnoreCase("MainActivity.java")){
+                                SharedPreferences.Editor edit = myPref.edit();
+                                edit.putString("Warehouse",Result);
+                                edit.commit();
+
+                                Intent intent = new Intent(DefaultActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Message.message(getApplicationContext(), "Warehouse saved: " + Result);
+                                    }
+                                });
+                            }
+                        }
+
 
                     }
                 }, 1000); // after 1 second (or 1000 miliseconds), the task will be active.

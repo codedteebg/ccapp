@@ -4,13 +4,17 @@ import android.Manifest;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Environment;
 
+import com.babbangona.barcodescannerproject.api.ApiClient;
+import com.babbangona.barcodescannerproject.api.ApiInterface;
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.syncHSFResponse;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,6 +23,7 @@ import android.os.Bundle;
 
 import android.content.Intent;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -31,6 +36,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import jxl.Workbook;
@@ -38,7 +44,12 @@ import jxl.WorkbookSettings;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import com.babbangona.barcodescannerproject.model.inventoryT;
+import com.google.gson.Gson;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
     ComponentName componentName;
     private static final int JOB_ID =101;
     AppDatabase mDb;
+    ApiInterface apiInterface;
+    String jsooon;
+    SharedPreferences myPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mDb = AppDatabase.getInstance(getApplicationContext());
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        myPref = getSharedPreferences("User_prefs", 0);
         // Sync triggered whenever you visit the home page
         SyncData.SyncInventory syncTest = new SyncData.SyncInventory(getApplicationContext()){
             @Override
@@ -98,6 +115,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openScanScreen(View view) {
+        SharedPreferences.Editor edit = myPref.edit();
+        edit.putString("Activity", "SecondActivity.java");
+        edit.commit();
+
         Intent i = new Intent(this, DefaultActivity.class);
         startActivity(i);
 
@@ -296,6 +317,62 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return inventoryTS; //return List
+    }
+
+    public void testCheck(View view){
+
+        final ArrayList<syncHSFResponse> syncHSFResponses = new ArrayList<>() ;
+
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final inventoryT[] invss = mDb.inventoryTDao().selectUnsynced();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        jsooon = new Gson().toJson(invss);
+                        Log.d("Tobi", jsooon + "t");
+
+                        Call<List<syncHSFResponse>> call = apiInterface.syncHSF(jsooon);
+                        call.enqueue(new Callback<List<syncHSFResponse>>(){
+                            @Override
+                            public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response){
+               /* List<syncHSFResponse> syncHSFResponses = response.body();
+                Log.d("Tobi", "new " + response.body());
+                int syncSize = syncHSFResponses.size();
+                for(int i = 0; i < syncSize;i++ ){
+                    Message.message(getApplicationContext(), syncHSFResponses.get(i).getHsfId());
+                }
+*/              /*for(syncHSFResponse syncHSFResponse: response.body()){
+                    System.out.println(syncHSFResponse.toString());
+                }*/
+                                System.out.println("Tope" +response.body().toString());
+
+                            }
+
+                            public void onFailure(Call<List<syncHSFResponse>>call, Throwable t){
+                                Log.d("Tobi", t + "Tobi");
+                            }
+                        });
+                    }
+                });
+
+
+             }
+        });
+
+
+    }
+
+    public void addWarehouse(View view) {
+        SharedPreferences.Editor edit = myPref.edit();
+        edit.putString("Activity", "MainActivity.java");
+        edit.commit();
+
+        Intent i = new Intent(this, DefaultActivity.class);
+        startActivity(i);
+
     }
 
     @Override

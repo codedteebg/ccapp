@@ -54,19 +54,21 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         Button nextConfirmScan;
 
         Intent intent = getIntent();
-        final String hsf_string = intent.getStringExtra("HSF_ID");
+        final String rawResult = intent.getStringExtra("SCAN_RESULT");
+        /*final String hsf_string = intent.getStringExtra("HSF_ID");
         final String field_string = intent.getStringExtra("FIELD_ID");
         String bags_string = intent.getStringExtra("BAGS_MKTD");
-        String seed_string = intent.getStringExtra("SEED_TYPE");
+        String seed_string = intent.getStringExtra("SEED_TYPE");*/
+        String[] Result = rawResult.split(",");
 
         hsfidText =  findViewById(R.id.hsfidText);
-        hsfidText.setText(hsf_string);
+        hsfidText.setText(Result[0]);
 
         fieldIDText =  findViewById(R.id.fieldIDText);
-        fieldIDText.setText(field_string);
+        fieldIDText.setText(Result[1]);
 
         bagsMarketedText = findViewById(R.id.bagsMarketedText);
-        bagsMarketedText.setText(bags_string);
+        bagsMarketedText.setText(Result[2]);
         bagsMarketedText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -92,7 +94,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         seedSpinner.setAdapter(dataAdapter);
 
         //seedSpinner.setSelection(getIndex(seedSpinner, seed_string));
-        seedSpinner.setText(seed_string);
+        seedSpinner.setText(Result[3]);
         disableInput(hsfidText);
         disableInput(fieldIDText);
 
