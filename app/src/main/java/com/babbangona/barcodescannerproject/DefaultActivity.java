@@ -28,6 +28,11 @@ public class DefaultActivity extends AppCompatActivity implements ZXingScannerVi
         setContentView(R.layout.activity_default);
         //setTitle("Scan");
         myPref = getSharedPreferences("User_prefs", 0);
+        if(myPref.getString("Activity", "").equalsIgnoreCase("MainActivity.java")){
+            setTitle("Scan Warehouse");
+        } else {
+            setTitle("Scan HSF");
+        }
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 5);

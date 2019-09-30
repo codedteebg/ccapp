@@ -1,6 +1,7 @@
 package com.babbangona.barcodescannerproject;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -50,6 +51,7 @@ import retrofit2.Response;
 
 import com.babbangona.barcodescannerproject.model.inventoryT;
 import com.google.gson.Gson;
+import android.content.DialogInterface;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -115,12 +117,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openScanScreen(View view) {
-        SharedPreferences.Editor edit = myPref.edit();
-        edit.putString("Activity", "SecondActivity.java");
-        edit.commit();
+        final SharedPreferences.Editor edit = myPref.edit();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialogTheme);
+        if(!myPref.contains("Warehouse")){
+            builder.setTitle("Warehouse Not Registered")
+                    .setMessage("Please click Continue to register Warehouse.")
+                    .setCancelable(false)
+                    .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
 
-        Intent i = new Intent(this, DefaultActivity.class);
-        startActivity(i);
+                            edit.putString("Activity", "MainActivity.java");
+                            edit.commit();
+
+                            Intent i = new Intent(MainActivity.this, DefaultActivity.class);
+                            startActivity(i);
+                }
+            })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+
+        } else {
+            builder.setTitle("Scan HSF")
+                    .setMessage("Please click Continue to scan HSF.")
+                    .setCancelable(false)
+                    .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                            edit.putString("Activity", "SecondActivity.java");
+                            edit.commit();
+
+                            Intent i = new Intent(MainActivity.this, DefaultActivity.class);
+                            startActivity(i);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+
+
+        }
 
     }
 
