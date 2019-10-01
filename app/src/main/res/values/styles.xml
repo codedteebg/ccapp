@@ -47,4 +47,8 @@
         <item name="android:windowBackground">@drawable/background_dialog</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="Theme.MaterialComponents.Light.DarkActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="Theme.MaterialComponents.Light.DarkActionBar" />
+
 </resources>

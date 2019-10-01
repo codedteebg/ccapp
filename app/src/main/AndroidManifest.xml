@@ -19,7 +19,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon,android:theme">
-        <activity android:name=".SelectMSA"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
@@ -148,6 +147,26 @@
         <activity android:name=".SelectPercentMoistureSummary" />
         <activity android:name=".ShowPercentCleanSummary" />
         <activity android:name=".ShowPercentMoistureSummary" />
+        <activity
+            android:name=".SelectMSA"
+            android:label="Select MSA"
+            android:theme="@style/AppTheme">
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+
+        </activity>
     </application>
 
 </manifest>
