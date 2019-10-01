@@ -75,5 +75,13 @@
         android:onClick="addWarehouse"
         android:layout_below="@id/testButton" />
 
+    <Button
+        android:id="@+id/payTransporter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pay Transporter"
+        android:onClick="payTransporter"
+        android:layout_below="@id/changeWarehouse" />
+
 
 </RelativeLayout>
