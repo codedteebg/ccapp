@@ -26,12 +26,14 @@ import android.widget.ArrayAdapter;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.lang.String;
-
+import com.babbangona.barcodescannerproject.model.transporterRate;
 
 
 public class SecondScanActivity extends AppCompatActivity implements OnClickListener {
@@ -39,9 +41,9 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
     static private boolean isFirstTimeGetFocused = true;
-    String GetHsfidText, GetFieldidText, GetBagsMarketedText, GetDateText, GetSeedText, getMoldCount, getPercentClean, getPercentMoisture, getKgMarketed;
-    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed, hsfidText, fieldIDText, bagsMarketedText;
-    private AutoCompleteTextView seedSpinner;
+    String GetHsfidText, GetFieldidText, GetBagsMarketedText, GetDateText, GetSeedText, getTransportRate, getMoldCount, getPercentClean, getPercentMoisture, getKgMarketed, getTransporterID;
+    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed, hsfidText, fieldIDText, bagsMarketedText, transporterIDText;
+    private AutoCompleteTextView seedSpinner, transportRateSpinner;
     private Button nextConfirmScan;
 
 
@@ -93,10 +95,17 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         seedSpinner.setAdapter(dataAdapter);
 
+        transportRateSpinner = findViewById(R.id.scanTransporterRateText);
+        List<String> rateList = transporterRate.getRate();
+        ArrayAdapter<String> rateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, rateList);
+        transportRateSpinner.setAdapter(rateAdapter);
+
+
         //seedSpinner.setSelection(getIndex(seedSpinner, seed_string));
         seedSpinner.setText(Result[3]);
         disableInput(hsfidText);
         disableInput(fieldIDText);
+        transporterIDText = findViewById(R.id.editScanTransporter);
 
         dateText = findViewById(R.id.dateText);
 
@@ -130,6 +139,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
                 getPercentClean = percentClean.getText().toString();
                 getPercentMoisture = percentMoisture.getText().toString();
                 getKgMarketed = kg_marketed.getText().toString();
+                getTransporterID = transporterIDText.getText().toString();
 
                 if (GetSeedText.equals("Select One:")){
                     Toast.makeText(SecondScanActivity.this, "Please select a Seed Type",
@@ -139,7 +149,9 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
                 else {
 
                     if (TextUtils.isEmpty(GetHsfidText) || TextUtils.isEmpty(GetFieldidText)
-                            || TextUtils.isEmpty(GetBagsMarketedText) || TextUtils.isEmpty(GetSeedText) || TextUtils.isEmpty(GetDateText)) {
+                            || TextUtils.isEmpty(GetBagsMarketedText) || TextUtils.isEmpty(GetSeedText) || TextUtils.isEmpty(GetDateText)
+                    || TextUtils.isEmpty(getTransporterID) || TextUtils.isEmpty(getMoldCount) || TextUtils.isEmpty(getPercentClean)
+                    || TextUtils.isEmpty(getPercentMoisture) || TextUtils.isEmpty(getKgMarketed)) {
                         Toast.makeText(SecondScanActivity.this, "One or more required fields are empty",
                                 Toast.LENGTH_SHORT).show();
                     } else {
@@ -156,6 +168,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
                         openConfirmScanPage.putExtra("Percent_Clean", getPercentClean);
                         openConfirmScanPage.putExtra("Percent_Moisture", getPercentMoisture);
                         openConfirmScanPage.putExtra("kg_marketed", getKgMarketed);
+                        openConfirmScanPage.putExtra("transporterID", getTransporterID);
 
                         startActivity(openConfirmScanPage);
                     }

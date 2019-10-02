@@ -19,8 +19,9 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class DefaultActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
-    String fieldID, bags, seedDistributed, hsfID;
+    //String fieldID, bags, seedDistributed, hsfID;
     SharedPreferences myPref;
+    String openType, scanType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,11 +29,10 @@ public class DefaultActivity extends AppCompatActivity implements ZXingScannerVi
         setContentView(R.layout.activity_default);
         //setTitle("Scan");
         myPref = getSharedPreferences("User_prefs", 0);
-        if(myPref.getString("Activity", "").equalsIgnoreCase("MainActivity.java")){
-            setTitle("Scan Warehouse");
-        } else {
-            setTitle("Scan HSF");
-        }
+        openType = myPref.getString("OpenType", "");
+        scanType = myPref.getString("ScanType", "");
+
+        setTitle(scanType);
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 5);
@@ -57,6 +57,7 @@ public class DefaultActivity extends AppCompatActivity implements ZXingScannerVi
 
         final String format = rawResult.getBarcodeFormat().toString();
         final String Result;
+        final SharedPreferences.Editor edit = myPref.edit();
 
         if(format.equals("QR_CODE")) {
 
@@ -88,30 +89,42 @@ public class DefaultActivity extends AppCompatActivity implements ZXingScannerVi
                         t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
                         mScannerView.stopCamera();
 
-                        if(myPref.contains("Activity")){
-                            String activityIntent = myPref.getString("Activity", "");
-                            if(activityIntent.equalsIgnoreCase("SecondActivity.java")){
-                                Intent intent = new Intent(DefaultActivity.this, SecondScanActivity.class);
-                                intent.putExtra("SCAN_RESULT",Result);
-                                startActivity(intent);
+                        if(openType.equalsIgnoreCase("OpenScan") && scanType.equalsIgnoreCase("Scan Warehouse")){
+                            edit.putString("ScanType", "Scan HSF");
+                            edit.putString("Warehouse", Result);
+                            edit.commit();
+                            Intent i = new Intent(DefaultActivity.this, DefaultActivity.class);
+                            startActivity(i);
+                            finish();
+                        } else if(openType.equalsIgnoreCase("OpenScan" )&& scanType.equalsIgnoreCase("Scan HSF")){
+                            if(Result.matches("HS(.*)")){
+                                Log.d("Tola", "Got here" + Result);
+                                Intent i = new Intent(DefaultActivity.this, SecondScanActivity.class);
+                                i.putExtra("SCAN_RESULT", Result);
+                                startActivity(i);
                                 finish();
-                            }
-                            else if(activityIntent.equalsIgnoreCase("MainActivity.java")){
-                                SharedPreferences.Editor edit = myPref.edit();
-                                edit.putString("Warehouse",Result);
-                                edit.commit();
-
-                                Intent intent = new Intent(DefaultActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                            } else{
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Message.message(getApplicationContext(), "Warehouse saved: " + Result);
+                                        Message.message(getApplicationContext(),"Wrong HSF QR Code Scanned");
                                     }
                                 });
+
+                                Intent i = new Intent(DefaultActivity.this, MainActivity.class);
+                                startActivity(i);
+                                finish();
                             }
+                           // Message.message(getApplicationContext(), Result);
+
+                        } else if(openType.equalsIgnoreCase("OpenFill") && scanType.equalsIgnoreCase("Scan Warehouse")){
+                            edit.putString("Warehouse", Result);
+                            edit.commit();
+                            Intent i = new Intent(DefaultActivity.this, FillActivity.class);
+                            startActivity(i);
                         }
+
+
 
 
                     }

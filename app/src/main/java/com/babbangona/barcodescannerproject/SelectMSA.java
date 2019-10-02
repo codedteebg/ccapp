@@ -2,6 +2,10 @@ package com.babbangona.barcodescannerproject;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+//import androidx.appcompat.widget.SearchView;
+import android.graphics.Color;
+import android.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +19,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
+
 
 import com.babbangona.barcodescannerproject.model.msaT;
 import com.babbangona.bg_face.LuxandActivity;
@@ -30,11 +34,14 @@ public class SelectMSA extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MsaAdapter msaAdapter;
     private SharedPreferences myPref;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_msa);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         myPref = getSharedPreferences("User_prefs", 0);
 
@@ -293,11 +300,14 @@ public class SelectMSA extends AppCompatActivity {
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
-                .getActionView();
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        /*searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();*/
         searchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
+
 
         // listening to search query text change
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

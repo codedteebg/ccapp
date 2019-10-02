@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     ApiInterface apiInterface;
     String jsooon;
     SharedPreferences myPref;
+    SharedPreferences.Editor edit;
 
 
     @Override
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         mDb = AppDatabase.getInstance(getApplicationContext());
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         myPref = getSharedPreferences("User_prefs", 0);
+        edit = myPref.edit();
         // Sync triggered whenever you visit the home page
         SyncData.SyncInventory syncTest = new SyncData.SyncInventory(getApplicationContext()){
             @Override
@@ -117,56 +119,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openScanScreen(View view) {
-        final SharedPreferences.Editor edit = myPref.edit();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialogTheme);
-        if(!myPref.contains("Warehouse")){
-            builder.setTitle("Warehouse Not Registered")
-                    .setMessage("Please click Continue to register Warehouse.")
-                    .setCancelable(false)
-                    .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
 
-                            edit.putString("Activity", "MainActivity.java");
-                            edit.commit();
-
-                            Intent i = new Intent(MainActivity.this, DefaultActivity.class);
-                            startActivity(i);
-                }
-            })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //  Action for 'NO' Button
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
-
-        } else {
-            builder.setTitle("Scan HSF")
-                    .setMessage("Please click Continue to scan HSF.")
-                    .setCancelable(false)
-                    .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            finish();
-                            edit.putString("Activity", "SecondActivity.java");
-                            edit.commit();
-
-                            Intent i = new Intent(MainActivity.this, DefaultActivity.class);
-                            startActivity(i);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //  Action for 'NO' Button
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
-
-
-        }
+        edit.putString("OpenType", "OpenScan");
+        edit.putString("ScanType", "Scan Warehouse");
+        edit.commit();
+        Intent i = new Intent(this,DefaultActivity.class );
+        startActivity(i);
 
     }
 
@@ -178,8 +136,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openFillScreen(View view) {
-        Intent j = new Intent(this, FillActivity.class);
-        startActivity(j);
+
+
+        edit.putString("OpenType", "OpenFill");
+        edit.putString("ScanType", "Scan Warehouse");
+        edit.commit();
+        Intent i = new Intent(this,DefaultActivity.class );
+        startActivity(i);
     }
 
     public void showSummary(View view) {
@@ -293,13 +256,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Used in an onClick method here. Just add to your onCreate, etc....
-    public void csvImport(View view){
+   /* public void csvImport(View view){
         final ArrayList<inventoryT> invs = readCSVFromAssets(); //gets List of objects from readCSV method
 
-        /*
+        *//*
          * I am using Executors here. Your AsyncTask will also work.
         Will attach the Executors class also in case you need them.
-         */
+         *//*
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -324,10 +287,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     //CSV read into List of model class
-    private ArrayList<inventoryT> readCSVFromAssets(){
+    /*private ArrayList<inventoryT> readCSVFromAssets(){
         ArrayList<inventoryT> inventoryTS = new ArrayList<>(); //List to hold model class objects
         String[] content = null; //placeholder String array
         try{
@@ -353,7 +316,8 @@ public class MainActivity extends AppCompatActivity {
                      content[6],
                      Integer.parseInt(content[7]),
                      Integer.parseInt(content[8]),
-                     Integer.parseInt(content[9]));
+                     Integer.parseInt(content[9]),
+                        );
                 inventoryTS.add(inv);
                 }
             }
@@ -363,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return inventoryTS; //return List
-    }
+    }*/
 
     public void testCheck(View view){
 

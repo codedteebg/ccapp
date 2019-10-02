@@ -19,11 +19,13 @@
     <string name="fieldID">Field ID</string>
     <string name="bagsMarketed">Bags Marketed</string>
     <string name="seedtype">Seed Type</string>
+    <string name="transportRate">Rate Transporter</string>
     <string name="dateProcessed">Date Processed</string>
     <string name="moldCount">Mold Count</string>
     <string name="percentClean">Percent Clean</string>
     <string name="percentMoist">Percent Moisture</string>
     <string name="kgMarketed">KG Marketed</string>
+    <string name="transporter">Transporter ID</string>
     <string name="buttonNext">Next Page</string>
     <string name="buttonSave">Save</string>
     <string name="showCropSummary">Show Summary for Selected Crop</string>
@@ -31,6 +33,7 @@
     <string name="totalTrans">Total Transactions</string>
     <string name="selectDateSummary">Select Date to filter by:</string>
     <string name="showDateSummary">Show Summary for Selected Date</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 
     <string-array name="seedtype_array">
         <item>Select One</item>

@@ -46,15 +46,15 @@ public class MsaAdapter extends RecyclerView.Adapter<MsaAdapter.MyViewHolder> im
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position){
-            msaT msaT = msaListFiltered.get(position);
+        public void onBindViewHolder(MyViewHolder holder, final int position){
+            final msaT msaT = msaListFiltered.get(position);
             holder.msaStaff.setText(msaT.getStaff_id());
             holder.msaName.setText(msaT.getFullname());
         }
 
         @Override
         public int getItemCount(){
-            return msaList.size();
+            return msaListFiltered.size();
         }
 
         @Override
@@ -69,7 +69,7 @@ public class MsaAdapter extends RecyclerView.Adapter<MsaAdapter.MyViewHolder> im
                         List<msaT> filteredList = new ArrayList<>();
                         for (msaT row : msaList){
                             //checking for name or staffID match
-                            if(row.getStaff_id().toLowerCase().contains(charString.toLowerCase()) || row.getFullname().contains((charString.toLowerCase()))){
+                            if(row.getStaff_id().toLowerCase().contains(charString.toLowerCase()) || row.getFullname().toLowerCase().contains((charString.toLowerCase()))){
                                 filteredList.add(row);
                             }
                         }
