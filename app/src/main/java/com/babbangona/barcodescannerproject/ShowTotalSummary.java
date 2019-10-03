@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.MenuItem;
 import android.widget.EditText;
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.totalSummary;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -15,13 +18,16 @@ public class ShowTotalSummary extends AppCompatActivity {
     String totalBags, totalTrans;
     int totalBagsNo;
     int totalTransNo;
+    AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_total_summary);
 
-        TextInputEditText showBags, showTrans;
+        mDb = AppDatabase.getInstance(getApplicationContext());
+
+        final TextInputEditText showBags, showTrans;
         showBags = findViewById(R.id.totalBags);
         showTrans = findViewById(R.id.totalTrans);
 
@@ -30,7 +36,33 @@ public class ShowTotalSummary extends AppCompatActivity {
         disableInput(showBags);
         disableInput(showTrans);
 
-        helper = new myDbAdapter(this);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final totalSummary totalSummary = mDb.inventoryTDao().showTotalSummary();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(totalSummary.toString().equalsIgnoreCase("")){
+                            totalBagsNo = 0;
+                            totalTransNo = 0;
+                        } else {
+                            totalBagsNo = totalSummary.getTotalBagsTotal();
+                            totalTransNo = totalSummary.getTxnTotal();
+                            totalBags = String.valueOf(totalBagsNo);
+                            totalTrans = String.valueOf(totalTransNo);
+                            showBags.setText(totalBags);
+                            showTrans.setText(totalTrans);
+
+                        }
+
+                    }
+                });
+            }
+        });
+
+
+        /*helper = new myDbAdapter(this);
 
 
         SQLiteDatabase database = new myDbAdapter.myDbHelper(this).getReadableDatabase();
@@ -46,22 +78,22 @@ public class ShowTotalSummary extends AppCompatActivity {
 
         // if (transCropCursor != null) {
         totalTransNo = transCursor.getCount();
-       /* } else
+       *//* } else
         {
             totalCropTransNo = 0;
         }
-*/
+*//*
 
         totalBags = String.valueOf(totalBagsNo);
         totalTrans = String.valueOf(totalTransNo);
         showBags.setText(totalBags);
         showTrans.setText(totalTrans);
         bagsCursor.close();
-        transCursor.close();
+        transCursor.close();*/
 
     }
 
-    void disableInput (EditText editText) {
+    void disableInput (TextInputEditText editText) {
         editText.setInputType(InputType.TYPE_NULL);
         editText.setTextIsSelectable(false);
     }

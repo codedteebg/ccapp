@@ -172,13 +172,47 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/fillTransporterID"
+            android:hint="@string/transporter"
+            android:layout_below="@id/percentMoisture"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/fillTransporterText"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/fillTransporterRate"
+            android:hint="@string/transportRate"
+            android:layout_below="@id/fillTransporterID"
+            style="@style/ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/fillTransporterRateText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:text="@string/buttonNext"
             android:textAllCaps="false"
             android:layout_width="250sp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/percentMoisture"
+            android:layout_below="@+id/fillTransporterRate"
             android:layout_centerHorizontal="true"
             android:id="@+id/nextConfirmFill" />
 

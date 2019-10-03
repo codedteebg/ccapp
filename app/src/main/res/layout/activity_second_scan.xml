@@ -199,7 +199,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/scanTransporterRate"
             android:hint="@string/transportRate"
-            android:layout_below="@id/scanPercentMoisture"
+            android:layout_below="@id/scanTransporterID"
             style="@style/ExposedDropdownMenu">
 
             <AutoCompleteTextView

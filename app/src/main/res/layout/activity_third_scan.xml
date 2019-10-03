@@ -193,12 +193,29 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmScanTransporterRate"
+            android:hint="@string/transportRate"
+            android:layout_below="@id/confirmScanTransporterID"
+            style="@style/ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/confirmScanTransporterRateText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:text="@string/buttonSave"
             android:textAllCaps="false"
             android:layout_width="250sp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/confirmScanTransporterID"
+            android:layout_below="@+id/confirmScanTransporterRate"
             android:layout_centerHorizontal="true"
             android:id="@+id/saveScanResults"
             android:onClick="saveScanResults"/>

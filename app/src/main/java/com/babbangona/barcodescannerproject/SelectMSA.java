@@ -56,14 +56,16 @@ public class SelectMSA extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                msaT msaT = msaTList.get(position);
+                //msaT msaT = msaTList.get(position);
+                msaT msaT = msaAdapter.getItem(position);
                 Message.message(getApplicationContext(), msaT.getStaff_id() + "is selected");
                 CallLuxandPrefs(msaT.getStaff_id(), msaT.getFacetemplate());
             }
 
             @Override
             public void onLongClick(View view, int position) {
-
+                msaT msaT = msaAdapter.getItem(position);
+                Message.message(getApplicationContext(), msaT.getStaff_id() + "is selected");
             }
         }));
 

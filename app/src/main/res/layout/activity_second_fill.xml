@@ -171,13 +171,48 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmFillTransporterID"
+            android:hint="@string/transporter"
+            android:layout_below="@id/confirmPercentMoisture"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/confirmFillTransporterIDText"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmFillTransporterRate"
+            android:hint="@string/transportRate"
+            android:layout_below="@id/confirmFillTransporterID"
+            style="@style/ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/confirmFillTransporterRateText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <Button
             android:text="@string/buttonSave"
             android:textAllCaps="false"
             android:layout_width="250sp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/confirmPercentMoisture"
+            android:layout_below="@+id/confirmFillTransporterRate"
             android:layout_centerHorizontal="true"
             android:id="@+id/ConfirmFill"
             android:onClick="saveFillResults"/>

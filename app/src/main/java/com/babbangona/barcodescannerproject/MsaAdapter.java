@@ -20,16 +20,18 @@ import java.util.List;
 public class MsaAdapter extends RecyclerView.Adapter<MsaAdapter.MyViewHolder> implements Filterable {
         private List<msaT> msaList;
         private List<msaT> msaListFiltered;
-       // private Context context;
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
             public TextView msaStaff, msaName;
 
             public MyViewHolder(View view){
                 super(view);
+
                 msaStaff = view.findViewById(R.id.msaStaffID);
                 msaName = view.findViewById(R.id.msaName);
             }
+
+
         }
 
         public MsaAdapter (List<msaT> msaList){
@@ -55,6 +57,10 @@ public class MsaAdapter extends RecyclerView.Adapter<MsaAdapter.MyViewHolder> im
         @Override
         public int getItemCount(){
             return msaListFiltered.size();
+        }
+
+        public msaT getItem (int position){
+            return msaListFiltered.get(position);
         }
 
         @Override

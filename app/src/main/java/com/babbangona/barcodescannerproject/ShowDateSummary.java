@@ -16,6 +16,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.dateSummary;
 
 public class ShowDateSummary extends AppCompatActivity {
     myDbAdapter helper;
@@ -23,16 +26,19 @@ public class ShowDateSummary extends AppCompatActivity {
     long dateForSumQ;
     int totalDateBagsNo, totalDateTransNo;
     Date date;
+    AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_date_summary);
 
+        mDb = AppDatabase.getInstance(getApplicationContext());
+
         Intent openDateSummary = getIntent();
         dateForSummary = openDateSummary.getStringExtra("Date_For_Summary");
 
-        TextInputEditText showBagsDate, showTransDate;
+        final TextInputEditText showBagsDate, showTransDate;
         TextView dateTitleLabel;
         String dateTitleLabelValue, totalBagsDateLabelValue, totalTransDateLabelValue;
 
@@ -61,7 +67,29 @@ public class ShowDateSummary extends AppCompatActivity {
 /*        totalBagsDateLabel.setText(totalBagsDateLabelValue);
         totalTransDateLabel.setText(totalTransDateLabelValue);*/
 
-        helper = new myDbAdapter(this);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final dateSummary dateSummary = mDb.inventoryTDao().showDateSummary(dateForSummary);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(dateSummary.toString().equalsIgnoreCase("")){
+                            totalDateBagsNo = 0;
+                            totalDateTransNo = 0;
+                        } else {
+                            totalDateBagsNo = dateSummary.getTotalBagsDate();
+                            totalDateTransNo = dateSummary.getTxnDate();
+                        }
+                        showBagsDate.setText(String.valueOf(totalDateBagsNo));
+                        showTransDate.setText(String.valueOf(totalDateTransNo));
+
+                    }
+                });
+            }
+        });
+
+        /*helper = new myDbAdapter(this);
         SQLiteDatabase database = new myDbAdapter.myDbHelper(this).getReadableDatabase();
 
         try {
@@ -86,7 +114,7 @@ public class ShowDateSummary extends AppCompatActivity {
         showTransDate.setText(String.valueOf(totalDateTransNo));
 
         bagsDateCursor.close();
-        transDateCursor.close();
+        transDateCursor.close();*/
     }
 
     public void showDateSummary(View view){

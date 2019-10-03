@@ -3,6 +3,7 @@ package com.babbangona.barcodescannerproject.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 
 @Entity (tableName = "inventoryT", primaryKeys = "HSFID")
 public class inventoryT {
@@ -67,13 +68,19 @@ public class inventoryT {
     @NonNull
     private int BagsRate;
 
+
+    @ColumnInfo (name = "DeletedFlag")
+    @NonNull
+    private int DeletedFlag;
+
     @ColumnInfo (name = "SyncFlag")
     @NonNull
     private int SyncFlag;
 
+    @Ignore
     public inventoryT (@NonNull String HSFID, String FieldID, int BagsMarketed, int KGMarketed,
                        String SeedType, String DateProcessed, int MoldCount, int PercentClean, int PercentMoisture,
-                       String WarehouseID, String CCOID, String TransporterID, int TransportPaidFlag,String TransporterRating, int BagsRate, int SyncFlag){
+                       String WarehouseID, String CCOID, String TransporterID, int TransportPaidFlag,String TransporterRating, int BagsRate, int DeletedFlag, int SyncFlag){
 
         this.HSFID = HSFID;
         this.FieldID = FieldID;
@@ -92,8 +99,10 @@ public class inventoryT {
         this.TransportPaidFlag = TransportPaidFlag;
         this.TransporterRating = TransporterRating;
         this.BagsRate = BagsRate;
+        this.DeletedFlag = DeletedFlag;
         this.SyncFlag = SyncFlag;
     }
+
 
     public inventoryT (@NonNull String HSFID, String FieldID, int BagsMarketed, int KGMarketed,
                        String SeedType, String DateProcessed, int MoldCount, int PercentClean, int PercentMoisture,
@@ -116,6 +125,7 @@ public class inventoryT {
         this.TransportPaidFlag = 0;
         this.TransporterRating = TransporterRating;
         this.BagsRate = 120;
+        this.DeletedFlag = 0;
         this.SyncFlag = 0;
     }
 
@@ -253,6 +263,14 @@ public class inventoryT {
 
     public void setTransporterRating(@NonNull String transporterRating) {
         TransporterRating = transporterRating;
+    }
+
+    public int getDeletedFlag() {
+        return DeletedFlag;
+    }
+
+    public void setDeletedFlag(int deletedFlag) {
+        DeletedFlag = deletedFlag;
     }
 
 

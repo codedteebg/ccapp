@@ -22,14 +22,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import com.babbangona.barcodescannerproject.model.transporterRate;
+
+import org.w3c.dom.Text;
 
 public class FillActivity extends AppCompatActivity implements View.OnClickListener{
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    private TextInputEditText fillHsfID, fillFieldID, fillBags, dateText, mold_count, percentClean, percentMoisture, kg_marketed;
+    private TextInputEditText fillHsfID, fillFieldID, fillBags, dateText, mold_count, percentClean, percentMoisture, kg_marketed, filltransporterID;
     //private Spinner fillSeed;
-    private AutoCompleteTextView fillSeed;
-    private String getFilledHSFID, getFilledFieldID, getFillBags, getFilledSeed, getFilledDate, getMoldCount, getPercentClean, getPercentMoisture, getKgMarketed;
+    private AutoCompleteTextView fillSeed, fillTransporterRate;
+    private String getFilledHSFID, getFilledFieldID, getFillBags, getFilledSeed, getFilledDate, getMoldCount, getPercentClean, getPercentMoisture, getKgMarketed, getFillTransporterID,  getFillTransporterRate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_fill);
 
         fillSeed = findViewById(R.id.spinnerTest);
+        fillTransporterRate = findViewById(R.id.fillTransporterRateText);
         //fillSeed = (Spinner) findViewById(R.id.fillSeedType);
         List<String> list = Master.getSeedType();
         //ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
@@ -46,6 +50,11 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
 
         //fillSeed.setAdapter(dataAdapter);
         fillSeed.setAdapter(adapter);
+
+        List<String> rateList = transporterRate.getRate();
+        ArrayAdapter<String> rateAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, rateList);
+        fillTransporterRate.setAdapter(rateAdapter);
 
 
         dateText =  findViewById(R.id.fillDateText);
@@ -58,6 +67,7 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
         percentClean = findViewById(R.id.percentCleanText);
         percentMoisture = findViewById(R.id.percentMoistureText);
         kg_marketed = findViewById(R.id.kgMarketedText);
+        filltransporterID = findViewById(R.id.fillTransporterText);
 
         /*
         BroadcastReceiver fill_receiver = new BroadcastReceiver() {
@@ -93,6 +103,10 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
                 getPercentClean = percentClean.getText().toString();
                 getPercentMoisture = percentMoisture.getText().toString();
                 getKgMarketed = kg_marketed.getText().toString();
+                getFillTransporterID = filltransporterID.getText().toString();
+                getFillTransporterRate = fillTransporterRate.getText().toString();
+
+
 
                 if (getFilledSeed.equals("Select One:")){
                     Message.message(getApplicationContext(), "Please select a Seed Type" );
@@ -101,7 +115,9 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
                 else {
 
                     if (TextUtils.isEmpty(getFilledHSFID) || TextUtils.isEmpty(getFilledFieldID)
-                            || TextUtils.isEmpty(getFillBags) || TextUtils.isEmpty(getFilledSeed) || TextUtils.isEmpty(getFilledDate)) {
+                            || TextUtils.isEmpty(getFillBags) || TextUtils.isEmpty(getFilledSeed) || TextUtils.isEmpty(getFilledDate)
+                            || TextUtils.isEmpty(getMoldCount) || TextUtils.isEmpty(getPercentClean) || TextUtils.isEmpty(getPercentMoisture)
+                            || TextUtils.isEmpty(getKgMarketed) || TextUtils.isEmpty(getFillTransporterID) || TextUtils.isEmpty(getFillTransporterRate)) {
                         Message.message(getApplicationContext(), "One or more required fields are empty");
 
                     } else {
@@ -120,6 +136,8 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
                             openConfirmFillPage.putExtra("Percent_Clean", getPercentClean);
                             openConfirmFillPage.putExtra("Percent_Moisture", getPercentMoisture);
                             openConfirmFillPage.putExtra("kg_marketed", getKgMarketed);
+                            openConfirmFillPage.putExtra("Confirm_Fill_Transport", getFillTransporterID);
+                            openConfirmFillPage.putExtra("Confirm_Fill_TransportRate", getFillTransporterRate);
 
                             startActivity(openConfirmFillPage);
                         }

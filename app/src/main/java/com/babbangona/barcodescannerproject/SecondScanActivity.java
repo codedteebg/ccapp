@@ -140,6 +140,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
                 getPercentMoisture = percentMoisture.getText().toString();
                 getKgMarketed = kg_marketed.getText().toString();
                 getTransporterID = transporterIDText.getText().toString();
+                getTransportRate = transportRateSpinner.getText().toString();
 
                 if (GetSeedText.equals("Select One:")){
                     Toast.makeText(SecondScanActivity.this, "Please select a Seed Type",
@@ -151,7 +152,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
                     if (TextUtils.isEmpty(GetHsfidText) || TextUtils.isEmpty(GetFieldidText)
                             || TextUtils.isEmpty(GetBagsMarketedText) || TextUtils.isEmpty(GetSeedText) || TextUtils.isEmpty(GetDateText)
                     || TextUtils.isEmpty(getTransporterID) || TextUtils.isEmpty(getMoldCount) || TextUtils.isEmpty(getPercentClean)
-                    || TextUtils.isEmpty(getPercentMoisture) || TextUtils.isEmpty(getKgMarketed)) {
+                    || TextUtils.isEmpty(getPercentMoisture) || TextUtils.isEmpty(getKgMarketed) || TextUtils.isEmpty(getTransportRate)) {
                         Toast.makeText(SecondScanActivity.this, "One or more required fields are empty",
                                 Toast.LENGTH_SHORT).show();
                     } else {
@@ -169,6 +170,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
                         openConfirmScanPage.putExtra("Percent_Moisture", getPercentMoisture);
                         openConfirmScanPage.putExtra("kg_marketed", getKgMarketed);
                         openConfirmScanPage.putExtra("transporterID", getTransporterID);
+                        openConfirmScanPage.putExtra("transporterRate", getTransportRate);
 
                         startActivity(openConfirmScanPage);
                     }

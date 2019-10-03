@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
 
+import com.babbangona.barcodescannerproject.model.cropSummary;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ShowCropSummary extends AppCompatActivity {
@@ -16,18 +19,22 @@ public class ShowCropSummary extends AppCompatActivity {
     String totalCropBags, totalCropTrans;
     int totalCropBagsNo;
     int totalCropTransNo;
+    TextInputEditText showBagsCrop, showTransCrop;
+    AppDatabase mDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_crop_summary);
 
-        TextInputEditText showBagsCrop, showTransCrop;
+        mDb = AppDatabase.getInstance(getApplicationContext());
+
+
         showBagsCrop =  findViewById(R.id.totalBagsCrop);
         showTransCrop =  findViewById(R.id.totalTransCrop);
 
 
         Intent openShowCropSummary = getIntent();
-        String selectedSeedSummary = openShowCropSummary.getStringExtra("Crop_To_Summarise");
+        final String selectedSeedSummary = openShowCropSummary.getStringExtra("Crop_To_Summarise");
 
         TextView cropTitleLabel =  findViewById(R.id.cropTitleLabel);
 
@@ -38,7 +45,33 @@ public class ShowCropSummary extends AppCompatActivity {
         disableInput(showBagsCrop);
         disableInput(showTransCrop);
 
-        helper = new myDbAdapter(this);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final cropSummary cropSummary = mDb.inventoryTDao().showCropSummary(selectedSeedSummary);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(cropSummary.toString().equalsIgnoreCase("")){
+                            totalCropBagsNo  = 0;
+                            totalCropTransNo = 0;
+                        }
+                        else {
+                            totalCropBagsNo = cropSummary.getTotalBagsCrop();
+                            totalCropTransNo = cropSummary.getTxnCrop();
+
+                        totalCropBags = String.valueOf(totalCropBagsNo);
+                        totalCropTrans = String.valueOf(totalCropTransNo);
+                        showBagsCrop.setText(totalCropBags);
+                        showTransCrop.setText(totalCropTrans);
+                        }
+
+                    }
+                });
+            }
+        });
+
+       /* helper = new myDbAdapter(this);
 
 
         SQLiteDatabase database = new myDbAdapter.myDbHelper(this).getReadableDatabase();
@@ -53,19 +86,16 @@ public class ShowCropSummary extends AppCompatActivity {
         Cursor transCropCursor = database.rawQuery("SELECT _id FROM inventoryT WHERE SeedType = ? AND deleted !=1", new String[] {selectedSeedSummary});
 
        // if (transCropCursor != null) {
-            totalCropTransNo = transCropCursor.getCount();
+            totalCropTransNo = transCropCursor.getCount();*/
        /* } else
         {
             totalCropTransNo = 0;
         }
 */
 
-        totalCropBags = String.valueOf(totalCropBagsNo);
-        totalCropTrans = String.valueOf(totalCropTransNo);
-        showBagsCrop.setText(totalCropBags);
-        showTransCrop.setText(totalCropTrans);
-        bagsCropCursor.close();
-        transCropCursor.close();
+
+        /*bagsCropCursor.close();
+        transCropCursor.close();*/
 
     }
 
