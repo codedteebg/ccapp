@@ -32,31 +32,28 @@ public class hsfTransportT {
     private String CCOID;
 
     @ColumnInfo
-    @NonNull
     private String MSAID;
 
     @ColumnInfo
-    @NonNull
     private int AmountPaid;
 
     @ColumnInfo
-    @NonNull
     private String DatePaid;
 
 
-    public hsfTransportT(@NonNull String HSFID, @NonNull String fieldID, int bagsMarketed, int bagsRate, @NonNull String transporterID, @NonNull String CCOID, @NonNull String MSAID, int amountPaid, @NonNull String datePaid) {
+    public hsfTransportT(@NonNull String HSFID, @NonNull String FieldID, int BagsMarketed, int BagsRate, @NonNull String TransporterID, @NonNull String CCOID, String MSAID, int AmountPaid, String DatePaid) {
         this.HSFID = HSFID;
-        FieldID = fieldID;
-        BagsMarketed = bagsMarketed;
-        BagsRate = bagsRate;
-        TransporterID = transporterID;
+        this.FieldID = FieldID;
+        this.BagsMarketed = BagsMarketed;
+        this.BagsRate = BagsRate;
+        this.TransporterID = TransporterID;
         this.CCOID = CCOID;
         this.MSAID = MSAID;
-        AmountPaid = amountPaid;
-        DatePaid = datePaid;
+        this.AmountPaid = AmountPaid;
+        this.DatePaid = DatePaid;
     }
 
-    @Ignore
+ /*   @Ignore
     public hsfTransportT(@NonNull String HSFID, @NonNull String fieldID, int bagsMarketed, int bagsRate, @NonNull String transporterID, @NonNull String CCOID) {
         this.HSFID = HSFID;
         FieldID = fieldID;
@@ -64,7 +61,7 @@ public class hsfTransportT {
         BagsRate = bagsRate;
         TransporterID = transporterID;
         this.CCOID = CCOID;
-    }
+    }*/
 
     @NonNull
     public String getHSFID() {
@@ -80,24 +77,24 @@ public class hsfTransportT {
         return FieldID;
     }
 
-    public void setFieldID(@NonNull String fieldID) {
-        FieldID = fieldID;
+    public void setFieldID(@NonNull String FieldID) {
+        this.FieldID = FieldID;
     }
 
     public int getBagsMarketed() {
         return BagsMarketed;
     }
 
-    public void setBagsMarketed(int bagsMarketed) {
-        BagsMarketed = bagsMarketed;
+    public void setBagsMarketed(int BagsMarketed) {
+        this.BagsMarketed = BagsMarketed;
     }
 
     public int getBagsRate() {
         return BagsRate;
     }
 
-    public void setBagsRate(int bagsRate) {
-        BagsRate = bagsRate;
+    public void setBagsRate(int BagsRate) {
+        this.BagsRate = BagsRate;
     }
 
     @NonNull
@@ -105,8 +102,8 @@ public class hsfTransportT {
         return TransporterID;
     }
 
-    public void setTransporterID(@NonNull String transporterID) {
-        TransporterID = transporterID;
+    public void setTransporterID(@NonNull String TransporterID) {
+        this.TransporterID = TransporterID;
     }
 
     @NonNull
@@ -118,12 +115,12 @@ public class hsfTransportT {
         this.CCOID = CCOID;
     }
 
-    @NonNull
+
     public String getMSAID() {
         return MSAID;
     }
 
-    public void setMSAID(@NonNull String MSAID) {
+    public void setMSAID( String MSAID) {
         this.MSAID = MSAID;
     }
 
@@ -131,17 +128,17 @@ public class hsfTransportT {
         return AmountPaid;
     }
 
-    public void setAmountPaid(int amountPaid) {
-        AmountPaid = amountPaid;
+    public void setAmountPaid(int AmountPaid) {
+        this.AmountPaid = AmountPaid;
     }
 
-    @NonNull
+
     public String getDatePaid() {
         return DatePaid;
     }
 
-    public void setDatePaid(@NonNull String datePaid) {
-        DatePaid = datePaid;
+    public void setDatePaid( String DatePaid) {
+        this.DatePaid = DatePaid;
     }
 
 

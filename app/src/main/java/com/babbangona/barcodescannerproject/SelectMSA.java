@@ -290,6 +290,8 @@ public class SelectMSA extends AppCompatActivity {
         if (requestCode == 419 && data != null) {
             if (data.getIntExtra("RESULT", 0) == 1) {
                 Message.message(getApplicationContext(), "Face Authenticated");
+                Intent i = new Intent(SelectMSA.this, SelectHSFForTransport.class);
+                startActivity(i);
             } else {
                 Message.message(getApplicationContext(), "Face Not Authenticated");
             }

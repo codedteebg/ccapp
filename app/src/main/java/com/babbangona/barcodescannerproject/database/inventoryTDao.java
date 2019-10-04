@@ -8,6 +8,7 @@ import androidx.room.Update;
 
 import com.babbangona.barcodescannerproject.model.cropSummary;
 import com.babbangona.barcodescannerproject.model.dateSummary;
+import com.babbangona.barcodescannerproject.model.hsf;
 import com.babbangona.barcodescannerproject.model.hsfTransportT;
 import com.babbangona.barcodescannerproject.model.inventoryT;
 import com.babbangona.barcodescannerproject.model.totalSummary;
@@ -44,8 +45,11 @@ public interface inventoryTDao {
     @Query("SELECT SUM(BagsMarketed) as totalBagsTotal, COUNT(HSFID) as txnTotal FROM inventoryT")
     totalSummary showTotalSummary();
 
-    @Query("SELECT HSFID, FieldID, BagsMarketed, BagsRate, TransporterID, CCOID FROM inventoryT WHERE TransportPaidFlag = 0")
-    List<hsfTransportT> selectUnpaidTransport();
+    /*@Query("SELECT HSFID, FieldID, BagsMarketed, BagsRate, TransporterID, CCOID FROM inventoryT WHERE TransportPaidFlag = 0")
+    List<hsfTransportT> selectUnpaidTransport();*/
+
+    @Query("SELECT HSFID, FieldID, BagsMarketed, BagsRate, TransporterID FROM inventoryT WHERE TransportPaidFlag = 0")
+    List<hsf> selectUnpaidTransport();
 
 
 

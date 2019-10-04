@@ -11,17 +11,15 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.babbangona.barcodescannerproject.model.hsf;
 import com.babbangona.barcodescannerproject.model.hsfTransportT;
-import com.babbangona.barcodescannerproject.model.msaT;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HSFTransportAdapter extends RecyclerView.Adapter<HSFTransportAdapter.MyViewHolder> implements Filterable {
-    private List<hsfTransportT> hsfList;
-    private List<hsfTransportT> hsfListFiltered;
+    private List<hsf> hsfList;
+    private List<hsf> hsfListFiltered;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView hsf, fieldID, bagsMarketed, transporterID, amount;
@@ -39,7 +37,7 @@ public class HSFTransportAdapter extends RecyclerView.Adapter<HSFTransportAdapte
 
     }
 
-    public HSFTransportAdapter (List<hsfTransportT> hsfList){
+    public HSFTransportAdapter (List<hsf> hsfList){
         this.hsfList = hsfList;
         this.hsfListFiltered = hsfList;
 
@@ -54,7 +52,7 @@ public class HSFTransportAdapter extends RecyclerView.Adapter<HSFTransportAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position){
-        final hsfTransportT hsfTransportT = hsfListFiltered.get(position);
+        final hsf hsfTransportT = hsfListFiltered.get(position);
         holder.hsf.setText(hsfTransportT.getHSFID());
         holder.fieldID.setText(hsfTransportT.getTransporterID());
         holder.bagsMarketed.setText(hsfTransportT.getBagsMarketed());
@@ -67,7 +65,7 @@ public class HSFTransportAdapter extends RecyclerView.Adapter<HSFTransportAdapte
         return hsfListFiltered.size();
     }
 
-    public hsfTransportT getItem (int position){
+    public hsf getItem (int position){
         return hsfListFiltered.get(position);
     }
 
@@ -80,8 +78,8 @@ public class HSFTransportAdapter extends RecyclerView.Adapter<HSFTransportAdapte
                 if (charString.isEmpty()) {
                     hsfListFiltered = hsfList;
                 } else{
-                    List<hsfTransportT> filteredList = new ArrayList<>();
-                    for (hsfTransportT row : hsfList){
+                    List<hsf> filteredList = new ArrayList<>();
+                    for (hsf row : hsfList){
                         //checking for name or staffID match
                         if(row.getHSFID().toLowerCase().contains(charString.toLowerCase()) || row.getFieldID().toLowerCase().contains((charString.toLowerCase()))){
                             filteredList.add(row);
@@ -96,7 +94,7 @@ public class HSFTransportAdapter extends RecyclerView.Adapter<HSFTransportAdapte
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                hsfListFiltered = (ArrayList<hsfTransportT>) filterResults.values;
+                hsfListFiltered = (ArrayList<hsf>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
