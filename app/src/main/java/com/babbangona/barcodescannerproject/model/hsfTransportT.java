@@ -41,6 +41,10 @@ public class hsfTransportT {
     private String DatePaid;
 
 
+    @ColumnInfo
+    private int SyncFlag;
+
+
     public hsfTransportT(@NonNull String HSFID, @NonNull String FieldID, int BagsMarketed, int BagsRate, @NonNull String TransporterID, @NonNull String CCOID, String MSAID, int AmountPaid, String DatePaid) {
         this.HSFID = HSFID;
         this.FieldID = FieldID;
@@ -51,6 +55,7 @@ public class hsfTransportT {
         this.MSAID = MSAID;
         this.AmountPaid = AmountPaid;
         this.DatePaid = DatePaid;
+        this.SyncFlag = 0;
     }
 
  /*   @Ignore
@@ -141,5 +146,12 @@ public class hsfTransportT {
         this.DatePaid = DatePaid;
     }
 
+    public int getSyncFlag() {
+        return SyncFlag;
+    }
+
+    public void setSyncFlag(int syncFlag) {
+        SyncFlag = syncFlag;
+    }
 
 }

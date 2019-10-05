@@ -54,10 +54,10 @@ public class HSFTransportAdapter extends RecyclerView.Adapter<HSFTransportAdapte
     public void onBindViewHolder(MyViewHolder holder, final int position){
         final hsf hsfTransportT = hsfListFiltered.get(position);
         holder.hsf.setText(hsfTransportT.getHSFID());
-        holder.fieldID.setText(hsfTransportT.getTransporterID());
-        holder.bagsMarketed.setText(hsfTransportT.getBagsMarketed());
+        holder.fieldID.setText(hsfTransportT.getFieldID());
+        holder.bagsMarketed.setText(String.valueOf(hsfTransportT.getBagsMarketed()));
         holder.transporterID.setText(hsfTransportT.getTransporterID());
-        holder.amount.setText((hsfTransportT.getBagsRate() * hsfTransportT.getBagsMarketed()));
+        holder.amount.setText(String.valueOf((hsfTransportT.getBagsRate() * hsfTransportT.getBagsMarketed())));
     }
 
     @Override

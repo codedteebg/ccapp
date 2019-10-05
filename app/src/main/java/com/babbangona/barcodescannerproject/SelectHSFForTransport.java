@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,7 +23,9 @@ import com.babbangona.barcodescannerproject.database.AppExecutors;
 import com.babbangona.barcodescannerproject.model.hsf;
 import com.babbangona.barcodescannerproject.model.hsfTransportT;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SelectHSFForTransport extends AppCompatActivity {
@@ -29,6 +33,8 @@ public class SelectHSFForTransport extends AppCompatActivity {
     private RecyclerView hsfRecycler;
     private HSFTransportAdapter hsfTransportAdapter;
     private AppDatabase mDb;
+    List<hsf> hsfTransportTS = new ArrayList<>();
+    private SharedPreferences myPref;
 
 
     @Override
@@ -40,6 +46,7 @@ public class SelectHSFForTransport extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mDb = AppDatabase.getInstance(getApplicationContext());
+        myPref = getSharedPreferences("User_prefs", 0);
 
         hsfRecycler = findViewById(R.id.hsfRecyclerview);
         hsfTransportAdapter = new HSFTransportAdapter(hsfTransportTList);
@@ -52,9 +59,47 @@ public class SelectHSFForTransport extends AppCompatActivity {
         hsfRecycler.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), hsfRecycler, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                String CCOID = myPref.getString("CCOID", "");
+                String MSAID = myPref.getString("MSAID", "");
 
                 hsf hsf = hsfTransportAdapter.getItem(position);
+                int AmountPaid = hsf.getBagsMarketed() * hsf.getBagsRate();
+
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = new Date();
+                String dateS = formatter.format(date);
+
                 Message.message(getApplicationContext(), hsf.getHSFID() + "is selected");
+                final hsfTransportT hsfTransportT = new hsfTransportT(
+                        hsf.getHSFID(),
+                        hsf.getFieldID(),
+                        hsf.getBagsMarketed(),
+                        hsf.getBagsRate(),
+                        hsf.getTransporterID(),
+                        CCOID,
+                        MSAID,
+                        AmountPaid,
+                        dateS);
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        long iid = mDb.hsfTransportTDao().insertPayment(hsfTransportT);
+                        if(iid > 0){
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Message.message(getApplicationContext(), "Payment Saved.");
+                                    Intent i = new Intent(SelectHSFForTransport.this, MainActivity.class);
+                                    startActivity(i);
+                                }
+                            });
+                        }
+                    }
+                });
+
+
+
             }
 
             @Override
@@ -63,24 +108,46 @@ public class SelectHSFForTransport extends AppCompatActivity {
             }
         }));
 
-        prepareHSFData();
-
-    }
-
-    private void prepareHSFData(){
-
-       // final List<hsfTransportT> hsfTransportTS = new ArrayList<>();
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
 
-                hsfTransportTTList = mDb.inventoryTDao().selectUnpaidTransport();
+                final List<hsf> hsfTransportTTList = mDb.inventoryTDao().selectUnpaidTransport();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("Tobi", hsfTransportTList.size() + "");
+
                         Log.d("Tola",hsfTransportAdapter.getItemCount() + "");
-                        hsfTransportTList = hsf
+                        hsfTransportTList.clear();
+                        hsfTransportTList.addAll(hsfTransportTTList);
+                        Log.d("Tobi", hsfTransportTList.size() + "");
+                        hsfTransportAdapter.notifyDataSetChanged();
+                    }
+                });
+
+
+            }
+        });
+
+        //prepareHSFData();
+
+    }
+
+    private List<hsf> prepareHSFData(){
+
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final List<hsf> hsfTransportTTList = mDb.inventoryTDao().selectUnpaidTransport();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Log.d("Tola",hsfTransportAdapter.getItemCount() + "");
+                        hsfTransportTList = hsfTransportTTList;
+                        Log.d("Tobi", hsfTransportTS.size() + "");
                         hsfTransportAdapter.notifyDataSetChanged();
                     }
                 });
@@ -90,6 +157,7 @@ public class SelectHSFForTransport extends AppCompatActivity {
         });
 
 
+        return hsfTransportTS;
     }
 
     @Override

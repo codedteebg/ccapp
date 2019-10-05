@@ -21,7 +21,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface inventoryTDao {
 
-    @Insert (onConflict = REPLACE)
+    @Insert
     long insertTxn(inventoryT inventoryT);
 
     @Insert (onConflict = REPLACE)
@@ -36,6 +36,9 @@ public interface inventoryTDao {
     @Query("SELECT * FROM inventoryT WHERE SyncFlag = 0")
     inventoryT[] selectUnsynced();
 
+    @Query("SELECT * FROM inventoryT WHERE HSFID = :hsfID")
+    List<inventoryT> checkHSF(String hsfID);
+
     @Query("SELECT SUM(BagsMarketed) as totalBagsCrop, COUNT(HSFID) as txnCrop FROM inventoryT WHERE SeedType = :seedType AND DeletedFlag != 1")
     cropSummary showCropSummary(String seedType);
 
@@ -45,8 +48,6 @@ public interface inventoryTDao {
     @Query("SELECT SUM(BagsMarketed) as totalBagsTotal, COUNT(HSFID) as txnTotal FROM inventoryT")
     totalSummary showTotalSummary();
 
-    /*@Query("SELECT HSFID, FieldID, BagsMarketed, BagsRate, TransporterID, CCOID FROM inventoryT WHERE TransportPaidFlag = 0")
-    List<hsfTransportT> selectUnpaidTransport();*/
 
     @Query("SELECT HSFID, FieldID, BagsMarketed, BagsRate, TransporterID FROM inventoryT WHERE TransportPaidFlag = 0")
     List<hsf> selectUnpaidTransport();

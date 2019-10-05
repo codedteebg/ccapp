@@ -33,6 +33,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
     String confirmFillHsfString, confirmFillFieldIDString, confirmFIllBagsMarketedString,confirmFillSeedString, confirmFillDateString, loginName,
     confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed, confirmFillTransport, confirmFillTransportRate;
     long iid;
+    List<inventoryT> inventoryTS;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
 
     public void saveFillResults (View view) {
 
-        String v1 = confirmFillHSFId.getText().toString();
+        final String v1 = confirmFillHSFId.getText().toString();
         String v2 = confirmFillFieldID.getText().toString();
         String v3 = confirmFillBags.getText().toString();
         String v4 = confirmFillSeed.getText().toString();
@@ -154,28 +155,38 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
 
                         AppExecutors.getInstance().diskIO().execute(new Runnable() {
                             @Override
-                            public void run() {
-                                iid = mDb.inventoryTDao().insertTxn(inventoryT);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (iid < 0) {
-                                            Message.message(getApplicationContext(), "Insertion Unsuccessful");
-                                        } else {
-                                            Message.message(getApplicationContext(), "Inventory Successfully Saved");
-                                            Intent openMainActivity = new Intent(SecondFillActivity.this, MainActivity.class);
-                                            startActivity(openMainActivity);
-
-                                            Intent finishSecondScanActivity = new Intent("finishFirstFill");
-                                            sendBroadcast(finishSecondScanActivity);
-
-                                            finish();
-
+                                public void run() {
+                                inventoryTS = mDb.inventoryTDao().checkHSF(v1);
+                                if (inventoryTS.size() > 0) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Message.message(getApplicationContext(), "This HSF already exist. Please check HSF.");
                                         }
-                                    }
-                                });
+                                    });
+                                } else {
+                                    iid = mDb.inventoryTDao().insertTxn(inventoryT);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (iid < 0) {
+                                                Message.message(getApplicationContext(), "Insertion Unsuccessful");
+                                            } else {
+                                                Message.message(getApplicationContext(), "Inventory Successfully Saved");
+                                                Intent openMainActivity = new Intent(SecondFillActivity.this, MainActivity.class);
+                                                startActivity(openMainActivity);
 
+                                                Intent finishSecondScanActivity = new Intent("finishFirstFill");
+                                                sendBroadcast(finishSecondScanActivity);
+
+                                                finish();
+
+                                            }
+                                        }
+                                    });
+                                }
                             }
+
                         });
                     } else {
                         Message.message(getApplicationContext(), "Data entered doesn't correspond. Please go back to previous screen and re-enter data.");

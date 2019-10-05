@@ -33,4 +33,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract inventoryTDao inventoryTDao();
 
+    public abstract hsfTransportTDao hsfTransportTDao();
+
 }

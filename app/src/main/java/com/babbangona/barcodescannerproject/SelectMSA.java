@@ -45,6 +45,8 @@ public class SelectMSA extends AppCompatActivity {
 
         myPref = getSharedPreferences("User_prefs", 0);
 
+
+
         recyclerView = findViewById(R.id.msaRecyclerview);
         msaAdapter = new MsaAdapter(msaTList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -57,8 +59,11 @@ public class SelectMSA extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 //msaT msaT = msaTList.get(position);
+                SharedPreferences.Editor edit = myPref.edit();
                 msaT msaT = msaAdapter.getItem(position);
                 Message.message(getApplicationContext(), msaT.getStaff_id() + "is selected");
+                edit.putString("MSAID",msaT.getStaff_id());
+                edit.commit();
                 CallLuxandPrefs(msaT.getStaff_id(), msaT.getFacetemplate());
             }
 

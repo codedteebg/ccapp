@@ -35,6 +35,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
     String confirmHsfString, confirmFieldIDString, confirmBagsMarketedString,confirmSeed, confirmDate, loginName,
             confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed, confirmTransporterID, confirmTransporterRate;
     long iid;
+    List<inventoryT> inventoryTS;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,7 +120,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         transporterId = findViewById(R.id.confirmScanTransporterText);
         // End New Columns
 
-        String v1 = saveScanHSF.getText().toString();
+        final String v1 = saveScanHSF.getText().toString();
         String v2 = saveScanField.getText().toString();
         String v3 = saveScanBags.getText().toString();
         String v5 = saveScanDate.getText().toString();
@@ -169,28 +170,39 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
                     AppExecutors.getInstance().diskIO().execute(new Runnable() {
                         @Override
                         public void run() {
-                            iid = mDb.inventoryTDao().insertTxn(inv);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (iid < 0) {
-                                        Message.message(getApplicationContext(), "Insertion Unsuccessful");
-                                    } else {
-                                        Message.message(getApplicationContext(), "Inventory Successfully Saved");
-                                        Intent openMainActivity = new Intent(ThirdScanActivity.this, MainActivity.class);
-                                        startActivity(openMainActivity);
-
-                                        Intent finishSecondScanActivity = new Intent("finishFirstFill");
-                                        sendBroadcast(finishSecondScanActivity);
-
-                                        finish();
-
+                            inventoryTS = mDb.inventoryTDao().checkHSF(v1);
+                            if (inventoryTS.size() > 0) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Message.message(getApplicationContext(), "This HSF already exist. Please check HSF.");
                                     }
-                                }
-                            });
+                                });
+                            } else {
+                                iid = mDb.inventoryTDao().insertTxn(inv);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (iid < 0) {
+                                            Message.message(getApplicationContext(), "Insertion Unsuccessful");
+                                        } else {
+                                            Message.message(getApplicationContext(), "Inventory Successfully Saved");
+                                            Intent openMainActivity = new Intent(ThirdScanActivity.this, MainActivity.class);
+                                            startActivity(openMainActivity);
 
+                                            Intent finishSecondScanActivity = new Intent("finishFirstFill");
+                                            sendBroadcast(finishSecondScanActivity);
+
+                                            finish();
+
+                                        }
+                                    }
+                                });
+
+                            }
                         }
                     });
+
                 /*
                     long id = helper.insertData(v1, v2, bags, v4, v5, loginName, mold, clean, moisture, kgMarketed);
                     if (id < 0) {
