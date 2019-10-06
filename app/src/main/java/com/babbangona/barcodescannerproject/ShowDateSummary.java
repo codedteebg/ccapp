@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -119,7 +120,8 @@ public class ShowDateSummary extends AppCompatActivity {
 
     public void showDateSummary(View view){
         Intent openShowInventory =  new Intent(this, ShowInventory.class);
-        openShowInventory.putExtra("Date_For_Inventory", String.valueOf(dateForSumQ));
+        openShowInventory.putExtra("Date_For_Inventory", dateForSummary);
+        Log.d("TobiLog", dateForSummary);
         startActivity(openShowInventory);
 
         }

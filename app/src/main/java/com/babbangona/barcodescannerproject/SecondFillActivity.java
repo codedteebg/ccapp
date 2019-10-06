@@ -34,6 +34,8 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
     confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed, confirmFillTransport, confirmFillTransportRate;
     long iid;
     List<inventoryT> inventoryTS;
+    SharedPreferences myPrefs;
+    SharedPreferences.Editor edit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,9 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_second_fill);
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         mDb = AppDatabase.getInstance(getApplicationContext());
+
+        myPrefs = getSharedPreferences("User_prefs", 0);
+
 
         Intent openConfirmFillPage = getIntent();
         confirmFillHsfString = openConfirmFillPage.getStringExtra("Confirm_Fill_HSF_ID");
@@ -106,11 +111,9 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         String kgMarketed = kg_marketed.getText().toString();
         String transporter = confirmFillTransporterRate.getText().toString();
         String transporterRate = confirmFillTransporterRate.getText().toString();
+        String ccoID = myPrefs.getString("CCOID", "");
+        String warehouseID = myPrefs.getString("Warehouse", "");
 
-
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        loginName = preferences.getString("Name", "");
 
         int fillBags = 0;
 
@@ -151,7 +154,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
                             && confirmFillTransport.equalsIgnoreCase(transporter) && confirmFillTransportRate.equalsIgnoreCase(transporterRate)
                             ) {
                         final inventoryT inventoryT = new inventoryT(v1,  v2, fillBags, Integer.parseInt(kgMarketed), v4, v5, Integer.parseInt(mold),
-                                Integer.parseInt(clean), Integer.parseInt(moisture), "NNNNNN", "CCOOOO", transporter,transporterRate );
+                                Integer.parseInt(clean), Integer.parseInt(moisture), warehouseID, ccoID, transporter,transporterRate );
 
                         AppExecutors.getInstance().diskIO().execute(new Runnable() {
                             @Override
@@ -173,7 +176,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
                                                 Message.message(getApplicationContext(), "Insertion Unsuccessful");
                                             } else {
                                                 Message.message(getApplicationContext(), "Inventory Successfully Saved");
-                                                Intent openMainActivity = new Intent(SecondFillActivity.this, MainActivity.class);
+                                                Intent openMainActivity = new Intent(SecondFillActivity.this, Main2Activity.class);
                                                 startActivity(openMainActivity);
 
                                                 Intent finishSecondScanActivity = new Intent("finishFirstFill");

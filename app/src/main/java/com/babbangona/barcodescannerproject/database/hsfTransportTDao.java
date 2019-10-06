@@ -16,6 +16,6 @@ public interface hsfTransportTDao {
     @Query("SELECT * FROM hsfTransportT WHERE SyncFlag = 0")
     hsfTransportT[] selectUnsynced();
 
-    @Query("UPDATE hsfTransportT SET SyncFlag = 1 WHERE HSFID = :hsfID")
-    void updateSyncFlag(String hsfID);
+    @Query("UPDATE hsfTransportT SET SyncFlag = :syncFlag WHERE HSFID = :hsfID")
+    void updateSyncFlag(String hsfID, int syncFlag);
 }

@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity{
                         editor.putString("Name",selectedName);
                         editor.apply();
                         Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent i = new Intent(LoginActivity.this, Main2Activity.class);
                         startActivity(i);
                         mDBHelper.close();
                         finish();

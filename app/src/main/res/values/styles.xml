@@ -7,7 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="textInputStyle">@style/AppTextField</item>
+        <item name="alertDialogStyle">@style/Alertbutton</item>
 
+    </style>
+
+    <style name="Alertbutton" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">

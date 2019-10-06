@@ -10,8 +10,9 @@ import androidx.room.RoomDatabase;
 
 import com.babbangona.barcodescannerproject.model.hsfTransportT;
 import com.babbangona.barcodescannerproject.model.inventoryT;
+import com.babbangona.barcodescannerproject.model.msaT;
 
-@Database(entities = {inventoryT.class, hsfTransportT.class}, version = 1, exportSchema = false)
+@Database(entities = {inventoryT.class, hsfTransportT.class, msaT.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
     private static final Object LOCK = new Object();
@@ -34,5 +35,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract inventoryTDao inventoryTDao();
 
     public abstract hsfTransportTDao hsfTransportTDao();
+
+    public abstract msaTDao msaTDao();
 
 }

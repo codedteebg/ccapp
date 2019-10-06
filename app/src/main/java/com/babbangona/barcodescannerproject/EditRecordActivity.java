@@ -7,12 +7,19 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.inventoryT;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,12 +28,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class EditRecordActivity extends AppCompatActivity implements View.OnClickListener {
-    private EditText dateText, editHsfID, editFieldID, editBags, mold_count, percentClean, percentMoisture, kg_marketed;
-    private Spinner editSeed;
+    private TextInputEditText dateText, editHsfID, editFieldID, editBags, mold_count, percentClean, percentMoisture, kg_marketed, editTransporter;
+    private AutoCompleteTextView editSeed;
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    myDbAdapter helper;
-    int uid;
+    String hsfString;
+    AppDatabase mDb;
+    inventoryT inventoryT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,56 +45,56 @@ public class EditRecordActivity extends AppCompatActivity implements View.OnClic
         sendBroadcast(intent);
 
         Intent openEditRecords = getIntent();
-        String uidString = openEditRecords.getStringExtra("ID_To_Edit");
+        hsfString = openEditRecords.getStringExtra("ID_To_Edit");
 
-        uid = Integer.parseInt(uidString);
+        mDb = AppDatabase.getInstance(getApplicationContext());
 
-        editHsfID = (EditText) findViewById(R.id.editHsfidText);
-        editFieldID = (EditText) findViewById(R.id.editFieldIDText);
-        editBags = (EditText) findViewById(R.id.editBagsMarketedText);
-        dateText = (EditText) findViewById(R.id.editDateText);
 
-        editSeed = (Spinner) findViewById(R.id.editSeedType);
+        editHsfID =  findViewById(R.id.edHSFText);
+        editFieldID = findViewById(R.id.edFieldIDText);
+        editBags =  findViewById(R.id.edBagsText);
+        dateText =   findViewById(R.id.editDateText);
+
+        editSeed = findViewById(R.id.edSeedText);
 
         // New columns
-        mold_count = findViewById(R.id.editMold_Count);
-        percentClean = findViewById(R.id.editPercentClean);
-        percentMoisture = findViewById(R.id.editPercentMoisture);
-        kg_marketed = findViewById(R.id.editKgMarketed);
+        mold_count = findViewById(R.id.editMoldText);
+        percentClean = findViewById(R.id.editCleanText);
+        percentMoisture = findViewById(R.id.editMoistureText);
+        kg_marketed = findViewById(R.id.edKGText);
+        editTransporter = findViewById(R.id.editTransportText);
 
         List<String> list  = Master.getSeedType();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, list);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         editSeed.setAdapter(dataAdapter);
 
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
-        helper = new myDbAdapter(this);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                inventoryT = mDb.inventoryTDao().retrieveHSF(hsfString);
+                if(inventoryT != null){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            editHsfID.setText(inventoryT.getHSFID());
+                            editFieldID.setText(inventoryT.getFieldID());
+                            editBags.setText(String.valueOf(inventoryT.getBagsMarketed()));
+                            dateText.setText(inventoryT.getDateProcessed());
+                            editSeed.setText(inventoryT.getSeedType());
+                            mold_count.setText(String.valueOf(inventoryT.getMoldCount()));
+                            percentClean.setText(String.valueOf(inventoryT.getPercentClean()));
+                            percentMoisture.setText(String.valueOf(inventoryT.getPercentMoisture()));
+                            kg_marketed.setText(String.valueOf(inventoryT.getKGMarketed()));
+                            editTransporter.setText(inventoryT.getTransporterID());
+                        }
+                    });
+                }
+            }
+        });
 
-        SQLiteDatabase database = new myDbAdapter.myDbHelper(this).getReadableDatabase();
-
-        Cursor selectCursor = database.rawQuery("SELECT * FROM inventoryT WHERE _id = ?", new String[] {uidString});
-
-        if (selectCursor != null) {
-            selectCursor.moveToFirst();
-            editHsfID.setText(selectCursor.getString(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.HSFID)));
-            editFieldID.setText(selectCursor.getString(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.FieldID)));
-            editBags.setText(selectCursor.getString(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Bags)));
-
-            mold_count.setText(selectCursor.getString(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Mold_Count)));
-            percentClean.setText(selectCursor.getString(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Percent_Clean)));
-            percentMoisture.setText(selectCursor.getString(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Percent_Moisture)));
-            kg_marketed.setText(selectCursor.getString(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.KG_Marketed)));
-
-            Long dateInMilli = selectCursor.getLong(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Date));
-
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            String dateString = formatter.format(new Date(dateInMilli));
-
-            dateText.setText(dateString);
-            String cursorSeed = selectCursor.getString(selectCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Seed));
-            editSeed.setSelection(getIndex(editSeed, cursorSeed));
-        }
 
         findViewsById();
         setDateTimeField();
@@ -94,7 +102,7 @@ public class EditRecordActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void saveEditedRecord (View view){
-        String u1, u2, u3, u4, u5, mold, clean, moisture, kgMarketed;
+        String u1, u2, u3, u4, u5, mold, clean, moisture, kgMarketed, transporter;
         int uBags = 0;
 
         u1 = editHsfID.getText().toString();
@@ -105,15 +113,15 @@ public class EditRecordActivity extends AppCompatActivity implements View.OnClic
         mold = mold_count.getText().toString();
         clean = percentClean.getText().toString();
         moisture = percentMoisture.getText().toString();
-        moisture = percentMoisture.getText().toString();
         kgMarketed = kg_marketed.getText().toString();
+        transporter = editTransporter.getText().toString();
 
         try {
             uBags = Integer.parseInt(u3);
         }
         catch(NumberFormatException nfe) {}
 
-        u4 = editSeed.getSelectedItem().toString();
+        u4 = editSeed.getText().toString();
         u5 = dateText.getText().toString();
 
         if (u4.equals("Select One:")){
@@ -127,16 +135,38 @@ public class EditRecordActivity extends AppCompatActivity implements View.OnClic
             if (u2.length() != 18) {
                 Message.message(getApplicationContext(), "Wrong Field ID. Please ensure Field ID is entered correctly");
             } else {
-                long count = helper.updateRecord(uid, u1, u2, uBags, u4, u5, mold, clean, moisture, kgMarketed );
-                if (count < 0) {
-                    Message.message(getApplicationContext(), "Editing Unsuccessful");
-                } else {
-                    Message.message(getApplicationContext(), "Inventory Successfully Edited");
-                    Intent openMainAfterEdit = new Intent(EditRecordActivity.this, MainActivity.class);
-                    startActivity(openMainAfterEdit );
-                    finish();
+                inventoryT.setHSFID(u1);
+                inventoryT.setFieldID(u2);
+                inventoryT.setBagsMarketed(uBags);
+                inventoryT.setKGMarketed(Integer.parseInt(kgMarketed));
+                inventoryT.setDateProcessed(u5);
+                inventoryT.setSeedType(u4);
+                inventoryT.setMoldCount(Integer.parseInt(mold));
+                inventoryT.setPercentClean(Integer.parseInt(clean));
+                inventoryT.setPercentMoisture(Integer.parseInt(moisture));
+                inventoryT.setTransporterID(transporter);
+                inventoryT.setUpdateFlag(1);
 
-                }
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        final int iid = mDb.inventoryTDao().updateTxn(inventoryT);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(iid > 0){
+                                    Message.message(getApplicationContext(), "Inventory Successfully Edited");
+                                    Intent openMainAfterEdit = new Intent(EditRecordActivity.this, Main2Activity.class);
+                                    startActivity(openMainAfterEdit );
+                                    finish();
+                                }
+                                else {
+                                    Message.message(getApplicationContext(), "Editing Unsuccessful");
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
 
@@ -162,7 +192,7 @@ public class EditRecordActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void findViewsById(){
-        dateText = (EditText) findViewById(R.id.editDateText);
+        dateText = findViewById(R.id.editDateText);
         dateText.setInputType(InputType.TYPE_NULL);
         dateText.requestFocus();
     }

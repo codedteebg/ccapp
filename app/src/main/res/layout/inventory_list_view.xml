@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:id="@+id/card_view"
-        card_view:cardBackgroundColor="#D9DDD9"
+
         card_view:cardCornerRadius="12dp"
         card_view:cardElevation="3dp"
         card_view:contentPadding="4dp"
@@ -45,7 +45,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/idLabel"
-                android:visibility="invisible"
                 android:layout_toRightOf="@id/hsfIDLabelText"
                 android:layout_marginLeft="80dp"/>
 
@@ -169,26 +168,7 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="EDIT RECORD"
-                    android:id="@+id/editRecord"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DELETE RECORD"
-                    android:id="@+id/deleteRecord"
-                    android:layout_toRightOf="@id/editRecord"
-                    android:layout_marginLeft="20dp"/>
-
-
-            </RelativeLayout>
 
 
         </LinearLayout>

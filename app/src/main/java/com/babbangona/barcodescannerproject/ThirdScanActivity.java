@@ -14,7 +14,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -36,6 +35,9 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
             confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed, confirmTransporterID, confirmTransporterRate;
     long iid;
     List<inventoryT> inventoryTS;
+    SharedPreferences myPref;
+    SharedPreferences.Editor edit;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third_scan);
         mDb = AppDatabase.getInstance(getApplicationContext());
+        myPref = getSharedPreferences("User_prefs", 0);
 
         Intent openConfirmScanPage = getIntent();
         confirmHsfString = openConfirmScanPage.getStringExtra("Confirm_HSF_ID");
@@ -132,6 +135,8 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         String kgMarketed = kg_marketed.getText().toString();
         String transporter = transporterId.getText().toString();
         String transporterRate = confirmTransportRateSpinner.getText().toString();
+        String ccoID = myPref.getString("CCOID", "");
+        String warehouseID = myPref.getString("Warehouse", "");
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -165,7 +170,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
                         && confirmTransporterID.equalsIgnoreCase(transporter) && confirmTransporterRate.equalsIgnoreCase(transporterRate)
                         ) {
                     final inventoryT inv = new inventoryT(v1, v2, bags, Integer.parseInt(kgMarketed), v4, v5, Integer.parseInt(mold),
-                            Integer.parseInt(clean), Integer.parseInt(moisture), "NNNNNN", "CCOOOO", transporter,transporterRate);
+                            Integer.parseInt(clean), Integer.parseInt(moisture), warehouseID, ccoID, transporter,transporterRate);
 
                     AppExecutors.getInstance().diskIO().execute(new Runnable() {
                         @Override
@@ -187,7 +192,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
                                             Message.message(getApplicationContext(), "Insertion Unsuccessful");
                                         } else {
                                             Message.message(getApplicationContext(), "Inventory Successfully Saved");
-                                            Intent openMainActivity = new Intent(ThirdScanActivity.this, MainActivity.class);
+                                            Intent openMainActivity = new Intent(ThirdScanActivity.this, Main2Activity.class);
                                             startActivity(openMainActivity);
 
                                             Intent finishSecondScanActivity = new Intent("finishFirstFill");
@@ -209,7 +214,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
                         Message.message(getApplicationContext(), "Insertion Unsuccessful");
                     } else {
                         Message.message(getApplicationContext(), "Inventory Successfully Saved");
-                        Intent openMainActivity = new Intent(ThirdScanActivity.this, MainActivity.class);
+                        Intent openMainActivity = new Intent(ThirdScanActivity.this, Main2Activity.class);
                         startActivity(openMainActivity);
 
                         Intent finishSecondScanActivity = new Intent("finishSecondScan");

@@ -73,6 +73,11 @@ public class inventoryT {
     @NonNull
     private int DeletedFlag;
 
+    @ColumnInfo (name = "UpdateFlag")
+    @NonNull
+    private int UpdateFlag;
+
+
     @ColumnInfo (name = "SyncFlag")
     @NonNull
     private int SyncFlag;
@@ -100,6 +105,7 @@ public class inventoryT {
         this.TransporterRating = TransporterRating;
         this.BagsRate = BagsRate;
         this.DeletedFlag = DeletedFlag;
+        this.UpdateFlag = 0;
         this.SyncFlag = SyncFlag;
     }
 
@@ -126,6 +132,7 @@ public class inventoryT {
         this.TransporterRating = TransporterRating;
         this.BagsRate = 120;
         this.DeletedFlag = 0;
+        this.UpdateFlag = 0;
         this.SyncFlag = 0;
     }
 
@@ -190,19 +197,19 @@ public class inventoryT {
     }
 
     public int getPercentClean() {
-        return (int)(PercentClean * 100);
+        return PercentClean;
     }
 
     public void setPercentClean(int percentClean) {
-        PercentClean = percentClean / 100;
+        PercentClean = percentClean;
     }
 
     public int getPercentMoisture() {
-        return (int)(PercentMoisture * 100);
+        return PercentMoisture;
     }
 
     public void setPercentMoisture(int percentMoisture) {
-        PercentMoisture = percentMoisture / 100;
+        PercentMoisture = percentMoisture;
     }
 
     @NonNull
@@ -273,5 +280,12 @@ public class inventoryT {
         DeletedFlag = deletedFlag;
     }
 
+    public int getUpdateFlag() {
+        return UpdateFlag;
+    }
+
+    public void setUpdateFlag(int updateFlag) {
+        UpdateFlag = updateFlag;
+    }
 
 }

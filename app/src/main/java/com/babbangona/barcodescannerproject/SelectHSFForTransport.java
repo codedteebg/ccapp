@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -99,7 +100,7 @@ public class SelectHSFForTransport extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             Message.message(getApplicationContext(), "Payment Saved.");
-                                            Intent i = new Intent(SelectHSFForTransport.this, MainActivity.class);
+                                            Intent i = new Intent(SelectHSFForTransport.this, Main2Activity.class);
                                             startActivity(i);
                                         }
                                     });

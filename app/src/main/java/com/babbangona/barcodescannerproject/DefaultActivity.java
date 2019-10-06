@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -111,7 +110,7 @@ public class DefaultActivity extends AppCompatActivity implements ZXingScannerVi
                                     }
                                 });
 
-                                Intent i = new Intent(DefaultActivity.this, MainActivity.class);
+                                Intent i = new Intent(DefaultActivity.this, Main2Activity.class);
                                 startActivity(i);
                                 finish();
                             }

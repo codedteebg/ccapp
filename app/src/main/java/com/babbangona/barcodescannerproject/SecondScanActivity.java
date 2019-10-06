@@ -26,8 +26,6 @@ import android.widget.ArrayAdapter;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -232,7 +230,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent openScanMain = new Intent(SecondScanActivity.this, MainActivity.class);
+        Intent openScanMain = new Intent(SecondScanActivity.this, Main2Activity.class);
         startActivity(openScanMain);
         finish();
     }
@@ -241,7 +239,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent j = new Intent(SecondScanActivity.this, MainActivity.class);
+                Intent j = new Intent(SecondScanActivity.this, Main2Activity.class);
                 startActivity(j);
                 finish();
                 break;
