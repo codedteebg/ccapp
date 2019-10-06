@@ -3,6 +3,7 @@ package com.babbangona.barcodescannerproject.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 
 @Entity (tableName = "inventoryT", primaryKeys = "HSFID")
 public class inventoryT {
@@ -10,10 +11,6 @@ public class inventoryT {
     @ColumnInfo (name = "HSFID")
     @NonNull
     private String HSFID;
-
-    @ColumnInfo (name = "Unique_Field_ID")
-    @NonNull
-    private String Unique_Field_ID;
 
     @ColumnInfo (name = "FieldID")
     @NonNull
@@ -47,13 +44,45 @@ public class inventoryT {
     @NonNull
     private int PercentMoisture;
 
+    @ColumnInfo (name = "WarehouseID")
+    @NonNull
+    private String WarehouseID;
+
+    @ColumnInfo (name = "CCOID")
+    @NonNull
+    private String CCOID;
+
+    @ColumnInfo (name = "TransporterID")
+    @NonNull
+    private String TransporterID;
+
+    @ColumnInfo (name = "TransportPaidFlag")
+    @NonNull
+    private int TransportPaidFlag;
+
+    @ColumnInfo (name = "TransporterRating")
+    @NonNull
+    private String TransporterRating;
+
+    @ColumnInfo (name = "BagsRate")
+    @NonNull
+    private int BagsRate;
 
 
-    public inventoryT (@NonNull String HSFID, String Unique_Field_ID, String FieldID, int BagsMarketed, int KGMarketed,
-                       String SeedType, String DateProcessed, int MoldCount, int PercentClean, int PercentMoisture){
+    @ColumnInfo (name = "DeletedFlag")
+    @NonNull
+    private int DeletedFlag;
+
+    @ColumnInfo (name = "SyncFlag")
+    @NonNull
+    private int SyncFlag;
+
+    @Ignore
+    public inventoryT (@NonNull String HSFID, String FieldID, int BagsMarketed, int KGMarketed,
+                       String SeedType, String DateProcessed, int MoldCount, int PercentClean, int PercentMoisture,
+                       String WarehouseID, String CCOID, String TransporterID, int TransportPaidFlag,String TransporterRating, int BagsRate, int DeletedFlag, int SyncFlag){
 
         this.HSFID = HSFID;
-        this.Unique_Field_ID = Unique_Field_ID;
         this.FieldID = FieldID;
         this.BagsMarketed = BagsMarketed;
         this.KGMarketed = KGMarketed;
@@ -64,6 +93,40 @@ public class inventoryT {
         this.PercentMoisture = (float)PercentMoisture/100;*/
         this.PercentClean = PercentClean;
         this.PercentMoisture = PercentMoisture;
+        this.WarehouseID = WarehouseID;
+        this.CCOID = CCOID;
+        this.TransporterID = TransporterID;
+        this.TransportPaidFlag = TransportPaidFlag;
+        this.TransporterRating = TransporterRating;
+        this.BagsRate = BagsRate;
+        this.DeletedFlag = DeletedFlag;
+        this.SyncFlag = SyncFlag;
+    }
+
+
+    public inventoryT (@NonNull String HSFID, String FieldID, int BagsMarketed, int KGMarketed,
+                       String SeedType, String DateProcessed, int MoldCount, int PercentClean, int PercentMoisture,
+                       String WarehouseID, String CCOID, String TransporterID, String TransporterRating){
+
+        this.HSFID = HSFID;
+        this.FieldID = FieldID;
+        this.BagsMarketed = BagsMarketed;
+        this.KGMarketed = KGMarketed;
+        this.SeedType = SeedType;
+        this.DateProcessed = DateProcessed;
+        this.MoldCount = MoldCount;
+        /*this.PercentClean = (float)PercentClean/100;
+        this.PercentMoisture = (float)PercentMoisture/100;*/
+        this.PercentClean = PercentClean;
+        this.PercentMoisture = PercentMoisture;
+        this.WarehouseID = WarehouseID;
+        this.CCOID = CCOID;
+        this.TransporterID = TransporterID;
+        this.TransportPaidFlag = 0;
+        this.TransporterRating = TransporterRating;
+        this.BagsRate = 120;
+        this.DeletedFlag = 0;
+        this.SyncFlag = 0;
     }
 
     @NonNull
@@ -73,15 +136,6 @@ public class inventoryT {
 
     public void setHSFID(@NonNull String HSFID) {
         this.HSFID = HSFID;
-    }
-
-    @NonNull
-    public String getUnique_Field_ID() {
-        return Unique_Field_ID;
-    }
-
-    public void setUnique_Field_ID(@NonNull String unique_Field_ID) {
-        Unique_Field_ID = unique_Field_ID;
     }
 
     @NonNull
@@ -150,5 +204,74 @@ public class inventoryT {
     public void setPercentMoisture(int percentMoisture) {
         PercentMoisture = percentMoisture / 100;
     }
+
+    @NonNull
+    public String getWarehouseID() {
+        return WarehouseID;
+    }
+
+    public void setWarehouseID(@NonNull String warehouseID) {
+        WarehouseID = warehouseID;
+    }
+
+    @NonNull
+    public String getCCOID() {
+        return CCOID;
+    }
+
+    public void setCCOID(@NonNull String CCOID) {
+        this.CCOID = CCOID;
+    }
+
+    @NonNull
+    public String getTransporterID() {
+        return TransporterID;
+    }
+
+    public void setTransporterID(@NonNull String transporterID) {
+        TransporterID = transporterID;
+    }
+
+    public int getTransportPaidFlag() {
+        return TransportPaidFlag;
+    }
+
+    public void setTransportPaidFlag(int transportPaidFlag) {
+        TransportPaidFlag = transportPaidFlag;
+    }
+
+    public int getBagsRate() {
+        return BagsRate;
+    }
+
+    public void setBagsRate(int bagsRate) {
+        BagsRate = bagsRate;
+    }
+
+    public int getSyncFlag() {
+        return SyncFlag;
+    }
+
+    public void setSyncFlag(int syncFlag) {
+        SyncFlag = syncFlag;
+    }
+
+    @NonNull
+    public String getTransporterRating() {
+        return TransporterRating;
+    }
+
+    public void setTransporterRating(@NonNull String transporterRating) {
+        TransporterRating = transporterRating;
+    }
+
+    public int getDeletedFlag() {
+        return DeletedFlag;
+    }
+
+    public void setDeletedFlag(int deletedFlag) {
+        DeletedFlag = deletedFlag;
+    }
+
 
 }

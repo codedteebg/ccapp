@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/row_padding_vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/row_padding_vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/hsfLayout"
+        android:layout_marginBottom="5dp">
+        <TextView
+            android:id="@+id/hsfLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HSF ID:              "
+            android:textSize="20sp"
+            android:paddingRight="20dp"
+            />
+
+        <TextView
+            android:id="@+id/hsfText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="HSF ID:"
+            android:textSize="20sp"
+            android:layout_toEndOf="@id/hsfLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/amountLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/hsfLayout">
+        <TextView
+            android:id="@+id/amountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount to Pay: "
+            android:textSize="20sp"
+            android:paddingRight="10dp"
+            />
+
+        <TextView
+            android:id="@+id/amountText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            android:textSize="20sp"
+            android:layout_toEndOf="@id/amountLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fieldLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/amountLayout">
+        <TextView
+            android:id="@+id/fieldLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FieldID:                       "
+            android:textSize="15sp"
+            android:paddingRight="20dp"
+            />
+
+        <TextView
+            android:id="@+id/fieldText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FieldID:"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/fieldLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/transporterLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/fieldLayout">
+        <TextView
+            android:id="@+id/transporterLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TransporterID:          "
+            android:textSize="15sp"
+            android:paddingRight="20dp"
+            />
+
+        <TextView
+            android:id="@+id/transporterText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TransporterID:"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/transporterLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bagsLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/transporterLayout">
+        <TextView
+            android:id="@+id/bagsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bags Marketed:           "
+            android:textSize="15sp"
+            android:paddingRight="10dp"
+            />
+
+        <TextView
+            android:id="@+id/bagsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bags:"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/bagsLabel"/>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

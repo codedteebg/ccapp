@@ -1,6 +1,7 @@
 package com.babbangona.barcodescannerproject;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -14,6 +15,7 @@ import com.babbangona.barcodescannerproject.api.ApiClient;
 import com.babbangona.barcodescannerproject.api.ApiInterface;
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.hsfTransportT;
 import com.babbangona.barcodescannerproject.model.syncHSFResponse;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
@@ -50,6 +52,7 @@ import retrofit2.Response;
 
 import com.babbangona.barcodescannerproject.model.inventoryT;
 import com.google.gson.Gson;
+import android.content.DialogInterface;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -62,8 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int JOB_ID =101;
     AppDatabase mDb;
     ApiInterface apiInterface;
-    String jsooon;
+    String hsfJson;
+    String transportJson;
     SharedPreferences myPref;
+    SharedPreferences.Editor edit;
 
 
     @Override
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         mDb = AppDatabase.getInstance(getApplicationContext());
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         myPref = getSharedPreferences("User_prefs", 0);
+        edit = myPref.edit();
         // Sync triggered whenever you visit the home page
         SyncData.SyncInventory syncTest = new SyncData.SyncInventory(getApplicationContext()){
             @Override
@@ -115,11 +121,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openScanScreen(View view) {
-        SharedPreferences.Editor edit = myPref.edit();
-        edit.putString("Activity", "SecondActivity.java");
-        edit.commit();
 
-        Intent i = new Intent(this, DefaultActivity.class);
+        edit.putString("OpenType", "OpenScan");
+        edit.putString("ScanType", "Scan Warehouse");
+        edit.commit();
+        Intent i = new Intent(this,DefaultActivity.class );
         startActivity(i);
 
     }
@@ -132,8 +138,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openFillScreen(View view) {
-        Intent j = new Intent(this, FillActivity.class);
-        startActivity(j);
+
+
+        edit.putString("OpenType", "OpenFill");
+        edit.putString("ScanType", "Scan Warehouse");
+        edit.commit();
+        Intent i = new Intent(this,DefaultActivity.class );
+        startActivity(i);
     }
 
     public void showSummary(View view) {
@@ -247,13 +258,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Used in an onClick method here. Just add to your onCreate, etc....
-    public void csvImport(View view){
+   /* public void csvImport(View view){
         final ArrayList<inventoryT> invs = readCSVFromAssets(); //gets List of objects from readCSV method
 
-        /*
+        *//*
          * I am using Executors here. Your AsyncTask will also work.
         Will attach the Executors class also in case you need them.
-         */
+         *//*
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -278,10 +289,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     //CSV read into List of model class
-    private ArrayList<inventoryT> readCSVFromAssets(){
+    /*private ArrayList<inventoryT> readCSVFromAssets(){
         ArrayList<inventoryT> inventoryTS = new ArrayList<>(); //List to hold model class objects
         String[] content = null; //placeholder String array
         try{
@@ -307,7 +318,8 @@ public class MainActivity extends AppCompatActivity {
                      content[6],
                      Integer.parseInt(content[7]),
                      Integer.parseInt(content[8]),
-                     Integer.parseInt(content[9]));
+                     Integer.parseInt(content[9]),
+                        );
                 inventoryTS.add(inv);
                 }
             }
@@ -317,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return inventoryTS; //return List
-    }
+    }*/
 
     public void testCheck(View view){
 
@@ -328,33 +340,75 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 final inventoryT[] invss = mDb.inventoryTDao().selectUnsynced();
+                final hsfTransportT[] hsfTransportTS = mDb.hsfTransportTDao().selectUnsynced();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        jsooon = new Gson().toJson(invss);
-                        Log.d("Tobi", jsooon + "t");
+                        hsfJson = new Gson().toJson(invss);
+                        transportJson = new Gson().toJson(hsfTransportTS);
+                        Log.d("Tobi", transportJson + "t");
+                        if (hsfJson.length() < 5) {
+                            Message.message(getApplicationContext(), "No new HSF entries to sync");
+                        } else {
+                            //Start HSF Sync
+                            Call<List<syncHSFResponse>> call = apiInterface.syncHSF(hsfJson);
+                            call.enqueue(new Callback<List<syncHSFResponse>>() {
+                                @Override
+                                public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response) {
+                                    final List<syncHSFResponse> syncHSFResponses = response.body();
+                                    Log.d("Tobi", "new " + response.body());
+                                    int syncSize = syncHSFResponses.size();
+                                    for (int i = 0; i < syncSize; i++) {
+                                        Log.d("Ayo", syncHSFResponses.get(i).getHsfId());
+                                        final String hsf = syncHSFResponses.get(i).getHsfId();
+                                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mDb.inventoryTDao().updateSyncFlag(hsf);
+                                            }
+                                        });
+                                    }
+                                    Message.message(getApplicationContext(), "All HSF entries have been succesfully synced");
+                                }
 
-                        Call<List<syncHSFResponse>> call = apiInterface.syncHSF(jsooon);
-                        call.enqueue(new Callback<List<syncHSFResponse>>(){
-                            @Override
-                            public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response){
-               /* List<syncHSFResponse> syncHSFResponses = response.body();
-                Log.d("Tobi", "new " + response.body());
-                int syncSize = syncHSFResponses.size();
-                for(int i = 0; i < syncSize;i++ ){
-                    Message.message(getApplicationContext(), syncHSFResponses.get(i).getHsfId());
-                }
-*/              /*for(syncHSFResponse syncHSFResponse: response.body()){
-                    System.out.println(syncHSFResponse.toString());
-                }*/
-                                System.out.println("Tope" +response.body().toString());
+                                public void onFailure(Call<List<syncHSFResponse>> call, Throwable t) {
+                                    Log.d("Tobi", t + "Tobi");
+                                }
+                            });
 
-                            }
+                        }
 
-                            public void onFailure(Call<List<syncHSFResponse>>call, Throwable t){
-                                Log.d("Tobi", t + "Tobi");
-                            }
-                        });
+                        if (transportJson.length() < 5) {
+                            Message.message(getApplicationContext(), "No new Transport Payment entries to sync");
+                        } else {
+
+                            // Sync Transport Payment table
+                            Call<List<syncHSFResponse>> call2 = apiInterface.syncTransport(transportJson);
+                            call2.enqueue(new Callback<List<syncHSFResponse>>() {
+                                @Override
+                                public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response) {
+                                    final List<syncHSFResponse> syncHSFResponses1 = response.body();
+                                    Log.d("Tobi", "new " + response.body());
+                                    int syncSize = syncHSFResponses1.size();
+                                    for (int i = 0; i < syncSize; i++) {
+                                        Message.message(getApplicationContext(), syncHSFResponses1.get(i).getHsfId());
+                                        Log.d("Ayo", syncHSFResponses1.get(i).getHsfId());
+                                        final String hsf = syncHSFResponses1.get(i).getHsfId();
+                                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mDb.hsfTransportTDao().updateSyncFlag(hsf);
+                                            }
+                                        });
+                                    }
+                                    Message.message(getApplicationContext(),"All new Transporter Payments successfully synced");
+                                }
+
+                                public void onFailure(Call<List<syncHSFResponse>> call, Throwable t) {
+                                    Log.d("Tobi", t + "Tobi");
+                                }
+                            });
+                        }
                     }
                 });
 
@@ -374,6 +428,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
 
     }
+
+    public void payTransporter(View view) {
+        Intent j = new Intent(this, SelectMSA.class);
+        startActivity(j);
+    }
+
 
     @Override
     public void onBackPressed() {

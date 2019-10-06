@@ -110,7 +110,8 @@
             android:id="@+id/scanDate"
             android:hint="@string/dateProcessed"
             android:layout_below="@id/scanSeedType"
-            style="@style/AppTextField">
+            style="@style/AppTextField"
+            android:editable="false">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -176,13 +177,48 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanTransporterID"
+            android:hint="@string/transporter"
+            android:layout_below="@id/scanPercentMoisture"
+            style="@style/AppTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:id="@+id/editScanTransporter"
+                android:maxLines="1"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanTransporterRate"
+            android:hint="@string/transportRate"
+            android:layout_below="@id/scanTransporterID"
+            style="@style/ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/scanTransporterRateText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <Button
             android:text="@string/buttonNext"
             android:textAllCaps="false"
             android:layout_width="250sp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/scanPercentMoisture"
+            android:layout_below="@+id/scanTransporterRate"
             android:layout_centerHorizontal="true"
             android:id="@+id/nextConfirmScan" />
 

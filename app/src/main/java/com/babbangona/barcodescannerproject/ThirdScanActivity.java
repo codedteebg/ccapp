@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -20,17 +22,20 @@ import java.util.Locale;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.model.inventoryT;
+import com.babbangona.barcodescannerproject.model.transporterRate;
 
 
 
 public class ThirdScanActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed;
+    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed, transporterId;
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
+    private AutoCompleteTextView confirmTransportRateSpinner;
     private AppDatabase mDb;
     String confirmHsfString, confirmFieldIDString, confirmBagsMarketedString,confirmSeed, confirmDate, loginName,
-            confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed;
+            confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed, confirmTransporterID, confirmTransporterRate;
     long iid;
+    List<inventoryT> inventoryTS;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,11 +53,14 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         confirmSeed = openConfirmScanPage.getStringExtra("Confirm_Seed_Selected");
         confirmDate = openConfirmScanPage.getStringExtra("Confirm_Date_Selected");
 
+
         // New columns
         confirmMoldCount = openConfirmScanPage.getStringExtra("Mold_Count");
         confirmPercentClean = openConfirmScanPage.getStringExtra("Percent_Clean");
         confirmPercentMoisture = openConfirmScanPage.getStringExtra("Percent_Moisture");
         confirmKgMarketed = openConfirmScanPage.getStringExtra("kg_marketed");
+        confirmTransporterID = openConfirmScanPage.getStringExtra("transporterID");
+        confirmTransporterRate = openConfirmScanPage.getStringExtra("transporterRate");
         // Stop New Columns
 
         confirmHSFID =  findViewById(R.id.confirmHsfidText);
@@ -62,20 +70,26 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         confirmFieldID.setText(confirmFieldIDString);
 
         confirmBagsMarketed = findViewById(R.id.confirmBagsMarketedText);
-        confirmBagsMarketed.setText(confirmBagsMarketedString);
+        //confirmBagsMarketed.setText(confirmBagsMarketedString);
 
         confirmSeedSpinner = findViewById(R.id.confirmSeedTypeText);
 
         // New columns
-        mold_count = findViewById(R.id.editMold_Count);
-        percentClean = findViewById(R.id.editPercentClean);
-        percentMoisture = findViewById(R.id.editPercentMoisture);
-        kg_marketed = findViewById(R.id.editKgMarketed);
+        mold_count = findViewById(R.id.confirmScanMoldCountText);
+        percentClean = findViewById(R.id.confirmScanCleanText);
+        percentMoisture = findViewById(R.id.confirmScanMoistureText);
+        kg_marketed = findViewById(R.id.scanKgMarketedText);
+        transporterId = findViewById(R.id.confirmScanTransporterText);
+        confirmTransportRateSpinner = findViewById(R.id.confirmScanTransporterRateText);
 
         List<String> list = Master.getSeedType();
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
         //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         confirmSeedSpinner.setAdapter(dataAdapter);
+
+        List<String> rateList = transporterRate.getRate();
+        ArrayAdapter<String> rateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, rateList);
+        confirmTransportRateSpinner.setAdapter(rateAdapter);
 
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
@@ -102,10 +116,11 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         mold_count = findViewById(R.id.confirmScanMoldCountText);
         percentClean = findViewById(R.id.confirmScanCleanText);
         percentMoisture = findViewById(R.id.confirmScanMoistureText);
-        kg_marketed = findViewById(R.id.confirmScanKgMarketed);
+        kg_marketed = findViewById(R.id.scanKgMarketedText);
+        transporterId = findViewById(R.id.confirmScanTransporterText);
         // End New Columns
 
-        String v1 = saveScanHSF.getText().toString();
+        final String v1 = saveScanHSF.getText().toString();
         String v2 = saveScanField.getText().toString();
         String v3 = saveScanBags.getText().toString();
         String v5 = saveScanDate.getText().toString();
@@ -115,6 +130,9 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         String clean = percentClean.getText().toString();
         String moisture = percentMoisture.getText().toString();
         String kgMarketed = kg_marketed.getText().toString();
+        String transporter = transporterId.getText().toString();
+        String transporterRate = confirmTransportRateSpinner.getText().toString();
+
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         loginName = preferences.getString("Name", "");
@@ -138,41 +156,53 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
             Message.message(getApplicationContext(), "Please enter kg marketed value");
         }
         else {
-            if (v1.isEmpty() || v2.isEmpty() || v3.isEmpty() || v4.isEmpty() || v5.isEmpty()) {
+            if (v1.isEmpty() || v2.isEmpty() || v3.isEmpty() || v4.isEmpty() || v5.isEmpty() || transporter.isEmpty() || transporterRate.isEmpty()) {
                 Message.message(getApplicationContext(), "One or more fields are empty");
             } else {
                 if (confirmHsfString.equalsIgnoreCase(v1) && confirmFieldIDString.equalsIgnoreCase(v2) && confirmBagsMarketedString.equalsIgnoreCase(v3)
                         && confirmSeed.equalsIgnoreCase(v4) && confirmDate.equalsIgnoreCase(v5)
                         && confirmMoldCount.equalsIgnoreCase(mold) && confirmPercentClean.equalsIgnoreCase(clean) && confirmPercentMoisture.equalsIgnoreCase(moisture) && confirmKgMarketed.equalsIgnoreCase(kgMarketed)
+                        && confirmTransporterID.equalsIgnoreCase(transporter) && confirmTransporterRate.equalsIgnoreCase(transporterRate)
                         ) {
-                    final inventoryT inv = new inventoryT(v1, "Tobiiiiiiiiiiiii", v2, bags, Integer.parseInt(kgMarketed), v4, v5, Integer.parseInt(mold),
-                            Integer.parseInt(clean), Integer.parseInt(moisture));
+                    final inventoryT inv = new inventoryT(v1, v2, bags, Integer.parseInt(kgMarketed), v4, v5, Integer.parseInt(mold),
+                            Integer.parseInt(clean), Integer.parseInt(moisture), "NNNNNN", "CCOOOO", transporter,transporterRate);
 
                     AppExecutors.getInstance().diskIO().execute(new Runnable() {
                         @Override
                         public void run() {
-                            iid = mDb.inventoryTDao().insertTxn(inv);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (iid < 0) {
-                                        Message.message(getApplicationContext(), "Insertion Unsuccessful");
-                                    } else {
-                                        Message.message(getApplicationContext(), "Inventory Successfully Saved");
-                                        Intent openMainActivity = new Intent(ThirdScanActivity.this, MainActivity.class);
-                                        startActivity(openMainActivity);
-
-                                        Intent finishSecondScanActivity = new Intent("finishFirstFill");
-                                        sendBroadcast(finishSecondScanActivity);
-
-                                        finish();
-
+                            inventoryTS = mDb.inventoryTDao().checkHSF(v1);
+                            if (inventoryTS.size() > 0) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Message.message(getApplicationContext(), "This HSF already exist. Please check HSF.");
                                     }
-                                }
-                            });
+                                });
+                            } else {
+                                iid = mDb.inventoryTDao().insertTxn(inv);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (iid < 0) {
+                                            Message.message(getApplicationContext(), "Insertion Unsuccessful");
+                                        } else {
+                                            Message.message(getApplicationContext(), "Inventory Successfully Saved");
+                                            Intent openMainActivity = new Intent(ThirdScanActivity.this, MainActivity.class);
+                                            startActivity(openMainActivity);
 
+                                            Intent finishSecondScanActivity = new Intent("finishFirstFill");
+                                            sendBroadcast(finishSecondScanActivity);
+
+                                            finish();
+
+                                        }
+                                    }
+                                });
+
+                            }
                         }
                     });
+
                 /*
                     long id = helper.insertData(v1, v2, bags, v4, v5, loginName, mold, clean, moisture, kgMarketed);
                     if (id < 0) {

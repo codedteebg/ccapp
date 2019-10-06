@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
 import com.babbangona.barcodescannerproject.model.inventoryT;
+import com.babbangona.barcodescannerproject.model.transporterRate;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -25,13 +26,14 @@ import java.util.Locale;
 public class SecondFillActivity extends AppCompatActivity implements View.OnClickListener{
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    TextInputEditText dateText, confirmFillHSFId, confirmFillFieldID, confirmFillBags, mold_count, percentClean, percentMoisture, kg_marketed;
-    AutoCompleteTextView confirmFillSeed;
+    TextInputEditText dateText, confirmFillHSFId, confirmFillFieldID, confirmFillBags, mold_count, percentClean, percentMoisture, kg_marketed, confirmFillTransportID;
+    AutoCompleteTextView confirmFillSeed, confirmFillTransporterRate;
     myDbAdapter helper;
     private AppDatabase mDb;
     String confirmFillHsfString, confirmFillFieldIDString, confirmFIllBagsMarketedString,confirmFillSeedString, confirmFillDateString, loginName,
-    confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed;
+    confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed, confirmFillTransport, confirmFillTransportRate;
     long iid;
+    List<inventoryT> inventoryTS;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         confirmPercentClean = openConfirmFillPage.getStringExtra("Percent_Clean");
         confirmPercentMoisture = openConfirmFillPage.getStringExtra("Percent_Moisture");
         confirmKgMarketed = openConfirmFillPage.getStringExtra("kg_marketed");
+        confirmFillTransport = openConfirmFillPage.getStringExtra("Confirm_Fill_Transport");
+        confirmFillTransportRate = openConfirmFillPage.getStringExtra("Confirm_Fill_TransportRate");
         // Stop New Columns
 
         confirmFillHSFId = findViewById(R.id.confirmFillHsfIdText);
@@ -58,19 +62,26 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         confirmFillBags = findViewById(R.id.confirmFillBagsMarketedText);
 
         confirmFillSeed = findViewById(R.id.confirmSpinnerText);
-
+        confirmFillTransporterRate = findViewById(R.id.confirmFillTransporterRateText);
 
         // New columns
         mold_count = findViewById(R.id.confirmMoldCountText);
         percentClean = findViewById(R.id.confirmPercentCleanText);
         percentMoisture = findViewById(R.id.confirmPercentMoistureText);
         kg_marketed = findViewById(R.id.kgMarketedText);
+        confirmFillTransportID = findViewById(R.id.confirmFillTransporterIDText);
 
         List<String> list  = Master.getSeedType();
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         confirmFillSeed.setAdapter(dataAdapter);
+
+        List<String> rateList = transporterRate.getRate();
+
+        ArrayAdapter<String> rateAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, rateList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        confirmFillTransporterRate.setAdapter(rateAdapter);
 
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
@@ -82,7 +93,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
 
     public void saveFillResults (View view) {
 
-        String v1 = confirmFillHSFId.getText().toString();
+        final String v1 = confirmFillHSFId.getText().toString();
         String v2 = confirmFillFieldID.getText().toString();
         String v3 = confirmFillBags.getText().toString();
         String v4 = confirmFillSeed.getText().toString();
@@ -93,6 +104,9 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         String clean = percentClean.getText().toString();
         String moisture = percentMoisture.getText().toString();
         String kgMarketed = kg_marketed.getText().toString();
+        String transporter = confirmFillTransporterRate.getText().toString();
+        String transporterRate = confirmFillTransporterRate.getText().toString();
+
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -134,34 +148,45 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
                     if (confirmFillHsfString.equalsIgnoreCase(v1) && confirmFillFieldIDString.equalsIgnoreCase(v2) && confirmFIllBagsMarketedString.equalsIgnoreCase(v3)
                             && confirmFillSeedString.equalsIgnoreCase(v4) && confirmFillDateString.equalsIgnoreCase(v5)
                             && confirmMoldCount.equalsIgnoreCase(mold) && confirmPercentClean.equalsIgnoreCase(clean) && confirmPercentMoisture.equalsIgnoreCase(moisture) && confirmKgMarketed.equalsIgnoreCase(kgMarketed)
+                            && confirmFillTransport.equalsIgnoreCase(transporter) && confirmFillTransportRate.equalsIgnoreCase(transporterRate)
                             ) {
-                        final inventoryT inventoryT = new inventoryT(v1, "Tobiiiiiiiiiiiii", v2, fillBags, Integer.parseInt(kgMarketed), v4, v5, Integer.parseInt(mold),
-                                Integer.parseInt(clean), Integer.parseInt(moisture));
+                        final inventoryT inventoryT = new inventoryT(v1,  v2, fillBags, Integer.parseInt(kgMarketed), v4, v5, Integer.parseInt(mold),
+                                Integer.parseInt(clean), Integer.parseInt(moisture), "NNNNNN", "CCOOOO", transporter,transporterRate );
 
                         AppExecutors.getInstance().diskIO().execute(new Runnable() {
                             @Override
-                            public void run() {
-                                iid = mDb.inventoryTDao().insertTxn(inventoryT);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (iid < 0) {
-                                            Message.message(getApplicationContext(), "Insertion Unsuccessful");
-                                        } else {
-                                            Message.message(getApplicationContext(), "Inventory Successfully Saved");
-                                            Intent openMainActivity = new Intent(SecondFillActivity.this, MainActivity.class);
-                                            startActivity(openMainActivity);
-
-                                            Intent finishSecondScanActivity = new Intent("finishFirstFill");
-                                            sendBroadcast(finishSecondScanActivity);
-
-                                            finish();
-
+                                public void run() {
+                                inventoryTS = mDb.inventoryTDao().checkHSF(v1);
+                                if (inventoryTS.size() > 0) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Message.message(getApplicationContext(), "This HSF already exist. Please check HSF.");
                                         }
-                                    }
-                                });
+                                    });
+                                } else {
+                                    iid = mDb.inventoryTDao().insertTxn(inventoryT);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (iid < 0) {
+                                                Message.message(getApplicationContext(), "Insertion Unsuccessful");
+                                            } else {
+                                                Message.message(getApplicationContext(), "Inventory Successfully Saved");
+                                                Intent openMainActivity = new Intent(SecondFillActivity.this, MainActivity.class);
+                                                startActivity(openMainActivity);
 
+                                                Intent finishSecondScanActivity = new Intent("finishFirstFill");
+                                                sendBroadcast(finishSecondScanActivity);
+
+                                                finish();
+
+                                            }
+                                        }
+                                    });
+                                }
                             }
+
                         });
                     } else {
                         Message.message(getApplicationContext(), "Data entered doesn't correspond. Please go back to previous screen and re-enter data.");

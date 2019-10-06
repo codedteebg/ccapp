@@ -10,6 +10,9 @@ public class syncHSFResponse {
         @SerializedName("sync_flag")
         @Expose
         private Integer syncFlag;
+        @SerializedName("sync_time")
+        @Expose
+        private String syncTime;
 
         public String getHsfId() {
             return hsfId;
@@ -26,5 +29,14 @@ public class syncHSFResponse {
         public void setSyncFlag(Integer syncFlag) {
             this.syncFlag = syncFlag;
         }
+
+        public String getSyncTime() {
+            return syncTime;
+        }
+
+        public void setSyncTime(String syncTime) {
+            this.syncTime = syncTime;
+        }
+
 
 }
