@@ -16,7 +16,7 @@ public class ApiClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://e9f1352a.ngrok.io")
+                .baseUrl("http://apps.babbangona.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

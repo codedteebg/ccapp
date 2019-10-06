@@ -18,13 +18,13 @@ import java.util.List;
 public interface ApiInterface {
 
     @FormUrlEncoded
-    @POST("/ccapi/public/api/v1/insertHSF")
+    @POST("/ccapp/public/api/v1/insertHSF")
     Call<List<syncHSFResponse>> syncHSF(@Field("jsent") String jsent);
 
     @FormUrlEncoded
-    @POST("/ccapi/public/api/v1/insertTransport")
+    @POST("/ccapp/public/api/v1/insertTransport")
     Call<List<syncHSFResponse>> syncTransport(@Field("transup") String transport);
 
-    @GET("/ccapi/public/api/v1/getMSA/{dateP}")
+    @GET("/ccapp/public/api/v1/getMSA/{dateP}")
     Call<List<msaResponseT>> getMSAs(@Path("dateP") String dateP);
 }
