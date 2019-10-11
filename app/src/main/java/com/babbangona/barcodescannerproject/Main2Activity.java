@@ -38,6 +38,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.write.Label;
@@ -154,108 +155,101 @@ public class Main2Activity extends AppCompatActivity {
 
     public void exportInventory(View view) {
 
-        helper = new myDbAdapter(this);
-
-        Cursor exportCursor = helper.getData();
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
+        String CCOID = myPref.getString("CCOID", "");
+
         String todaysDate = new SimpleDateFormat("ddMMyyyy").format(calendar.getTime());
 
-        String csvFile = "inv_" + todaysDate + "_" + System.currentTimeMillis() + ".xls";
+        final String csvFile = "inv_" + CCOID + "_" + todaysDate + "_" + System.currentTimeMillis() + ".xls";
 
-        String dir = Environment.getExternalStorageDirectory().getPath() + "/InventoryExport/";
+        final String dir = Environment.getExternalStorageDirectory().getPath() + "/InventoryExport/";
 
-        File directory = new File(dir);
+        final File directory = new File(dir);
         //create directory if not exist
         if (!directory.isDirectory()) {
             directory.mkdirs();
         }
         try {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        File file = new File(directory, csvFile);
+                        WorkbookSettings wbSettings = new WorkbookSettings();
+                        wbSettings.setLocale(new Locale("en", "EN"));
+                        WritableWorkbook workbook;
+                        workbook = Workbook.createWorkbook(file, wbSettings);
 
-            //file path
-            File file = new File(directory, csvFile);
-            WorkbookSettings wbSettings = new WorkbookSettings();
-            wbSettings.setLocale(new Locale("en", "EN"));
-            WritableWorkbook workbook;
-            workbook = Workbook.createWorkbook(file, wbSettings);
-            //Excel sheet name. 0 represents first sheet
-            WritableSheet sheet = workbook.createSheet("inventory", 0);
+                        //Excel sheet name. 0 represents first sheet
+                        WritableSheet sheet = workbook.createSheet("inventory", 0);
 
-            sheet.addCell(new Label(0, 0, "HSFID")); // column and row
-            sheet.addCell(new Label(1, 0, "FieldID"));
-            sheet.addCell(new Label(2, 0, "Bags"));
-            sheet.addCell(new Label(3, 0, "Seed"));
-            sheet.addCell(new Label(4, 0, "Date"));
-            sheet.addCell(new Label(5, 0, "CCOName"));
+                        sheet.addCell(new Label(0, 0, "HSFID")); // column and row
+                        sheet.addCell(new Label(1, 0, "FieldID"));
+                        sheet.addCell(new Label(2, 0, "Bags"));
+                        sheet.addCell(new Label(3, 0, "KG Marketed"));
+                        sheet.addCell(new Label(4, 0, "SeedType"));
+                        sheet.addCell(new Label(5, 0, "Date Processed"));
+                        sheet.addCell(new Label(6, 0, "Mold_Count"));
+                        sheet.addCell(new Label(7, 0, "Percent_Clean"));
+                        sheet.addCell(new Label(8, 0, "Percent_Moisture"));
+                        sheet.addCell(new Label(9, 0, "Warehouse ID"));
+                        sheet.addCell(new Label(10, 0, "CCO ID"));
+                        sheet.addCell(new Label(11, 0, "TransporterID"));
+                        sheet.addCell(new Label(12, 0, "TransportPaidFlag"));
+                        sheet.addCell(new Label(13, 0, "TransporterRating"));
+                        sheet.addCell(new Label(14, 0, "Transporter Bags Rate"));
+                        sheet.addCell(new Label(15, 0, "DeletedFlag"));
+                        sheet.addCell(new Label(16, 0, "UpdateFlag"));
+                        sheet.addCell(new Label(17,0, "SyncFlag"));
 
-            sheet.addCell(new Label(6, 0, "Mold_Count"));
-            sheet.addCell(new Label(7, 0, "Percent_Clean"));
-            sheet.addCell(new Label(8, 0, "Percent_Moisture"));
-            sheet.addCell(new Label(9, 0, "KG_Marketed"));
+                        final List<inventoryT> inventoryTS = mDb.inventoryTDao().selectAll();
 
-            String hsfInput, fieldInput, bagsInput, seedInput, ccoInput, dateInput, mold_count, percentClean, percentMoisture, kg_marketed;
-            Calendar cal;
+                        for (int i = 0; i < inventoryTS.size(); i++){
+                            int j = i + 1;
+                            sheet.addCell(new Label(0, j, inventoryTS.get(i).getHSFID()));
+                            sheet.addCell(new Label(1, j, inventoryTS.get(i).getFieldID()));
+                            sheet.addCell(new Label(2, j, String.valueOf(inventoryTS.get(i).getBagsMarketed())));
+                            sheet.addCell(new Label(3, j, String.valueOf(inventoryTS.get(i).getKGMarketed())));
+                            sheet.addCell(new Label(4, j, inventoryTS.get(i).getSeedType()));
+                            sheet.addCell(new Label(5, j, inventoryTS.get(i).getDateProcessed()));
+                            sheet.addCell(new Label(6, j, String.valueOf(inventoryTS.get(i).getMoldCount())));
+                            sheet.addCell(new Label(7, j, String.valueOf(inventoryTS.get(i).getPercentClean())));
+                            sheet.addCell(new Label(8, j, String.valueOf(inventoryTS.get(i).getPercentMoisture())));
+                            sheet.addCell(new Label(9, j, inventoryTS.get(i).getWarehouseID()));
+                            sheet.addCell(new Label(10, j, inventoryTS.get(i).getCCOID()));
+                            sheet.addCell(new Label(11, j, inventoryTS.get(i).getTransporterID()));
+                            sheet.addCell(new Label(12, j, String.valueOf(inventoryTS.get(i).getTransportPaidFlag())));
+                            sheet.addCell(new Label(13, j, inventoryTS.get(i).getTransporterRating()));
+                            sheet.addCell(new Label(14, j, String.valueOf(inventoryTS.get(i).getBagsRate())));
+                            sheet.addCell(new Label(15, j, String.valueOf(inventoryTS.get(i).getDeletedFlag())));
+                            sheet.addCell(new Label(16, j, String.valueOf(inventoryTS.get(i).getUpdateFlag())));
+                            sheet.addCell(new Label(17, j, String.valueOf(inventoryTS.get(i).getSyncFlag())));
+                        }
+                        workbook.write();
+                        workbook.close();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Message.message(getApplicationContext(), "Data exported in Excel sheet in directory " + dir);
+                            }
+                        });
 
-            if (exportCursor.moveToFirst()) {
-                do {
-                    hsfInput = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.HSFID));
-                    fieldInput = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.FieldID));
-                    bagsInput = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Bags));
-                    seedInput = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Seed));
-                    cal = Calendar.getInstance();
-                    cal.setTimeInMillis(exportCursor.getLong(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Date)));
-                    dateInput = new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
 
-                    ccoInput = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.CCOName));
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
 
-                    mold_count = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Mold_Count));
-                    percentClean = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Percent_Clean));
-                    percentMoisture = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.Percent_Moisture));
-                    kg_marketed = exportCursor.getString(exportCursor.getColumnIndexOrThrow(myDbAdapter.myDbHelper.KG_Marketed));
-
-                    int i = exportCursor.getPosition() + 1;
-                    sheet.addCell(new Label(0, i, hsfInput));
-                    sheet.addCell(new Label(1, i, fieldInput));
-                    sheet.addCell(new Label(2, i, bagsInput));
-                    sheet.addCell(new Label(3, i, seedInput));
-                    sheet.addCell(new Label(4, i, dateInput));
-                    sheet.addCell(new Label(5, i, ccoInput));
-
-                    // New columns
-                    sheet.addCell(new Label(6, i, mold_count));
-                    sheet.addCell(new Label(7, i, percentClean));
-                    sheet.addCell(new Label(8, i, percentMoisture));
-                    sheet.addCell(new Label(9, i, kg_marketed));
-                } while (exportCursor.moveToNext());
-            }
-            //closing cursor
-            exportCursor.close();
-            workbook.write();
-            workbook.close();
-            Toast.makeText(getApplication(), "Data Exported in an Excel Sheet", Toast.LENGTH_SHORT).show();
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-  /*  public void syncInventory(View view) {
-
-        Snackbar.make(findViewById(android.R.id.content), "Sending data...\nYou will be notified when the process completes", Snackbar.LENGTH_SHORT).show();
-
-        SyncData.SyncInventory syncTest = new SyncData.SyncInventory(getApplicationContext()){
-
-            @Override
-            protected void onPostExecute(String s){
-                Toast.makeText(Main2Activity.this, s, Toast.LENGTH_LONG).show();
-            }
-        };
-
-        syncTest.execute();
-
-    }*/
 
     //Used in an onClick method here. Just add to your onCreate, etc....
    /* public void csvImport(View view){

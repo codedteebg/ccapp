@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
+import android.widget.EditText;
+
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -98,6 +100,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
 
         findViewsById();
         setDateTimeField();
+        disableInput(dateText);
 
         //helper = new myDbAdapter(this);
 
@@ -258,6 +261,11 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         dateTextDialog.show();
+    }
+
+    void disableInput (EditText editText) {
+        editText.setInputType(InputType.TYPE_NULL);
+        editText.setTextIsSelectable(false);
     }
 
     @Override

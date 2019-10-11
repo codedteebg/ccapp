@@ -150,6 +150,7 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         findViewsById();
         setDateTimeField();
+        disableInput(dateText);
     }
 
 
@@ -176,6 +177,11 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         dateTextDialog.show();
+    }
+
+    void disableInput (EditText editText) {
+        editText.setInputType(InputType.TYPE_NULL);
+        editText.setTextIsSelectable(false);
     }
 
 }

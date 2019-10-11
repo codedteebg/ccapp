@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
+import android.widget.EditText;
+
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
 import com.babbangona.barcodescannerproject.model.inventoryT;
@@ -92,6 +94,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
 
         findViewsById();
         setDateTimeField();
+        disableInput(dateText);
         helper = new myDbAdapter(this);
 
     }
@@ -225,5 +228,10 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         dateTextDialog.show();
+    }
+
+    void disableInput (EditText editText) {
+        editText.setInputType(InputType.TYPE_NULL);
+        editText.setTextIsSelectable(false);
     }
 }

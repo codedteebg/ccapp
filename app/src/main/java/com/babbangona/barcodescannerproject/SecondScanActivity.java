@@ -180,6 +180,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
 
         findViewsById();
         setDateTimeField();
+        disableInput(dateText);
     }
 
     private int getIndex(Spinner spinner, String myString)
