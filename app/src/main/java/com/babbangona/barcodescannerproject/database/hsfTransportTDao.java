@@ -7,6 +7,8 @@ import androidx.room.Query;
 import com.babbangona.barcodescannerproject.model.hsfTransportT;
 import com.babbangona.barcodescannerproject.model.inventoryT;
 
+import java.util.List;
+
 @Dao
 public interface hsfTransportTDao {
 
@@ -18,4 +20,8 @@ public interface hsfTransportTDao {
 
     @Query("UPDATE hsfTransportT SET SyncFlag = :syncFlag WHERE HSFID = :hsfID")
     void updateSyncFlag(String hsfID, int syncFlag);
+
+    @Query("SELECT * FROM hsfTransportT")
+    List<hsfTransportT> selectAll();
+
 }

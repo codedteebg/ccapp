@@ -20,56 +20,37 @@
         android:textStyle="bold"/>
 
     <Button
-        android:id="@+id/scanbutton"
+        android:id="@+id/cropButton"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:text="By Crop"
         android:layout_below="@id/summaryLabel"
         android:onClick="openCropSummary"
-        android:layout_marginBottom="8dp"/>
+        />
 
     <Button
-        android:id="@+id/fillbutton"
+        android:id="@+id/dateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="By Date"
         android:onClick="openDateSummary"
-        android:layout_below="@id/scanbutton"
-        android:layout_marginBottom="8dp"/>
+        android:layout_below="@id/cropButton" />
 
-    <!--<Button
-        android:id="@+id/moldbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="By Mold Count"
-        android:onClick="openMoldSummary"
-        android:layout_below="@id/fillbutton"
-        android:layout_marginBottom="8dp"/>
 
     <Button
-        android:id="@+id/percentcleanbutton"
+        android:id="@+id/totalButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="By Percent Clean"
-        android:onClick="openPercentCleanSummary"
-        android:layout_below="@id/moldbutton"
-        android:layout_marginBottom="8dp"/>
-
-    <Button
-        android:id="@+id/percentmoisturebutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="By Percent Moisture"
-        android:onClick="openPercentMoistureSummary"
-        android:layout_below="@id/percentcleanbutton"
-        android:layout_marginBottom="8dp"/>-->
-
-    <Button
-        android:id="@+id/recordbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Total Sumamry"
+        android:text="Total Summary"
         android:onClick="openTotalSummary"
-        android:layout_below="@id/fillbutton"/>
+        android:layout_below="@id/dateButton"/>
+
+    <Button
+        android:id="@+id/showTransportPaid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Transport Paid"
+        android:onClick="openHSFTransport"
+        android:layout_below="@id/totalButton"/>
 
 </RelativeLayout>

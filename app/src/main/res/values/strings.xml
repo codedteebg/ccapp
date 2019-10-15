@@ -2,8 +2,8 @@
     <string name="app_name">BG Collection Centre App</string>
     <string name="main_screen">Main Page</string>
     <string name="default_scan">Scan</string>
-    <string name="scan_details">Scan Details</string>
-    <string name="confirm_scan">Confirm Scan</string>
+    <string name="scan_details">Enter HSF Details</string>
+    <string name="confirm_scan">Confirm HSF Details</string>
     <string name="fill_details">Fill HSF Details</string>
     <string name="confirm_fill">Confirm HSF Details</string>
     <string name="summary_page">Summary</string>

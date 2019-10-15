@@ -26,7 +26,6 @@
         android:layout_width="match_parent"
         android:text="Scan"
         android:onClick="openScanScreen"
-        android:layout_marginBottom="8dp"
         android:layout_below="@id/pgBar"/>
 
     <Button
@@ -36,7 +35,7 @@
         android:text="Fill Form"
         android:onClick="openFillScreen"
         android:layout_below="@id/scanbutton"
-        android:layout_marginBottom="8dp" />
+        />
 
     <Button
         android:id="@+id/recordbutton"
@@ -45,7 +44,7 @@
         android:text="Summary"
         android:onClick="showSummary"
         android:layout_below="@id/fillbutton"
-        android:layout_marginBottom="8dp" />
+        />
 
     <Button
         android:id="@+id/exportbutton"
@@ -55,30 +54,15 @@
         android:onClick="exportInventory"
         android:layout_below="@id/recordbutton" />
 
-    <!--<Button
-        android:id="@+id/syncbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sync Inventory"
-        android:onClick="syncInventory"
-        android:layout_below="@id/exportbutton" />-->
-
-    <!--<Button
-        android:id="@+id/csvbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CSV Import"
-        android:onClick="csvImport"
-        android:layout_below="@id/syncbutton" />-->
 
 
 
     <Button
-        android:id="@+id/testButton"
+        android:id="@+id/syncButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sync"
-        android:onClick="testCheck"
+        android:onClick="sync"
         android:layout_below="@id/exportbutton" />
 
    <!-- <Button
@@ -95,7 +79,14 @@
         android:layout_height="wrap_content"
         android:text="Pay Transporter"
         android:onClick="payTransporter"
-        android:layout_below="@id/testButton" />
+        android:layout_below="@id/syncButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/versionName"
+        android:layout_alignParentBottom="true"
+        />
 
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 
 public class SummaryActivity extends AppCompatActivity {
@@ -23,24 +24,14 @@ public class SummaryActivity extends AppCompatActivity {
         Intent j = new Intent(this, SelectDateSummary.class);
         startActivity(j);
     }
-/*
-    public void openMoldSummary(View view){
-        Intent j = new Intent(this, SelectMoldSummary.class);
-        startActivity(j);
-    }
-
-    public void openPercentCleanSummary(View view){
-        Intent j = new Intent(this, SelectPercentCleanSummary.class);
-        startActivity(j);
-    }
-
-    public void openPercentMoistureSummary(View view){
-        Intent j = new Intent(this, SelectPercentMoistureSummary.class);
-        startActivity(j);
-    }*/
 
     public void openTotalSummary(View view){
         Intent k = new Intent(this, ShowTotalSummary.class);
         startActivity(k);
+    }
+
+    public void openHSFTransport(View view){
+        Intent l = new Intent(this, SelectPaidTransport.class);
+        startActivity(l);
     }
 }

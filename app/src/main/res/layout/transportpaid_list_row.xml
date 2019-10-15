@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/row_padding_vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/row_padding_vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/hsfTransLayout"
+        android:layout_marginBottom="5dp">
+        <TextView
+            android:id="@+id/hsfTransLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HSF ID:             "
+            android:textSize="20sp"
+            android:paddingRight="20dp"
+            />
+
+        <TextView
+            android:id="@+id/hsfTransText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="HSF ID:"
+            android:textSize="20sp"
+            android:layout_toEndOf="@id/hsfTransLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/amountTransLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/hsfTransLayout">
+        <TextView
+            android:id="@+id/amountTransLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount Paid:    "
+            android:textSize="20sp"
+            android:paddingRight="10dp"
+            />
+
+        <TextView
+            android:id="@+id/amountTransText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            android:textSize="20sp"
+            android:layout_toEndOf="@id/amountTransLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fieldTransLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/amountTransLayout">
+        <TextView
+            android:id="@+id/fieldTransLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FieldID:                       "
+            android:textSize="15sp"
+            android:paddingRight="20dp"
+            />
+
+        <TextView
+            android:id="@+id/fieldTransText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FieldID:"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/fieldTransLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/transporterTransLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/fieldTransLayout">
+        <TextView
+            android:id="@+id/transporterTransLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TransporterID:          "
+            android:textSize="15sp"
+            android:paddingRight="20dp"
+            />
+
+        <TextView
+            android:id="@+id/transporterTransText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TransporterID:"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/transporterTransLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateTransLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/transporterTransLayout">
+        <TextView
+            android:id="@+id/dateTransLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date Paid:                    "
+            android:textSize="15sp"
+            android:paddingRight="10dp"
+            />
+
+        <TextView
+            android:id="@+id/dateTransText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date:"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/dateTransLabel"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/msaTransLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/dateTransLayout">
+        <TextView
+            android:id="@+id/msaTransLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MSA ID:                      "
+            android:textSize="15sp"
+            android:paddingRight="20dp"
+            />
+
+        <TextView
+            android:id="@+id/msaTransText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MSA ID:"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/msaTransLabel"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

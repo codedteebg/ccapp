@@ -7,6 +7,8 @@ import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 
 import com.babbangona.barcodescannerproject.api.ApiClient;
@@ -29,6 +31,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -88,6 +91,10 @@ public class Main2Activity extends AppCompatActivity {
             edit.putString("CCOName", staff_name);
             edit.commit();
         }
+
+        TextView versionName = findViewById(R.id.versionName);
+        String version = "App Version:" + BuildConfig.VERSION_NAME;
+        versionName.setText(version);
         // End code stub
 
         // Background Sync
@@ -325,153 +332,167 @@ public class Main2Activity extends AppCompatActivity {
         return inventoryTS; //return List
     }*/
 
-    public void testCheck(View view){
-        Message.message(getApplicationContext(), "Sync Started");
+    private boolean checkInternet(){
+        boolean status = false;
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        status = networkInfo != null && networkInfo.isConnected();
+
+        return status;
+
+    }
+
+    public void sync(View view){
+        if(checkInternet()) {
+
+            Message.message(getApplicationContext(), "Sync Started");
 
 
+           // final ArrayList<syncHSFResponse> syncHSFResponses = new ArrayList<>();
+            progressBar = findViewById(R.id.pgBar);
+            progressBar.setVisibility(View.VISIBLE);
 
-        final ArrayList<syncHSFResponse> syncHSFResponses = new ArrayList<>() ;
-        progressBar = findViewById(R.id.pgBar);
-        progressBar.setVisibility(View.VISIBLE);
 
-
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e){
-                    Log.d("Except", e +"");
-                }
-                final inventoryT[] invss = mDb.inventoryTDao().selectUnsynced();
-                final hsfTransportT[] hsfTransportTS = mDb.hsfTransportTDao().selectUnsynced();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hsfJson = new Gson().toJson(invss);
-                        transportJson = new Gson().toJson(hsfTransportTS);
-                        Log.d("Tobi", transportJson + "t");
-                        if (hsfJson.length() < 5) {
-                           // Message.message(getApplicationContext(), "No new HSF entries to sync");
-                        } else {
-                            //Start HSF Sync
-                            Call<List<syncHSFResponse>> call = apiInterface.syncHSF(hsfJson);
-                            call.enqueue(new Callback<List<syncHSFResponse>>() {
-                                @Override
-                                public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response) {
-                                    final List<syncHSFResponse> syncHSFResponses = response.body();
-                                    Log.d("Tobi", "new " + response.body());
-                                    int syncSize = syncHSFResponses.size();
-                                    for (int i = 0; i < syncSize; i++) {
-                                        if(i == syncSize-1){
-                                            edit.putString("hsf_last_sync_time", syncHSFResponses.get(i).getSyncTime());
-                                            edit.commit();
-                                        }
-                                        Log.d("Ayo", syncHSFResponses.get(i).getHsfId());
-                                        final String hsf = syncHSFResponses.get(i).getHsfId();
-                                        final int syncFlag = syncHSFResponses.get(i).getSyncFlag();
-                                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                mDb.inventoryTDao().updateSyncFlag(hsf,syncFlag);
-                                            }
-                                        });
-                                    }
-                                   // Message.message(getApplicationContext(), "All HSF entries have been succesfully synced");
-                                }
-
-                                public void onFailure(Call<List<syncHSFResponse>> call, Throwable t) {
-                                    Log.d("Tobi", t + "Tobi");
-                                }
-                            });
-
-                        }
-
-                        if (transportJson.length() < 5) {
-                           // Message.message(getApplicationContext(), "No new Transport Payment entries to sync");
-                            //progressBar.setVisibility(View.GONE);
-                        } else {
-
-                            // Sync Transport Payment table
-                            Call<List<syncHSFResponse>> call2 = apiInterface.syncTransport(transportJson);
-                            call2.enqueue(new Callback<List<syncHSFResponse>>() {
-                                @Override
-                                public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response) {
-                                    final List<syncHSFResponse> syncHSFResponses1 = response.body();
-                                    Log.d("Tobi", "new " + response.body());
-                                    int syncSize = syncHSFResponses1.size();
-                                    for (int i = 0; i < syncSize; i++) {
-                                        if(i == syncSize-1){
-                                            edit.putString("transport_last_sync_time", syncHSFResponses1.get(i).getSyncTime());
-                                            edit.commit();
-                                        }
-                                        Message.message(getApplicationContext(), syncHSFResponses1.get(i).getHsfId());
-                                        Log.d("Ayo", syncHSFResponses1.get(i).getHsfId());
-                                        final String hsf = syncHSFResponses1.get(i).getHsfId();
-                                        final int syncFlag = syncHSFResponses1.get(i).getSyncFlag();
-                                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                mDb.hsfTransportTDao().updateSyncFlag(hsf, syncFlag);
-                                            }
-                                        });
-                                    }
-                                    //Message.message(getApplicationContext(),"All new Transporter Payments successfully synced");
-
-                                }
-
-                                public void onFailure(Call<List<syncHSFResponse>> call, Throwable t) {
-                                    Log.d("Tobi", t + "Tobi");
-                                }
-                            });
-                        }
-
-                        String dateP = "";
-                        if (myPref.contains("msa_last_sync_time")) {
-                            dateP = myPref.getString("msa_last_sync_time", "");
-                        }else{
-                            dateP = "2019-01-01 00:00:00";
-                        }
-                        Call<List<msaResponseT>> call3 = apiInterface.getMSAs(dateP);
-                        call3.enqueue(new Callback<List<msaResponseT>>() {
-                            @Override
-                            public void onResponse(Call<List<msaResponseT>> call, Response<List<msaResponseT>> response) {
-                                final List<msaResponseT> msaResponseTS = response.body();
-                                Log.d("MsaTobi", "new " + response.body());
-                                int syncSize = msaResponseTS.size();
-                                for (int i = 0; i < syncSize; i++) {
-                                    if (i == syncSize - 1) {
-                                        edit.putString("msa_last_sync_time", msaResponseTS.get(i).getSyncTime());
-                                        edit.commit();
-                                    }
-                                    final msaT msaT = new msaT(msaResponseTS.get(i).getStaffId(), msaResponseTS.get(i).getFullname(),
-                                            msaResponseTS.get(i).getTemplate());
-                                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mDb.msaTDao().insertMsa(msaT);
-                                        }
-                                    });
-                                }
-                                Message.message(getApplicationContext(), "All records successfully synced");
-                                progressBar.setVisibility(View.GONE);
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<List<msaResponseT>> call, Throwable t) {
-
-                            }
-                        });
-
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        Log.d("Except", e + "");
                     }
-                });
+                    final inventoryT[] invss = mDb.inventoryTDao().selectUnsynced();
+                    final hsfTransportT[] hsfTransportTS = mDb.hsfTransportTDao().selectUnsynced();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hsfJson = new Gson().toJson(invss);
+                            transportJson = new Gson().toJson(hsfTransportTS);
+                            Log.d("Tobi", transportJson + "t");
+                            if (hsfJson.length() < 5) {
+                                // Message.message(getApplicationContext(), "No new HSF entries to sync");
+                            } else {
+                                //Start HSF Sync
+                                Call<List<syncHSFResponse>> call = apiInterface.syncHSF(hsfJson);
+                                call.enqueue(new Callback<List<syncHSFResponse>>() {
+                                    @Override
+                                    public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response) {
+                                        final List<syncHSFResponse> syncHSFResponses = response.body();
+                                        Log.d("Tobi", "new " + response.body());
+                                        int syncSize = syncHSFResponses.size();
+                                        for (int i = 0; i < syncSize; i++) {
+                                            if (i == syncSize - 1) {
+                                                edit.putString("hsf_last_sync_time", syncHSFResponses.get(i).getSyncTime());
+                                                edit.commit();
+                                            }
+                                            Log.d("Ayo", syncHSFResponses.get(i).getHsfId());
+                                            final String hsf = syncHSFResponses.get(i).getHsfId();
+                                            final int syncFlag = syncHSFResponses.get(i).getSyncFlag();
+                                            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mDb.inventoryTDao().updateSyncFlag(hsf, syncFlag);
+                                                }
+                                            });
+                                        }
+                                        // Message.message(getApplicationContext(), "All HSF entries have been succesfully synced");
+                                    }
+
+                                    public void onFailure(Call<List<syncHSFResponse>> call, Throwable t) {
+                                        Log.d("Tobi", t + "Tobi");
+                                    }
+                                });
+
+                            }
+
+                            if (transportJson.length() < 5) {
+                                // Message.message(getApplicationContext(), "No new Transport Payment entries to sync");
+                                //progressBar.setVisibility(View.GONE);
+                            } else {
+
+                                // Sync Transport Payment table
+                                Call<List<syncHSFResponse>> call2 = apiInterface.syncTransport(transportJson);
+                                call2.enqueue(new Callback<List<syncHSFResponse>>() {
+                                    @Override
+                                    public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response) {
+                                        final List<syncHSFResponse> syncHSFResponses1 = response.body();
+                                        Log.d("Tobi", "new " + response.body());
+                                        int syncSize = syncHSFResponses1.size();
+                                        for (int i = 0; i < syncSize; i++) {
+                                            if (i == syncSize - 1) {
+                                                edit.putString("transport_last_sync_time", syncHSFResponses1.get(i).getSyncTime());
+                                                edit.commit();
+                                            }
+                                            Message.message(getApplicationContext(), syncHSFResponses1.get(i).getHsfId());
+                                            Log.d("Ayo", syncHSFResponses1.get(i).getHsfId());
+                                            final String hsf = syncHSFResponses1.get(i).getHsfId();
+                                            final int syncFlag = syncHSFResponses1.get(i).getSyncFlag();
+                                            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mDb.hsfTransportTDao().updateSyncFlag(hsf, syncFlag);
+                                                }
+                                            });
+                                        }
+                                        //Message.message(getApplicationContext(),"All new Transporter Payments successfully synced");
+
+                                    }
+
+                                    public void onFailure(Call<List<syncHSFResponse>> call, Throwable t) {
+                                        Log.d("Tobi", t + "Tobi");
+                                    }
+                                });
+                            }
+
+                            String dateP = "";
+                            if (myPref.contains("msa_last_sync_time")) {
+                                dateP = myPref.getString("msa_last_sync_time", "");
+                            } else {
+                                dateP = "2019-01-01 00:00:00";
+                            }
+                            Call<List<msaResponseT>> call3 = apiInterface.getMSAs(dateP);
+                            call3.enqueue(new Callback<List<msaResponseT>>() {
+                                @Override
+                                public void onResponse(Call<List<msaResponseT>> call, Response<List<msaResponseT>> response) {
+                                    final List<msaResponseT> msaResponseTS = response.body();
+                                    Log.d("MsaTobi", "new " + response.body());
+                                    int syncSize = msaResponseTS.size();
+                                    for (int i = 0; i < syncSize; i++) {
+                                        if (i == syncSize - 1) {
+                                            edit.putString("msa_last_sync_time", msaResponseTS.get(i).getSyncTime());
+                                            edit.commit();
+                                        }
+                                        final msaT msaT = new msaT(msaResponseTS.get(i).getStaffId(), msaResponseTS.get(i).getFullname(),
+                                                msaResponseTS.get(i).getTemplate());
+                                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mDb.msaTDao().insertMsa(msaT);
+                                            }
+                                        });
+                                    }
+                                    Message.message(getApplicationContext(), "All records successfully synced");
+                                    progressBar.setVisibility(View.GONE);
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<List<msaResponseT>> call, Throwable t) {
+
+                                }
+                            });
+
+                        }
+                    });
 
 
-             }
+                }
 
-        });
-
+            });
+        }
+        else {
+            Message.message(getApplicationContext(), "No active Internet Connection. Please check.");
+        }
 
     }
 
