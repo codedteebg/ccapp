@@ -15,6 +15,8 @@ import com.babbangona.barcodescannerproject.api.ApiClient;
 import com.babbangona.barcodescannerproject.api.ApiInterface;
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.drivers;
+import com.babbangona.barcodescannerproject.model.driversResponse;
 import com.babbangona.barcodescannerproject.model.hsfTransportT;
 import com.babbangona.barcodescannerproject.model.msaResponseT;
 import com.babbangona.barcodescannerproject.model.msaT;
@@ -54,10 +56,10 @@ import retrofit2.Response;
 import com.babbangona.barcodescannerproject.model.inventoryT;
 import com.google.gson.Gson;
 
+import org.w3c.dom.Text;
+
 
 public class Main2Activity extends AppCompatActivity {
-
-    myDbAdapter helper;
 
     private JobScheduler jobScheduler;
     private JobInfo jobInfo;
@@ -93,8 +95,29 @@ public class Main2Activity extends AppCompatActivity {
         }
 
         TextView versionName = findViewById(R.id.versionName);
-        String version = "App Version:" + BuildConfig.VERSION_NAME;
+        TextView lastSyncTime = findViewById(R.id.lastSyncTime);
+        TextView ccoID = findViewById(R.id.ccoID);
+        String version = "App Version: " + BuildConfig.VERSION_NAME;
         versionName.setText(version);
+
+        String syncTime = "";
+        if (myPref.contains("hsf_last_sync_time")) {
+            syncTime = myPref.getString("hsf_last_sync_time", "");
+        } else {
+            syncTime = "0000-00-00 00:00:00";
+        }
+        String syncT = "Last Sync Time: " + syncTime;
+        lastSyncTime.setText(syncT);
+
+        String ccoString = "";
+        if (myPref.contains("CCOID")) {
+            ccoString = myPref.getString("CCOID", "");
+        } else {
+            ccoString = "";
+        }
+        String ccoSet = "CCO ID: " + ccoString;
+        ccoID.setText(ccoSet);
+
         // End code stub
 
         // Background Sync
@@ -362,12 +385,12 @@ public class Main2Activity extends AppCompatActivity {
                         Log.d("Except", e + "");
                     }
                     final inventoryT[] invss = mDb.inventoryTDao().selectUnsynced();
-                    final hsfTransportT[] hsfTransportTS = mDb.hsfTransportTDao().selectUnsynced();
+                    //final hsfTransportT[] hsfTransportTS = mDb.hsfTransportTDao().selectUnsynced();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             hsfJson = new Gson().toJson(invss);
-                            transportJson = new Gson().toJson(hsfTransportTS);
+                            //transportJson = new Gson().toJson(hsfTransportTS);
                             Log.d("Tobi", transportJson + "t");
                             if (hsfJson.length() < 5) {
                                 // Message.message(getApplicationContext(), "No new HSF entries to sync");
@@ -405,69 +428,30 @@ public class Main2Activity extends AppCompatActivity {
 
                             }
 
-                            if (transportJson.length() < 5) {
-                                // Message.message(getApplicationContext(), "No new Transport Payment entries to sync");
-                                //progressBar.setVisibility(View.GONE);
+                            String dateT = "";
+                            if (myPref.contains("driver_last_sync_time")) {
+                                dateT = myPref.getString("driver_last_sync_time", "");
                             } else {
-
-                                // Sync Transport Payment table
-                                Call<List<syncHSFResponse>> call2 = apiInterface.syncTransport(transportJson);
-                                call2.enqueue(new Callback<List<syncHSFResponse>>() {
-                                    @Override
-                                    public void onResponse(Call<List<syncHSFResponse>> call, Response<List<syncHSFResponse>> response) {
-                                        final List<syncHSFResponse> syncHSFResponses1 = response.body();
-                                        Log.d("Tobi", "new " + response.body());
-                                        int syncSize = syncHSFResponses1.size();
-                                        for (int i = 0; i < syncSize; i++) {
-                                            if (i == syncSize - 1) {
-                                                edit.putString("transport_last_sync_time", syncHSFResponses1.get(i).getSyncTime());
-                                                edit.commit();
-                                            }
-                                            Message.message(getApplicationContext(), syncHSFResponses1.get(i).getHsfId());
-                                            Log.d("Ayo", syncHSFResponses1.get(i).getHsfId());
-                                            final String hsf = syncHSFResponses1.get(i).getHsfId();
-                                            final int syncFlag = syncHSFResponses1.get(i).getSyncFlag();
-                                            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    mDb.hsfTransportTDao().updateSyncFlag(hsf, syncFlag);
-                                                }
-                                            });
-                                        }
-                                        //Message.message(getApplicationContext(),"All new Transporter Payments successfully synced");
-
-                                    }
-
-                                    public void onFailure(Call<List<syncHSFResponse>> call, Throwable t) {
-                                        Log.d("Tobi", t + "Tobi");
-                                    }
-                                });
+                                dateT = "2019-01-01 00:00:00";
                             }
 
-                            String dateP = "";
-                            if (myPref.contains("msa_last_sync_time")) {
-                                dateP = myPref.getString("msa_last_sync_time", "");
-                            } else {
-                                dateP = "2019-01-01 00:00:00";
-                            }
-                            Call<List<msaResponseT>> call3 = apiInterface.getMSAs(dateP);
-                            call3.enqueue(new Callback<List<msaResponseT>>() {
+                            Call<List<driversResponse>> call3 = apiInterface.getDrivers(dateT);
+                            call3.enqueue(new Callback<List<driversResponse>>() {
                                 @Override
-                                public void onResponse(Call<List<msaResponseT>> call, Response<List<msaResponseT>> response) {
-                                    final List<msaResponseT> msaResponseTS = response.body();
+                                public void onResponse(Call<List<driversResponse>> call, Response<List<driversResponse>> response) {
+                                    final List<driversResponse> driversResponses = response.body();
                                     Log.d("MsaTobi", "new " + response.body());
-                                    int syncSize = msaResponseTS.size();
+                                    int syncSize = driversResponses.size();
                                     for (int i = 0; i < syncSize; i++) {
                                         if (i == syncSize - 1) {
-                                            edit.putString("msa_last_sync_time", msaResponseTS.get(i).getSyncTime());
+                                            edit.putString("driver_last_sync_time", driversResponses.get(i).getSyncTime());
                                             edit.commit();
                                         }
-                                        final msaT msaT = new msaT(msaResponseTS.get(i).getStaffId(), msaResponseTS.get(i).getFullname(),
-                                                msaResponseTS.get(i).getTemplate());
+                                        final drivers drivers = new drivers(driversResponses.get(i).getDriverData());
                                         AppExecutors.getInstance().diskIO().execute(new Runnable() {
                                             @Override
                                             public void run() {
-                                                mDb.msaTDao().insertMsa(msaT);
+                                                mDb.driversDao().insertDriver(drivers);
                                             }
                                         });
                                     }
@@ -477,10 +461,13 @@ public class Main2Activity extends AppCompatActivity {
                                 }
 
                                 @Override
-                                public void onFailure(Call<List<msaResponseT>> call, Throwable t) {
+                                public void onFailure(Call<List<driversResponse>> call, Throwable t) {
 
                                 }
                             });
+
+
+
 
                         }
                     });
@@ -495,28 +482,17 @@ public class Main2Activity extends AppCompatActivity {
         }
 
     }
-
-    public void addWarehouse(View view) {
-        SharedPreferences.Editor edit = myPref.edit();
-        edit.putString("Activity", "Main2Activity.java");
-        edit.commit();
-
-        Intent i = new Intent(this, DefaultActivity.class);
-        startActivity(i);
-
-    }
+/*
 
     public void payTransporter(View view) {
         Intent j = new Intent(this, SelectMSA.class);
         startActivity(j);
-    }
+    }*/
 
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent openLogin= new Intent(this, LoginActivity.class);
-        startActivity(openLogin);
         finish();
     }
 
@@ -524,8 +500,6 @@ public class Main2Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent openLogin= new Intent(this, LoginActivity.class);
-                startActivity(openLogin);
                 finish();
                 break;
         }

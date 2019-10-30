@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -16,11 +17,13 @@ import android.widget.EditText;
 
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.drivers;
 import com.babbangona.barcodescannerproject.model.inventoryT;
 import com.babbangona.barcodescannerproject.model.transporterRate;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -28,16 +31,17 @@ import java.util.Locale;
 public class SecondFillActivity extends AppCompatActivity implements View.OnClickListener{
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    TextInputEditText dateText, confirmFillHSFId, confirmFillFieldID, confirmFillBags, mold_count, percentClean, percentMoisture, kg_marketed, confirmFillTransportID;
-    AutoCompleteTextView confirmFillSeed, confirmFillTransporterRate;
+    TextInputEditText dateText, confirmFillHSFId, confirmFillFieldID, confirmFillBags, mold_count, percentClean, percentMoisture, kg_marketed;
+    AutoCompleteTextView confirmFillSeed, confirmFillTransporterRate, confirmFillTransportID;
     myDbAdapter helper;
     private AppDatabase mDb;
-    String confirmFillHsfString, confirmFillFieldIDString, confirmFIllBagsMarketedString,confirmFillSeedString, confirmFillDateString, loginName,
+    String confirmFillHsfString, confirmFillFieldIDString, confirmFIllBagsMarketedString,confirmFillSeedString, confirmFillDateString,
     confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed, confirmFillTransport, confirmFillTransportRate;
     long iid;
     List<inventoryT> inventoryTS;
     SharedPreferences myPrefs;
     SharedPreferences.Editor edit;
+    private List<drivers> driversList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,8 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         confirmKgMarketed = openConfirmFillPage.getStringExtra("kg_marketed");
         confirmFillTransport = openConfirmFillPage.getStringExtra("Confirm_Fill_Transport");
         confirmFillTransportRate = openConfirmFillPage.getStringExtra("Confirm_Fill_TransportRate");
+
+
         // Stop New Columns
 
         confirmFillHSFId = findViewById(R.id.confirmFillHsfIdText);
@@ -80,15 +86,34 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
 
         List<String> list  = Master.getSeedType();
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, list);
         confirmFillSeed.setAdapter(dataAdapter);
 
         List<String> rateList = transporterRate.getRate();
 
-        ArrayAdapter<String> rateAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, rateList);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> rateAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, rateList);
         confirmFillTransporterRate.setAdapter(rateAdapter);
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<drivers> drivers = mDb.driversDao().getAllDrivers();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        driversList.clear();
+                        driversList.addAll(drivers);
+                        Log.d("DriverCheck", driversList.size() + "");
+                        List<String> strings = new ArrayList<>();
+                        for (drivers driver : driversList){
+                            strings.add(driver.getDriverData());
+                        }
+                        ArrayAdapter<String> transporterAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, strings);
+                        confirmFillTransportID.setAdapter(transporterAdapter);
+                    }
+                });
+            }
+        });
 
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
@@ -100,7 +125,12 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void saveFillResults (View view) {
+        try {
+            confirmFillTransportID.setText(confirmFillTransportID.getText().toString().substring(0, 8), false);
+        }
+        catch(StringIndexOutOfBoundsException s){
 
+        }
         final String v1 = confirmFillHSFId.getText().toString();
         String v2 = confirmFillFieldID.getText().toString();
         String v3 = confirmFillBags.getText().toString();
@@ -112,7 +142,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
         String clean = percentClean.getText().toString();
         String moisture = percentMoisture.getText().toString();
         String kgMarketed = kg_marketed.getText().toString();
-        String transporter = confirmFillTransporterRate.getText().toString();
+        String transporter = confirmFillTransportID.getText().toString();
         String transporterRate = confirmFillTransporterRate.getText().toString();
         String ccoID = myPrefs.getString("CCOID", "");
         String warehouseID = myPrefs.getString("Warehouse", "");
@@ -124,7 +154,7 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
             fillBags = Integer.parseInt(v3);
         }
         catch(NumberFormatException nfe) {
-
+            nfe.printStackTrace();
         }
 
         int fieldLength = v2.length();
@@ -151,6 +181,9 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
                 if (fieldLength != 18) {
                     Message.message(getApplicationContext(), "Wrong Field ID. Please ensure Field ID is entered correctly");
                 }else {
+                    Log.d("Tobi", v1 + "," + v2 + "," + v3 + "," +
+                            v4 + "," + v5 + "," + mold + "," +  clean + "," +
+                            moisture + "," + kgMarketed + "," + transporter +  "," + transporterRate);
                     if (confirmFillHsfString.equalsIgnoreCase(v1) && confirmFillFieldIDString.equalsIgnoreCase(v2) && confirmFIllBagsMarketedString.equalsIgnoreCase(v3)
                             && confirmFillSeedString.equalsIgnoreCase(v4) && confirmFillDateString.equalsIgnoreCase(v5)
                             && confirmMoldCount.equalsIgnoreCase(mold) && confirmPercentClean.equalsIgnoreCase(clean) && confirmPercentMoisture.equalsIgnoreCase(moisture) && confirmKgMarketed.equalsIgnoreCase(kgMarketed)
@@ -196,6 +229,9 @@ public class SecondFillActivity extends AppCompatActivity implements View.OnClic
                         });
                     } else {
                         Message.message(getApplicationContext(), "Data entered doesn't correspond. Please go back to previous screen and re-enter data.");
+                        Log.d("Tobi", confirmFillHsfString + "," + confirmFillFieldIDString + "," + confirmFIllBagsMarketedString + "," +
+                                confirmFillSeedString + "," + confirmFillDateString + "," + confirmMoldCount + "," +  confirmPercentClean + "," +
+                                confirmPercentMoisture + "," + confirmKgMarketed + "," + confirmFillTransport +  "," + confirmFillTransportRate);
                     }
 
                 }

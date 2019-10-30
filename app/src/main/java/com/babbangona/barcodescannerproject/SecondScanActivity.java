@@ -8,7 +8,9 @@ import android.content.IntentFilter;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
@@ -24,8 +26,13 @@ import android.widget.Toast;
 
 import android.widget.ArrayAdapter;
 
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.drivers;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,9 +47,11 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
     private SimpleDateFormat dateFormatter;
     static private boolean isFirstTimeGetFocused = true;
     String GetHsfidText, GetFieldidText, GetBagsMarketedText, GetDateText, GetSeedText, getTransportRate, getMoldCount, getPercentClean, getPercentMoisture, getKgMarketed, getTransporterID;
-    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed, hsfidText, fieldIDText, bagsMarketedText, transporterIDText;
-    private AutoCompleteTextView seedSpinner, transportRateSpinner;
+    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed, hsfidText, fieldIDText, bagsMarketedText;
+    private AutoCompleteTextView seedSpinner, transportRateSpinner, transporterIDText;
     private Button nextConfirmScan;
+    private List<drivers> driversList = new ArrayList<>();
+    private AppDatabase mDb;
 
 
     @Override
@@ -50,7 +59,8 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second_scan);
 
-        //final Spinner seedSpinner;
+        mDb = AppDatabase.getInstance(getApplicationContext());
+
         Button nextConfirmScan;
 
         Intent intent = getIntent();
@@ -98,14 +108,44 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         ArrayAdapter<String> rateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, rateList);
         transportRateSpinner.setAdapter(rateAdapter);
 
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<drivers> drivers = mDb.driversDao().getAllDrivers();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        driversList.clear();
+                        driversList.addAll(drivers);
+                        Log.d("DriverCheck", driversList.size() + "");
+                        List<String> strings = new ArrayList<>();
+                        for (drivers driver : driversList){
+                            strings.add(driver.getDriverData());
+                        }
+                        ArrayAdapter<String> transporterAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, strings);
+                        transporterIDText.setAdapter(transporterAdapter);
+                       // transporterIDText.setText(transporterIDText.getAdapter().getItem(position).get);
+                    }
+                });
+            }
+        });
+
+
 
         //seedSpinner.setSelection(getIndex(seedSpinner, seed_string));
         seedSpinner.setText(Result[3]);
+
+
         disableInput(hsfidText);
         disableInput(fieldIDText);
+        findViewsById();
+
         transporterIDText = findViewById(R.id.editScanTransporter);
 
+
+
         dateText = findViewById(R.id.dateText);
+
 
         BroadcastReceiver broadcast_receiver = new BroadcastReceiver() {
 
@@ -126,6 +166,11 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
         nextConfirmScan.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                try {
+                    transporterIDText.setText(transporterIDText.getText().toString().substring(0, 8), false);
+                }catch (StringIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
                 GetHsfidText = hsfidText.getText().toString();
                 GetFieldidText = fieldIDText.getText().toString();
                 GetBagsMarketedText = bagsMarketedText.getText().toString();
@@ -178,7 +223,7 @@ public class SecondScanActivity extends AppCompatActivity implements OnClickList
 
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
-        findViewsById();
+
         setDateTimeField();
         disableInput(dateText);
     }

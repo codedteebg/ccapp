@@ -18,9 +18,11 @@ import android.widget.Spinner;
 
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.drivers;
 import com.babbangona.barcodescannerproject.model.inventoryT;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -94,6 +96,8 @@ public class EditRecordActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         });
+
+
 
 
         findViewsById();

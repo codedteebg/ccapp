@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="textInputStyle">@style/AppTextField</item>
         <item name="alertDialogStyle">@style/Alertbutton</item>
+        <item name="autoCompleteTextViewStyle">@style/AppTextField</item>
 
     </style>
 

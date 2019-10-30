@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,9 +15,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.babbangona.barcodescannerproject.model.drivers;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -28,10 +31,10 @@ import com.babbangona.barcodescannerproject.model.transporterRate;
 
 
 public class ThirdScanActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed, transporterId;
+    private TextInputEditText dateText, mold_count, percentClean, percentMoisture, kg_marketed;
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    private AutoCompleteTextView confirmTransportRateSpinner;
+    private AutoCompleteTextView confirmTransportRateSpinner, transporterId;
     private AppDatabase mDb;
     String confirmHsfString, confirmFieldIDString, confirmBagsMarketedString,confirmSeed, confirmDate, loginName,
             confirmMoldCount, confirmPercentClean, confirmPercentMoisture, confirmKgMarketed, confirmTransporterID, confirmTransporterRate;
@@ -39,6 +42,7 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
     List<inventoryT> inventoryTS;
     SharedPreferences myPref;
     SharedPreferences.Editor edit;
+    private List<drivers> driversList = new ArrayList<>();
 
 
     @Override
@@ -96,6 +100,28 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         ArrayAdapter<String> rateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, rateList);
         confirmTransportRateSpinner.setAdapter(rateAdapter);
 
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<drivers> drivers = mDb.driversDao().getAllDrivers();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        driversList.clear();
+                        driversList.addAll(drivers);
+                        Log.d("DriverCheck", driversList.size() + "");
+                        List<String> strings = new ArrayList<>();
+                        for (drivers driver : driversList){
+                            strings.add(driver.getDriverData());
+                        }
+                        ArrayAdapter<String> transporterAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, strings);
+                        transporterId.setAdapter(transporterAdapter);
+                        // transporterIDText.setText(transporterIDText.getAdapter().getItem(position).get);
+                    }
+                });
+            }
+        });
+
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
         findViewsById();
@@ -112,6 +138,8 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         int bags = 0;
 
 
+
+
         saveScanHSF =  findViewById(R.id.confirmHsfidText);
         saveScanField =  findViewById(R.id.confirmFieldIDText);
         saveScanBags =  findViewById(R.id.confirmBagsMarketedText);
@@ -124,6 +152,12 @@ public class ThirdScanActivity extends AppCompatActivity implements View.OnClick
         percentMoisture = findViewById(R.id.confirmScanMoistureText);
         kg_marketed = findViewById(R.id.scanKgMarketedText);
         transporterId = findViewById(R.id.confirmScanTransporterText);
+        try {
+            transporterId.setText(transporterId.getText().toString().substring(0, 8), false);
+        }catch(StringIndexOutOfBoundsException s)
+        {
+            s.printStackTrace();
+        }
         // End New Columns
 
         final String v1 = saveScanHSF.getText().toString();

@@ -65,27 +65,28 @@
         android:onClick="sync"
         android:layout_below="@id/exportbutton" />
 
-   <!-- <Button
-        android:id="@+id/changeWarehouse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Change Warehouse"
-        android:onClick="addWarehouse"
-        android:layout_below="@id/testButton" />-->
-
-    <Button
-        android:id="@+id/payTransporter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Pay Transporter"
-        android:onClick="payTransporter"
-        android:layout_below="@id/syncButton" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/versionName"
         android:layout_alignParentBottom="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lastSyncTime"
+        android:layout_above="@id/versionName"
+        android:layout_marginBottom="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ccoID"
+        android:layout_above="@id/lastSyncTime"
+        android:layout_marginBottom="10dp"
         />
 
 

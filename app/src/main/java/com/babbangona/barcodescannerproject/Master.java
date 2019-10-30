@@ -36,28 +36,12 @@ public class Master {
     }
     public static List getSeedType(){
         List<String> list = new ArrayList<String>();
+        list.add("SM15-Grain");
         list.add("30Y87-Grain");
         list.add("DK234-Grain");
         list.add("DK777-Grain");
-        list.add("DK818-Grain");
         list.add("DK920-Grain");
-        list.add("Faro44-C");
-        list.add("Faro44-Grain");
-        list.add("Faro61-F");
-        list.add("IWD C2 SYN-Grain");
-        list.add("PVA13-F");
-        list.add("PVA13-Grain");
-        list.add("PVA8-F");
-        list.add("PVA8-Grain");
-        list.add("SC510-Grain");
-        list.add("SC719-Grain");
-        list.add("SM15-C");
-        list.add("SM15-F");
-        list.add("SM15-Grain");
-        list.add("SM24-Grain");
-        list.add("SM25-Grain");
-        list.add("SM51-Grain");
-
+        list.add("SC517-Grain");
         return list;
     }
 

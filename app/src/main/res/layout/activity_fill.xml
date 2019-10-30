@@ -59,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/fillBagsMarketedText"
                 android:maxLines="1"/>
 
@@ -76,7 +77,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/kgMarketedText"
                 android:maxLines="1"/>
 
@@ -112,7 +114,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="none"
+                android:focusable="false"
                 android:id="@+id/fillDateText"
                 android:maxLines="1"/>
 
@@ -131,6 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/moldCountText"
                 android:maxLines="1"/>
 
@@ -148,7 +152,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/percentCleanText"
                 android:maxLines="1"/>
 
@@ -166,7 +171,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/percentMoistureText"
                 android:maxLines="1"/>
 
@@ -181,12 +187,12 @@
             android:layout_below="@id/percentMoisture"
             style="@style/AppTextField">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:layout_height="50dp"
+                android:padding="10dp"
                 android:id="@+id/fillTransporterText"
-                android:maxLines="1"/>
+                />
 
 
         </com.google.android.material.textfield.TextInputLayout>

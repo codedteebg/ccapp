@@ -1,10 +1,9 @@
 package com.babbangona.barcodescannerproject;
 
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 //import androidx.appcompat.widget.SearchView;
-import android.graphics.Color;
-import android.util.Log;
+
 import android.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -24,11 +23,7 @@ import android.view.View;
 
 import com.babbangona.barcodescannerproject.database.AppDatabase;
 import com.babbangona.barcodescannerproject.database.AppExecutors;
-import com.babbangona.barcodescannerproject.model.hsf;
 import com.babbangona.barcodescannerproject.model.msaT;
-import com.babbangona.bg_face.LuxandActivity;
-import com.babbangona.bg_face.LuxandAuthActivity;
-import com.babbangona.bg_face.LuxandInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +65,9 @@ public class SelectMSA extends AppCompatActivity {
                 Message.message(getApplicationContext(), msaT.getStaff_id() + "is selected");
                 edit.putString("MSAID",msaT.getStaff_id());
                 edit.commit();
-                CallLuxandPrefs(msaT.getStaff_id(), msaT.getFacetemplate());
+                Intent i = new Intent(SelectMSA.this, SelectHSFForTransport.class);
+                startActivity(i);
+               // CallLuxandPrefs(msaT.getStaff_id(), msaT.getFacetemplate());
             }
 
             @Override
@@ -104,7 +101,7 @@ public class SelectMSA extends AppCompatActivity {
 
     }
 
-    public void CallLuxandPrefs(String staff_id, String template) {
+   /* public void CallLuxandPrefs(String staff_id, String template) {
         SharedPreferences.Editor editor = myPref.edit();
         editor.putString("msaStaff", staff_id);
         editor.commit();
@@ -127,7 +124,7 @@ public class SelectMSA extends AppCompatActivity {
                 Message.message(getApplicationContext(), "Face Not Authenticated");
             }
         }
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

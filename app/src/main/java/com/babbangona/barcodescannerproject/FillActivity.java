@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -16,9 +17,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
+import com.babbangona.barcodescannerproject.database.AppDatabase;
+import com.babbangona.barcodescannerproject.database.AppExecutors;
+import com.babbangona.barcodescannerproject.model.drivers;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -29,16 +34,20 @@ import org.w3c.dom.Text;
 public class FillActivity extends AppCompatActivity implements View.OnClickListener{
     private DatePickerDialog dateTextDialog;
     private SimpleDateFormat dateFormatter;
-    private TextInputEditText fillHsfID, fillFieldID, fillBags, dateText, mold_count, percentClean, percentMoisture, kg_marketed, filltransporterID;
+    private TextInputEditText fillHsfID, fillFieldID, fillBags, dateText, mold_count, percentClean, percentMoisture, kg_marketed;
     //private Spinner fillSeed;
-    private AutoCompleteTextView fillSeed, fillTransporterRate;
+    private AutoCompleteTextView fillSeed, fillTransporterRate, filltransporterID;
     private String getFilledHSFID, getFilledFieldID, getFillBags, getFilledSeed, getFilledDate, getMoldCount, getPercentClean, getPercentMoisture, getKgMarketed, getFillTransporterID,  getFillTransporterRate;
+    private List<drivers> driversList = new ArrayList<>();
+    private AppDatabase mDb;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill);
 
+        mDb = AppDatabase.getInstance(getApplicationContext());
         fillSeed = findViewById(R.id.spinnerTest);
         fillTransporterRate = findViewById(R.id.fillTransporterRateText);
         //fillSeed = (Spinner) findViewById(R.id.fillSeedType);
@@ -69,26 +78,38 @@ public class FillActivity extends AppCompatActivity implements View.OnClickListe
         kg_marketed = findViewById(R.id.kgMarketedText);
         filltransporterID = findViewById(R.id.fillTransporterText);
 
-        /*
-        BroadcastReceiver fill_receiver = new BroadcastReceiver() {
-
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
-            public void onReceive(Context arg0, Intent intent) {
-                String action = intent.getAction();
-                if (action.equals("finishFirstFill")) {
-                    //finishing the activity
-                    finish();
-                }
+            public void run() {
+                final List<drivers> drivers = mDb.driversDao().getAllDrivers();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        driversList.clear();
+                        driversList.addAll(drivers);
+                        Log.d("DriverCheck", driversList.size() + "");
+                        List<String> strings = new ArrayList<>();
+                        for (drivers driver : driversList){
+                            strings.add(driver.getDriverData());
+                        }
+                        ArrayAdapter<String> transporterAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, strings);
+                        filltransporterID.setAdapter(transporterAdapter);
+                    }
+                });
             }
-        };
-        registerReceiver(fill_receiver, new IntentFilter("finishFirstFill"));
-*/
+        });
 
         Button nextConfirmFill = (Button) findViewById(R.id.nextConfirmFill);
 
         nextConfirmFill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try{
+                    filltransporterID.setText(filltransporterID.getText().toString().substring(0, 8), false);
+                }catch(StringIndexOutOfBoundsException s){
+                    s.printStackTrace();
+                }
+
                 getFilledHSFID = fillHsfID.getText().toString();
                 getFilledFieldID = fillFieldID.getText().toString();
                 getFillBags = fillBags.getText().toString();

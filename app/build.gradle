@@ -7,7 +7,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -53,5 +53,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
     //add Luxand
-    implementation project(':BG_FACE')
+    //implementation project(':BG_FACE')
 }

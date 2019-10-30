@@ -19,13 +19,12 @@
             android:hint="@string/hsfid"
             style="@style/AppTextField"
             app:boxBackgroundColor="#DCDCDC"
-            android:editable = "false"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="none"
                 android:id="@+id/hsfidText"
                 android:maxLines="1" />
 
@@ -45,7 +44,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="none"
                 android:id="@+id/fieldIDText"
                 android:maxLines="1"/>
 
@@ -63,6 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/bagsMarketedText"
                 android:maxLines="1"/>
 
@@ -80,7 +80,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/editKgMarketed"
                 android:maxLines="1"/>
 
@@ -116,9 +117,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:focusable="false"
                 android:id="@+id/dateText"
-                android:maxLines="1"/>
+                android:maxLines="1" />
 
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -135,6 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/editMold_Count"
                 android:maxLines="1"/>
 
@@ -152,7 +154,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/editPercentClean"
                 android:maxLines="1"/>
 
@@ -170,7 +173,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:digits="0123456789"
                 android:id="@+id/editPercentMoisture"
                 android:maxLines="1"/>
 
@@ -185,12 +189,12 @@
             android:layout_below="@id/scanPercentMoisture"
             style="@style/AppTextField">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:layout_height="50dp"
                 android:id="@+id/editScanTransporter"
-                android:maxLines="1"/>
+                android:padding="10dp"
+                />
 
 
         </com.google.android.material.textfield.TextInputLayout>

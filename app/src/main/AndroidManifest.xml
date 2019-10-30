@@ -82,6 +82,7 @@
         <activity
             android:name=".ThirdScanActivity"
             android:label="@string/confirm_scan"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".SecondScanActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -145,6 +146,7 @@
         <activity
             android:name=".SecondFillActivity"
             android:label="@string/confirm_fill"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".FillActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

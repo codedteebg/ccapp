@@ -85,16 +85,31 @@ public class DefaultActivity extends AppCompatActivity implements ZXingScannerVi
                 t.schedule(new TimerTask() {
                     public void run() {
                         alert1.dismiss(); // when the task active then close the dialog
-                        t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                        t.cancel(); // also just stop the timer thread, otherwise, you may receive a crash report
                         mScannerView.stopCamera();
 
-                        if(openType.equalsIgnoreCase("OpenScan") && scanType.equalsIgnoreCase("Scan Warehouse")){
-                            edit.putString("ScanType", "Scan HSF");
-                            edit.putString("Warehouse", Result);
-                            edit.commit();
-                            Intent i = new Intent(DefaultActivity.this, DefaultActivity.class);
-                            startActivity(i);
-                            finish();
+                        if (openType.equalsIgnoreCase("OpenScan") && scanType.equalsIgnoreCase("Scan Warehouse")) {
+                            if (Result.matches("(.*)NG(.*)")) {
+                                edit.putString("ScanType", "Scan HSF");
+                                final String[] Results = Result.split(",");
+                                edit.putString("Warehouse", Results[1]);
+                                edit.commit();
+
+                                Intent i = new Intent(DefaultActivity.this, DefaultActivity.class);
+                                startActivity(i);
+                                finish();
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Message.message(getApplicationContext(), "Wrong Warehouse QR Code Scanned");
+                                    }
+                                });
+
+                                Intent i = new Intent(DefaultActivity.this, Main2Activity.class);
+                                startActivity(i);
+                                finish();
+                            }
                         } else if(openType.equalsIgnoreCase("OpenScan" )&& scanType.equalsIgnoreCase("Scan HSF")){
                             if(Result.matches("HS(.*)")){
                                 Log.d("Tola", "Got here" + Result);
@@ -117,7 +132,8 @@ public class DefaultActivity extends AppCompatActivity implements ZXingScannerVi
                            // Message.message(getApplicationContext(), Result);
 
                         } else if(openType.equalsIgnoreCase("OpenFill") && scanType.equalsIgnoreCase("Scan Warehouse")){
-                            edit.putString("Warehouse", Result);
+                            final String[] Results = Result.split(",");
+                            edit.putString("Warehouse", Results[1]);
                             edit.commit();
                             Intent i = new Intent(DefaultActivity.this, FillActivity.class);
                             startActivity(i);
